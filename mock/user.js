@@ -4,8 +4,8 @@ const userpassword = {
   chef: {
     password: 'chef-password'
   },
-  cook: {
-    password: 'cook-password'
+  cooker: {
+    password: 'cooker-password'
   },
   architect: {
     password: 'architect-password'
@@ -16,8 +16,8 @@ const tokens = {
   chef: {
     token: 'chef-token'
   },
-  cook: {
-    token: 'cook-token'
+  cooker: {
+    token: 'cooker-token'
   },
   architect: {
     token: 'architect-token'
@@ -30,8 +30,8 @@ const users = {
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: '小刻食堂主厨'
   },
-  'cook-token': {
-    roles: ['cook'],
+  'cooker-token': {
+    roles: ['cooker'],
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: '小刻食堂厨师'
   },
