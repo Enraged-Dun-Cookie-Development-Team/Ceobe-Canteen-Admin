@@ -67,20 +67,72 @@ export const asyncRoutes = [
     path: '/canteen',
     name: 'canteen',
     component: Layout,
-    redirect: '/canteen/videolist',
-    meta: { title: 'Example', icon: 'dashboard', roles: ['chef', 'cooker'] },
+    redirect: '/canteen/announcement',
+    meta: { title: '小刻食堂运营信息', icon: 'form', roles: ['chef', 'cooker'] },
     children: [
       {
-        path: 'videolist',
-        name: '视频链接',
-        component: () => import('@/views/canteen/videoList/index'),
-        meta: { title: '视频链接', icon: 'dashboard' }
+        path: 'announcement',
+        name: '公告内容',
+        component: () => import('@/views/canteen/announcement/index'),
+        meta: { title: '公告内容', icon: 'el-icon-message-solid' }
       },
       {
         path: 'videolist',
         name: '视频链接',
         component: () => import('@/views/canteen/videoList/index'),
-        meta: { title: '视频链接', icon: 'dashboard' }
+        meta: { title: '视频链接', icon: 'el-icon-video-camera-solid' }
+      },
+      {
+        path: 'resource',
+        name: '资源时间管理',
+        component: () => import('@/views/canteen/resource/index'),
+        meta: { title: '资源时间管理', icon: 'el-icon-files' }
+      },
+      {
+        path: 'pluginVersion',
+        name: '插件更新',
+        component: () => import('@/views/canteen/pluginVersion/index'),
+        meta: { title: '插件更新', icon: 'el-icon-top' }
+      },
+      {
+        path: 'phoneVersion',
+        name: '手机更新',
+        component: () => import('@/views/canteen/phoneVersion/index'),
+        meta: { title: '手机更新', icon: 'el-icon-mobile-phone' }
+      }
+    ]
+  },
+  {
+    path: '/honeyCake',
+    name: 'HoneyCake',
+    component: Layout,
+    redirect: '/honeyCake/mansion',
+    meta: { title: '罗德岛蜜饼工坊', icon: 'el-icon-house', roles: ['chef', 'architect'] },
+    children: [
+      {
+        path: 'mansion',
+        name: '饼学大厦',
+        component: () => import('@/views/honeyCake/mansion/index'),
+        meta: { title: '饼学大厦', icon: 'el-icon-office-building' }
+      },
+      {
+        path: 'alternate',
+        name: '轮换饼学',
+        component: () => import('@/views/honeyCake/alternate/index'),
+        meta: { title: '轮换饼学', icon: 'el-icon-refresh' }
+      }
+    ]
+  },
+  {
+    path: '/statistics',
+    component: Layout,
+    meta: { roles: ['chef', 'cooker', 'architect'] },
+    children: [
+      {
+        path: 'index',
+        name: '统计信息',
+        component: () => import('@/views/statistics/index'),
+        meta: { title: '统计信息', icon: 'el-icon-s-data' }
       }
     ]
   },
