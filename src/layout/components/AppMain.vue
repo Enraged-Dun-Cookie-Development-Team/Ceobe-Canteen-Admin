@@ -8,26 +8,35 @@
 
 <script>
 export default {
-  name: 'AppMain',
+  name: "AppMain",
   computed: {
     key() {
-      return this.$route.path
-    }
-  }
-}
+      return this.$route.path;
+    },
+  },
+};
 </script>
 
 <style scoped>
 .app-main {
   /*50 = navbar  */
-  min-height: calc(100vh - 50px);
+  height: calc(100vh - 130px);
   width: 100%;
   padding: 3vh 4vw 0vh;
   position: relative;
-  overflow: hidden;
+  overflow: scroll;
 }
-.fixed-header+.app-main {
+.fixed-header + .app-main {
   padding-top: 50px;
+}
+
+::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0;
 }
 </style>
 
