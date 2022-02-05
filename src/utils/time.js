@@ -63,14 +63,35 @@ class TimeUtil {
 
   // 返回当日4点
   static fourTime(date) {
-    const datetime = new Date(`${date.getFullYear()}-${date.getMonth()}-${date.getDay()} 04:00:00`);
+    if(isNaN(date.getTime())) {
+      date = new Date();
+    }
+    const datetime = new Date(`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} 04:00:00`);
     return datetime;
   }
 
   // 返回当日16点
   static sixteenTime(date) {
-    const datetime = new Date(`${date.getFullYear()}-${date.getMonth()}-${date.getDay()} 16:00:00`);
+    if(isNaN(date.getTime())) {
+      date = new Date();
+    }
+    const datetime = new Date(`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} 16:00:00`);
     return datetime;
+  }
+
+  /*
+      param:
+          date: 当前时间
+          hour: 几秒后
+      return：几秒后
+      */
+  static passSecondTime(date, seconds) {
+    if(isNaN(date.getTime())) {
+      date = new Date();
+    }
+    date = new Date(date);
+    date.setSeconds(date.getSeconds() + seconds);
+    return date;
   }
 
   /*

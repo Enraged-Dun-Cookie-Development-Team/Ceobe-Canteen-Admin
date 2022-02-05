@@ -5079,7 +5079,7 @@ module.exports = [
             if (!data) {
                 return {
                     code: 40004,
-                    message: '账号或者密码不正确'
+                    message: 'BV号不正确'
                 }
             }
 

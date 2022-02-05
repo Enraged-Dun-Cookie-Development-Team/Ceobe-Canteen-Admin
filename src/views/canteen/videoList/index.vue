@@ -40,13 +40,14 @@
         </template>
         <el-card class="single-card">
           <el-form
-            ref="videoListForm"
-            :model="videoListForm"
+            :ref="'videoListForm' + index"
+            :model="videoListForm.videos[0]"
+            :rules="videoRules"
             class="video-list"
             label-width="100px"
             label-position="left"
           >
-            <el-form-item label="BV号">
+            <el-form-item label="BV号" prop="BV">
               <el-input
                 v-model="video.BV"
                 placeholder="请输入BV号"
@@ -98,6 +99,17 @@
             <el-form-item label="封面链接">
               <el-input v-model="video.coverImg" :disabled="true"></el-input>
             </el-form-item>
+            <el-form-item>
+              <iframe
+                :src="'//player.bilibili.com/player.html?bvid=' + video.BV"
+                scrolling="no"
+                border="0"
+                frameborder="no"
+                framespacing="0"
+                allowfullscreen="true"
+              >
+              </iframe>
+            </el-form-item>
           </el-form>
         </el-card>
       </el-collapse-item>
@@ -137,6 +149,14 @@ export default {
             videoLink: "",
             coverImg: "",
             set: false,
+          },
+        ],
+      },
+      videoRules: {
+        BV: [
+          {
+            validator: validBV,
+            trigger: "blur",
           },
         ],
       },
@@ -275,7 +295,7 @@ export default {
         .catch((_) => {
           this.$message({
             showClose: true,
-            message: "好像有哪里不太对，联系管理员看看呀",
+            message: "好像有哪里不太对，联系开发者看看呀",
             type: "warning",
           });
         });
@@ -323,34 +343,35 @@ export default {
     },
     //获取视频详细信息
     getVideoInfo(index) {
-      // this.$refs["videoListForm"].validate((valid) => {
-      //   if (valid) {
-      let bvNumber = this.videoListForm.videos[index]["BV"];
-      this.$store
-        .dispatch("video/getVideoInfo", bvNumber)
-        .then((response) => {
-          if (response.data.code != 0) {
-            this.$message({
-              showClose: true,
-              message: "BV号不正确，检查一下噢",
-              type: "warning",
+      this.$refs["videoListForm" + index][0].validate((valid) => {
+        if (valid) {
+          let bvNumber = this.videoListForm.videos[index]["BV"];
+          this.$store
+            .dispatch("video/getVideoInfo", bvNumber)
+            .then((response) => {
+              if (response.data.code != 0) {
+                this.$message({
+                  showClose: true,
+                  message: "BV号不正确，检查一下噢",
+                  type: "warning",
+                });
+                throw new Error("BV号不正确");
+              }
+              this.videoListForm.videos[index]["title"] =
+                response.data.data.title;
+              this.videoListForm.videos[index]["coverImg"] =
+                response.data.data.pic + "@@200w_125h_1c.webp";
+              this.videoListForm.videos[index]["author"] =
+                response.data.data.owner.name;
+              this.videoListForm.videos[index]["videoLink"] =
+                "https://www.bilibili.com/video/" + bvNumber;
+              this.checkForm(index);
+            })
+            .catch((e) => {
+              console.log(e);
             });
-            throw new Error("BV号不正确");
-          }
-          this.videoListForm.videos[index]["title"] = response.data.data.title;
-          this.videoListForm.videos[index]["coverImg"] =
-            response.data.data.pic + "@@200w_125h_1c.webp";
-          this.videoListForm.videos[index]["author"] =
-            response.data.data.owner.name;
-          this.videoListForm.videos[index]["videoLink"] =
-            "https://www.bilibili.com/video/" + bvNumber;
-          this.checkForm(index);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      // }
-      // });
+        }
+      });
     },
   },
 };
