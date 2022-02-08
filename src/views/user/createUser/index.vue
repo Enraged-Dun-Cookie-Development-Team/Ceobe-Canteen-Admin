@@ -92,5 +92,8 @@ export default {
 </script>
 <style lang="less" scoped>
 #mainWindow {
+  /deep/ label {
+    font-weight: 500;
+  }
 }
 </style>

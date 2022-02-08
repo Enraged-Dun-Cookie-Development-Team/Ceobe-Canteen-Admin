@@ -31,3 +31,11 @@ export function createUser(data) {
   })
 }
 
+export function changeUsername(data) {
+  return request({
+    url: '/admin/user/changeusername',
+    method: 'post',
+    data
+  })
+}
+

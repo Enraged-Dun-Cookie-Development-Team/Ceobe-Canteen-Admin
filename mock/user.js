@@ -43,17 +43,17 @@ const users = {
   'chef-token': {
     roles: ['chef'],
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-    name: '小刻食堂主厨'
+    name: 'chef'
   },
   'cooker-token': {
     roles: ['cooker'],
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-    name: '小刻食堂厨师'
+    name: 'cooker'
   },
   'architect-token': {
     roles: ['architect'],
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-    name: '饼学大厦建造师'
+    name: 'architect'
   }
 }
 
@@ -137,7 +137,29 @@ module.exports = [
           message: '你没有权限新建用户'
         }
       }
+    }
+  },
 
+  // 改用户名
+  {
+    url: '/admin/user/changeusername',
+    type: 'post',
+    response: config => {
+      const { token, username } = config.body
+      
+      const info = users[token]
+      if(username == info.name) {
+        return {
+          code: 20001,
+          message: '用户名已被使用'
+        }
+      } else {
+        return {
+          code: 20000,
+          message: '修改用户名成功',
+          data: { username }
+        }
+      }
     }
   },
 ]

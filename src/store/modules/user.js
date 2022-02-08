@@ -1,4 +1,4 @@
-import { login, logout, getInfo, createUser } from '@/api/user'
+import { login, logout, getInfo, createUser, changeUsername } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import md5 from 'js-md5'
@@ -92,9 +92,24 @@ const actions = {
     })
   },
 
+  // 创建一个用户
   createUser({ state }, permission) {
     return new Promise((resolve, reject) => {
       createUser({ token: state.token, permission: permission }).then(response => {
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  // 修改用户名
+  changeUsername({ state, commit }, username) {
+    return new Promise((resolve, reject) => {
+      changeUsername({ token: state.token, username: username }).then(response => {
+        const { data } = response;
+        commit('SET_NAME', data.username);
+        
         resolve(response)
       }).catch(error => {
         reject(error)
