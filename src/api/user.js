@@ -39,3 +39,11 @@ export function changeUsername(data) {
   })
 }
 
+export function changePassword(data) {
+  return request({
+    url: '/admin/user/changepassword',
+    method: 'post',
+    data
+  })
+}
+

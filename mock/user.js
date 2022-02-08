@@ -124,7 +124,7 @@ module.exports = [
     type: 'get',
     response: config => {
       const { token, permission } = config.query
-      
+
       if (token == 'chef-token') {
         const userInfo = newUser[permission]
         return {
@@ -146,9 +146,9 @@ module.exports = [
     type: 'post',
     response: config => {
       const { token, username } = config.body
-      
+
       const info = users[token]
-      if(username == info.name) {
+      if (username == info.name) {
         return {
           code: 20001,
           message: '用户名已被使用'
@@ -159,6 +159,20 @@ module.exports = [
           message: '修改用户名成功',
           data: { username }
         }
+      }
+    }
+  },
+
+  // 修改密码
+  {
+    url: '/admin/user/changepassword',
+    type: 'post',
+    response: config => {
+      const { token, password } = config.body
+
+      return {
+        code: 20000,
+        message: '修改密码成功'
       }
     }
   },

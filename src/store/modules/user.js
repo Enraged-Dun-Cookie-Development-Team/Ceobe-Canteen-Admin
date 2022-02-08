@@ -1,4 +1,4 @@
-import { login, logout, getInfo, createUser, changeUsername } from '@/api/user'
+import { login, logout, getInfo, createUser, changeUsername, changePassword } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import md5 from 'js-md5'
@@ -109,8 +109,24 @@ const actions = {
       changeUsername({ token: state.token, username: username }).then(response => {
         const { data } = response;
         commit('SET_NAME', data.username);
-        
+
         resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  // 修改密码
+  changePassword({ state, commit }, password) {
+    return new Promise((resolve, reject) => {
+      changePassword({ token: state.token, password: password }).then(response => {
+        const { data } = response;
+
+        commit('SET_TOKEN', data.token)
+        setToken(data.token)
+
+        resolve()
       }).catch(error => {
         reject(error)
       })
