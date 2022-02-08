@@ -38,12 +38,6 @@ export const constantRoutes = [
   },
 
   {
-    path: '/register',
-    component: () => import('@/views/register/index'),
-    hidden: true
-  },
-
-  {
     path: '/404',
     component: () => import('@/views/404'),
     hidden: true
@@ -55,14 +49,41 @@ export const constantRoutes = [
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
-      name: 'Dashboard',
+      name: '小刻食堂后厨',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '小刻食堂后厨', icon: 'dashboard' }
     }]
   }
 ]
 
 export const asyncRoutes = [
+  {
+    path: '/user',
+    name: '用户信息',
+    component: Layout,
+    redirect: '/user/changePassword',
+    meta: { title: '用户信息', icon: 'user'},
+    children: [
+      {
+        path: 'createUser',
+        name: '新建用户',
+        component: () => import('@/views/user/createUser/index'),
+        meta: { title: '新建用户', icon: 'peoples', roles: ['chef'] }
+      },
+      {
+        path: 'changeUsername',
+        name: '修改用户名',
+        component: () => import('@/views/user/changeUsername/index'),
+        meta: { title: '修改用户名', icon: 'el-icon-s-custom', roles: ['chef', 'cooker', 'architect'] }
+      },
+      {
+        path: 'changePassword',
+        name: '修改密码',
+        component: () => import('@/views/user/changePassword/index'),
+        meta: { title: '修改密码', icon: 'lock', roles: ['chef', 'cooker', 'architect'] }
+      },
+    ]
+  },
   {
     path: '/canteen',
     name: 'canteen',

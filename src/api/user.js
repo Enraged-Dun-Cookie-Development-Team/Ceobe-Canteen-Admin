@@ -23,10 +23,11 @@ export function logout() {
   })
 }
 
-export function register(data) {
+export function createUser(data) {
   return request({
-    url: '/admin/user/register',
-    method: 'post',
-    data
+    url: '/admin/user/create',
+    method: 'get',
+    params: data
   })
 }
+

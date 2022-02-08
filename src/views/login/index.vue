@@ -42,7 +42,6 @@
       </el-form-item>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">进入厨房</el-button>
-      <a class="register-link" href="/#/register">还没有入职？点击前往人事部</a>
     </el-form>
   </div>
 </template>

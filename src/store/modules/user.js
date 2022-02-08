@@ -1,4 +1,4 @@
-import { login, logout, getInfo, register } from '@/api/user'
+import { login, logout, getInfo, createUser } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import md5 from 'js-md5'
@@ -83,24 +83,22 @@ const actions = {
     })
   },
 
-  // 用户注册
-  register({ commit }, userInfo) {
-    const { username, password, inviteCode } = userInfo
-    return new Promise((resolve, reject) => {
-      register({ username: username.trim(), password: md5(password), inviteCode: inviteCode }).then(response => {
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
-
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
       commit('RESET_STATE')
       resolve()
+    })
+  },
+
+  createUser({ state }, permission) {
+    return new Promise((resolve, reject) => {
+      createUser({ token: state.token, permission: permission }).then(response => {
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
     })
   }
 }

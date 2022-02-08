@@ -24,6 +24,21 @@ const tokens = {
   }
 }
 
+const newUser = {
+  chef: {
+    username: 'chef1',
+    password: 'chef1-password'
+  },
+  cooker: {
+    username: 'cooker1',
+    password: 'cooker1-password'
+  },
+  architect: {
+    username: 'architect1',
+    password: 'architect1-password'
+  }
+}
+
 const users = {
   'chef-token': {
     roles: ['chef'],
@@ -104,23 +119,25 @@ module.exports = [
     }
   },
 
-  // 用户注册
   {
-    url: '/admin/user/register',
-    type: 'post',
+    url: '/admin/user/create',
+    type: 'get',
     response: config => {
-      const { inviteCode } = config.body
-      if (inviteCode === 't3rf3f3d') {
+      const { token, permission } = config.query
+      
+      if (token == 'chef-token') {
+        const userInfo = newUser[permission]
         return {
           code: 20000,
-          data: '注册成功'
+          data: userInfo
+        }
+      } else {
+        return {
+          code: 40001,
+          message: '你没有权限新建用户'
         }
       }
 
-      return {
-        code: 30001,
-        data: '邀请码无效'
-      }
     }
-  }
+  },
 ]
