@@ -1,0 +1,160 @@
+<template>
+  <div id="mainWindow">
+    <h3>插件端版本信息</h3>
+    <el-form
+      ref="phoneForm"
+      :model="phoneForm"
+      :rules="phoneRules"
+      label-position="left"
+      label-width="110px"
+    >
+      <el-form-item label="版本号" prop="version">
+        <el-input
+          v-model="phoneForm.version"
+          placeholder="请输入版本号"
+          @blur="changeVersion"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="强制更新" prop="forcus">
+        <el-switch
+          v-model="phoneForm.forcus"
+          active-color="#ffba4b"
+          inactive-color="#97a8be"
+        >
+        </el-switch>
+      </el-form-item>
+      <el-form-item label="上次强制版本" prop="lastForceVersion">
+        <el-input
+          v-model="phoneForm.lastForceVersion"
+          placeholder="请输入标题"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="描述" prop="description">
+        <el-input
+          type="textarea"
+          :rows="8"
+          v-model="phoneForm.description"
+          placeholder="请输入描述"
+        ></el-input>
+      </el-form-item>
+    </el-form>
+    <el-button
+      type="primary"
+      @click="submitPhoneVersion()"
+      class="btn-submit"
+      >提交</el-button
+    >
+  </div>
+</template>
+<script>
+export default {
+  data() {
+    let VersionValidate = (rule, value, callback) => {
+      let pattern = /^\d*\.\d+$/i;
+      if (!pattern.test(value)) {
+        callback(new Error("这不是正确版本号KUSO"));
+      } else {
+        callback();
+      }
+    };
+    return {
+      phoneForm: {
+        version: "",
+        forcus: true,
+        lastForceVersion: "",
+        description: "",
+      },
+      phoneRules: {
+        version: [
+          {
+            required: true,
+            message: "全部都要填上呀",
+            trigger: ["change", "blur"],
+          },
+          {
+            validator: VersionValidate,
+            message: "这不是正确版本号KUSO",
+            trigger: "blur",
+          },
+        ],
+        forcus: [
+          {
+            required: true,
+            message: "这里你也触发不出来",
+            trigger: "blur",
+          },
+        ],
+        lastForceVersion: [
+          {
+            required: true,
+            message: "别空着别空着",
+            trigger: ["change", "blur"],
+          },
+          {
+            validator: VersionValidate,
+            message: "这不是正确版本号KUSO",
+            trigger: "blur",
+          },
+        ],
+        description: [
+          {
+            required: true,
+            message: "都说了不要为空",
+            trigger: "blur",
+          },
+        ],
+      },
+    };
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {},
+    // 提交表单到服务器
+    submitPhoneVersion() {
+      this.$refs["phoneForm"].validate((valid) => {
+        if (valid) {
+          this.$store
+            .dispatch("version/submitPhoneVersion", this.phoneForm)
+            .then((_) => {
+              this.$message({
+                showClose: true,
+                message: "上传上去啦",
+                type: "success",
+              });
+            });
+        }
+      });
+    },
+  },
+};
+</script>
+
+<style lang="less" scoped>
+#mainWindow {
+  /deep/ label {
+    font-weight: 500;
+  }
+  .img-area {
+    position: absolute;
+    height: 40px;
+    img {
+      height: 40px;
+      margin-left: 20px;
+    }
+  }
+  .btn-submit {
+    position: fixed;
+    bottom: 20px;
+    right: 80px;
+    background-color: #ffba4b;
+    border-color: #ffba4b;
+  }
+  .btn-submit:focus,
+  .btn-submit:hover {
+    background-color: #ffc76e;
+    border-color: #ffc76e;
+  }
+}
+</style>

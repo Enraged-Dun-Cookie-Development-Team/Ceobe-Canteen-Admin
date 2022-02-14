@@ -7,11 +7,13 @@
       label-position="left"
       label-width="100px"
     >
-      <el-form-item label="职位">
+      <el-form-item label="职位" text-color="#ffba4b">
         <el-radio v-model="permission" label="chef">主厨</el-radio>
         <el-radio v-model="permission" label="cooker">厨师</el-radio>
         <el-radio v-model="permission" label="architect">建造师</el-radio>
-        <el-button type="primary" @click="entryCanteen">确定入职</el-button>
+        <el-button class="btn-submit" type="primary" @click="entryCanteen"
+          >确定入职</el-button
+        >
       </el-form-item>
     </el-form>
     <el-form
@@ -31,6 +33,7 @@
       <el-form-item>
         <el-button
           type="primary"
+          class="btn-submit"
           v-clipboard:copy="copytext"
           v-clipboard:success="onCopy"
           v-clipboard:error="onError"
@@ -94,6 +97,15 @@ export default {
 #mainWindow {
   /deep/ label {
     font-weight: 500;
+  }
+  .btn-submit {
+    background-color: #ffba4b;
+    border-color: #ffba4b;
+  }
+  .btn-submit:focus,
+  .btn-submit:hover {
+    background-color: #ffc76e;
+    border-color: #ffc76e;
   }
 }
 </style>

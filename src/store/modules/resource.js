@@ -12,7 +12,7 @@ const actions = {
         })
     },
     // 上传视频信息
-    submitResourceList({}, resouceList) {
+    submitResourceList(resouceList) {
         return new Promise((resolve, reject) => {
             submitResourceList(resouceList).then(response => {
                 resolve(response)

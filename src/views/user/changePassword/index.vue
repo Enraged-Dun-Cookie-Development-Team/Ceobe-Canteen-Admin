@@ -59,7 +59,7 @@
         </span>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="changePassword">提交修改</el-button>
+        <el-button class="btn-submit" type="primary" @click="changePassword">提交修改</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -154,6 +154,16 @@ export default {
 
   /deep/ label {
     font-weight: 500;
+  }
+
+  .btn-submit {
+    background-color: #ffba4b;
+    border-color: #ffba4b;
+  }
+  .btn-submit:focus,
+  .btn-submit:hover {
+    background-color: #ffc76e;
+    border-color: #ffc76e;
   }
 }
 </style>

@@ -169,10 +169,14 @@ module.exports = [
     type: 'post',
     response: config => {
       const { token, password } = config.body
+      let data={
+        token: "test"
+      }
 
       return {
         code: 20000,
-        message: '修改密码成功'
+        message: '修改密码成功',
+        data: data
       }
     }
   },

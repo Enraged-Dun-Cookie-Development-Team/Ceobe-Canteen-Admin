@@ -378,6 +378,13 @@ export default {
     position: fixed;
     bottom: 20px;
     right: 80px;
+    background-color: #ffba4b;
+    border-color: #ffba4b;
+  }
+  .btn-submit:focus,
+  .btn-submit:hover {
+    background-color: #ffc76e;
+    border-color: #ffc76e;
   }
 }
 </style>

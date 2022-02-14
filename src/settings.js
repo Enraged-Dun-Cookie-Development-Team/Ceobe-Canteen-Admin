@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Vue Admin Template',
+  title: '小刻食堂 Ceobe Canteen',
 
   /**
    * @type {boolean} true | false
