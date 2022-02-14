@@ -4,6 +4,7 @@
       <tinymce v-model="content" :height="100" />
     </div>
     <div class="editor-content" v-html="content" />
+    <img src="https://i2.hdslb.com/bfs/archive/e3dfafb045081803b4032d29d657f35e5f77a235.jpg@200w_125h_1c.webp" alt="">
   </div>
 </template>
 
