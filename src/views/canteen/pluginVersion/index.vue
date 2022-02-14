@@ -89,13 +89,13 @@
         ></el-input>
       </el-form-item>
     </el-form>
-    <el-button type="primary" @click="submitPluginVersion()" class="btn-submit"
-      >提交</el-button
-    >
+      <form-button @submit="submitPluginVersion()"></form-button>
   </div>
 </template>
 <script>
+import FormButton from '@/components/FormButton'
 export default {
+  components: { FormButton },
   data() {
     let VersionValidate = (rule, value, callback) => {
       let pattern = /^\d*\.\d+(\.\d+)?$/i;
@@ -269,17 +269,6 @@ export default {
       margin-left: 20px;
     }
   }
-  .btn-submit {
-    position: fixed;
-    bottom: 20px;
-    right: 80px;
-    background-color: #ffba4b;
-    border-color: #ffba4b;
-  }
-  .btn-submit:focus,
-  .btn-submit:hover {
-    background-color: #ffc76e;
-    border-color: #ffc76e;
-  }
+
 }
 </style>

@@ -1,12 +1,17 @@
 <template>
   <section class="app-main">
-    <transition name="fade-transform" mode="out-in">
+    <!-- <transition name="fade-transform"
+      enter-active-class="animate__animated animate__fadeInDown  animate__faster"
+      leave-active-class="animate__animated animate__fadeOutDown  animate__faster"
+      mode="out-in">
       <router-view :key="key" />
-    </transition>
+    </transition> -->
+     <router-view :key="key" />
   </section>
 </template>
 
 <script>
+import 'animate.css'
 export default {
   name: "AppMain",
   computed: {
@@ -16,6 +21,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .app-main {

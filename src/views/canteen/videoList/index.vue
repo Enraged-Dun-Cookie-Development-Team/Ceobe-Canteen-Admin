@@ -114,18 +114,15 @@
         </el-card>
       </el-collapse-item>
     </el-collapse>
-    <el-button
-      type="primary"
-      @click="submitVideoList('videoListForm')"
-      class="btn-submit"
-      >提交</el-button
-    >
+    <form-button @submit="submitVideoList('videoListForm')"></form-button>
   </div>
 </template>
 <script>
 import TimeUtil from "@/utils/time";
+import FormButton from '@/components/FormButton'
 
 export default {
+  components: { FormButton },
   data() {
     let that = this;
     let validBV = (rule, value, callback) => {

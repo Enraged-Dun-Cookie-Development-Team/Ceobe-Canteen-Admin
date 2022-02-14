@@ -111,18 +111,15 @@
         </el-card>
       </el-collapse-item>
     </el-collapse>
-    <el-button
-      type="primary"
-      @click="submitResourceList('videoListForm')"
-      class="btn-submit"
-      >提交</el-button
-    >
+    <form-button @submit="submitResourceList('videoListForm')"></form-button>
   </div>
 </template>
 <script>
 import TimeUtil from "@/utils/time";
+import FormButton from '@/components/FormButton'
 
 export default {
+  components: { FormButton },
   data() {
     let that = this;
     let timeValidate = (rule, value, callback) => {
@@ -372,19 +369,6 @@ export default {
 
   .width50 {
     width: 50%;
-  }
-
-  .btn-submit {
-    position: fixed;
-    bottom: 20px;
-    right: 80px;
-    background-color: #ffba4b;
-    border-color: #ffba4b;
-  }
-  .btn-submit:focus,
-  .btn-submit:hover {
-    background-color: #ffc76e;
-    border-color: #ffc76e;
   }
 }
 </style>
