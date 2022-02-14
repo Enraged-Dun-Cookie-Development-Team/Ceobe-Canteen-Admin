@@ -1,5 +1,6 @@
 <template>
   <div id="mainWindow">
+    <h3>视频链接</h3>
     <el-collapse
       v-for="(video, index) in videoListForm.videos"
       :key="index"
@@ -41,7 +42,7 @@
         <el-card class="single-card">
           <el-form
             :ref="'videoListForm' + index"
-            :model="videoListForm.videos[0]"
+            :model="videoListForm.videos[index]"
             :rules="videoRules"
             class="video-list"
             label-width="100px"
@@ -401,19 +402,6 @@ export default {
 
   .width30 {
     width: 30%;
-  }
-
-  .btn-submit {
-    position: fixed;
-    bottom: 20px;
-    right: 80px;
-    background-color: #ffba4b;
-    border-color: #ffba4b;
-  }
-  .btn-submit:focus,
-  .btn-submit:hover {
-    background-color: #ffc76e;
-    border-color: #ffc76e;
   }
 }
 </style>
