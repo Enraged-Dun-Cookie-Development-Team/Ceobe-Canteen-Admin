@@ -1,10 +1,11 @@
 import { getVideoInfo, getVideoList, submitVideoList } from '@/api/video'
+import store from '..'
 
 const actions = {
     // 获取视频消息信息
-    getVideoInfo({}, bvNumber) {
+    getVideoInfo({ }, bvNumber) {
         return new Promise((resolve, reject) => {
-            getVideoInfo(bvNumber).then(response => {
+            getVideoInfo({ token: store.getters.token, bvNumber: bvNumber }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)
@@ -14,7 +15,7 @@ const actions = {
     // 获取现有列表
     getVideoList() {
         return new Promise((resolve, reject) => {
-            getVideoList().then(response => {
+            getVideoList(store.getters.token).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)
@@ -22,9 +23,9 @@ const actions = {
         })
     },
     // 上传视频信息
-    submitVideoList({}, videoList) {
+    submitVideoList({ }, videoList) {
         return new Promise((resolve, reject) => {
-            submitVideoList(videoList).then(response => {
+            submitVideoList({ token: store.getters.token, info: videoList }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)

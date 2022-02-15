@@ -8,17 +8,18 @@ export async function getVideoInfo(bvNumber) {
     })
 }
 
-export async function getVideoList() {
+export async function getVideoList(token) {
     return request({
         url: `/admin/video/list`,
         method: 'get',
+        params: { token }
     })
 }
 
-export async function submitVideoList(videoList) {
+export async function submitVideoList(data) {
     return request({
         url: `/admin/video/submitList`,
         method: 'post',
-        data: videoList
+        data: data
     })
 }

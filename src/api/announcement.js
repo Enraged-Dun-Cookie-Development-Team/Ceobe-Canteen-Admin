@@ -1,16 +1,16 @@
 import request from '@/utils/request'
 
-export async function getResourceList(token) {
+export async function getAnnouncementList(token) {
     return request({
-        url: `/admin/resource/list`,
+        url: `/admin/announcement/get`,
         method: 'get',
         params: { token }
     })
 }
 
-export async function submitResourceList(data) {
+export async function submitAnnouncementList(data) {
     return request({
-        url: `/admin/resource/submitList`,
+        url: `/admin/announcement/submitList`,
         method: 'post',
         data: data
     })

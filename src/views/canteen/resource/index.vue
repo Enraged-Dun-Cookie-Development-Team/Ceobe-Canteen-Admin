@@ -124,8 +124,10 @@ export default {
     let that = this;
     let timeValidate = (rule, value, callback) => {
       if (
-        this.resourceForm.countdown[this.activeIndex].starTime == "" ||
-        this.resourceForm.countdown[this.activeIndex].overTime == ""
+        that.resourceForm.countdown[that.activeIndex].starTime == "" ||
+        that.resourceForm.countdown[that.activeIndex].overTime == "" ||
+        that.resourceForm.countdown[that.activeIndex].starTime == null ||
+        that.resourceForm.countdown[that.activeIndex].overTime == null
       ) {
         callback(new Error("我要什么时候显示呀"));
       } else {
@@ -163,6 +165,11 @@ export default {
           },
         ],
         starTime: [
+          {
+            required: true,
+            message: "我要什么时候显示呀",
+            trigger: "blur",
+          },
           {
             validator: timeValidate,
             message: "我要什么时候显示呀",

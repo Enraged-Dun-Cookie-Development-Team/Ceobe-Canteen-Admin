@@ -6,6 +6,7 @@ const table = require('./table')
 const video = require('./video')
 const resource = require('./resource')
 const version = require('./version')
+const announcement = require("./announcement")
 
 const mocks = [
   ...user,
@@ -13,6 +14,7 @@ const mocks = [
   ...video,
   ...resource,
   ...version,
+  ...announcement,
 ]
 
 // for front mock

@@ -1,20 +1,21 @@
 import { getResourceList, submitResourceList } from '@/api/resource'
+import store from '..'
 
 const actions = {
     // 获取现有列表
     getResourceList() {
         return new Promise((resolve, reject) => {
-            getResourceList().then(response => {
+            getResourceList(store.getters.token).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)
             })
         })
     },
-    // 上传视频信息
-    submitResourceList(resouceList) {
+    // 上传资源信息
+    submitResourceList({ }, resouceList) {
         return new Promise((resolve, reject) => {
-            submitResourceList(resouceList).then(response => {
+            submitResourceList({ token: store.getters.token, info: resouceList }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)

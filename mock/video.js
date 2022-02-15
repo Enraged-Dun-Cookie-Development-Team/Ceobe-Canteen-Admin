@@ -3,6 +3,7 @@ module.exports = [
         url: '/admin/video/detail\.*',
         type: 'get',
         response: config => {
+            console.log(config.query)
             let data = {
                 "code": 0,
                 "message": "0",
