@@ -20,7 +20,7 @@
                 video.starTime +
                 "显示到" +
                 video.overTime +
-                (video.set ? "  (已完成) " : "  (未完成) ")
+                (setAll[index].set ? "  (已完成) " : "  (未完成) ")
               }}
             </div>
             <div>
@@ -58,7 +58,7 @@
                 <template slot="prepend">BV</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="显示时间">
+            <el-form-item label="显示时间" prop="starTime">
               <el-date-picker
                 v-model="video.starTime"
                 type="datetime"
@@ -80,24 +80,24 @@
                 @blur="checkForm(index)"
               />
             </el-form-item>
-            <el-form-item label="视频标题">
+            <el-form-item label="视频标题" prop="title">
               <el-input
                 v-model="video.title"
                 placeholder="请输入标题"
                 @blur="checkForm(index)"
               ></el-input>
             </el-form-item>
-            <el-form-item label="up主">
+            <el-form-item label="up主" prop="author">
               <el-input
                 v-model="video.author"
                 :disabled="true"
                 class="width30"
               ></el-input>
             </el-form-item>
-            <el-form-item label="视频链接">
+            <el-form-item label="视频链接" prop="videoLink">
               <el-input v-model="video.videoLink" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="封面链接">
+            <el-form-item label="封面链接" prop="coverImg">
               <el-input v-model="video.coverImg" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item>
@@ -120,7 +120,7 @@
 </template>
 <script>
 import TimeUtil from "@/utils/time";
-import FormButton from '@/components/FormButton'
+import FormButton from "@/components/FormButton";
 
 export default {
   components: { FormButton },
@@ -130,6 +130,18 @@ export default {
       let pattern = /^(BV)?1..4(1|y)1.7..$/i;
       if (!pattern.test(value)) {
         callback(new Error("你这BV号好像不太对诶"));
+      } else {
+        callback();
+      }
+    };
+    let timeValidate = (rule, value, callback) => {
+      if (
+        that.videoListForm.videos[that.activeIndex].starTime == "" ||
+        that.videoListForm.videos[that.activeIndex].overTime == "" ||
+        that.videoListForm.videos[that.activeIndex].starTime == null ||
+        that.videoListForm.videos[that.activeIndex].overTime == null
+      ) {
+        callback(new Error("我要什么时候显示呀"));
       } else {
         callback();
       }
@@ -146,14 +158,38 @@ export default {
             author: "",
             videoLink: "",
             coverImg: "",
-            set: false,
           },
         ],
       },
+      setAll: [
+        {
+          set: false,
+        },
+      ],
       videoRules: {
         BV: [
           {
             validator: validBV,
+            message: "你这BV号好像不太对诶",
+            trigger: "blur",
+          },
+        ],
+        starTime: [
+          {
+            required: true,
+            message: "我要什么时候显示呀",
+            trigger: "blur",
+          },
+          {
+            validator: timeValidate,
+            message: "我要什么时候显示呀",
+            trigger: "blur",
+          },
+        ],
+        title: [
+          {
+            required: true,
+            message: "标题可别漏了",
             trigger: "blur",
           },
         ],
@@ -263,40 +299,58 @@ export default {
   methods: {
     init() {
       this.$store.dispatch("video/getVideoList").then((response) => {
+        response.data.videos.map((video, index) => {
+          if (index == 0) {
+            this.setAll[index]["set"] = true;
+          } else {
+            this.setAll.splice(index, 0, {
+              set: true,
+            });
+          }
+        });
         this.videoListForm = JSON.parse(JSON.stringify(response.data));
       });
     },
     // 提交表单到服务器
     submitVideoList() {
-      let videoList = {};
-      videoList.videos = [];
-      this.videoListForm.videos.forEach((video) => {
-        if (video.set == true) {
-          videoList.videos.push(JSON.parse(JSON.stringify(video)));
-        }
-      });
-      videoList.videos.forEach((video) => {
-        if (video.BV.substring(0, 2) !== "BV") {
-          video.BV = "BV" + video.BV;
-        }
-      });
-
-      this.$store
-        .dispatch("video/submitVideoList", videoList)
-        .then((_) => {
-          this.$message({
-            showClose: true,
-            message: "上传上去啦",
-            type: "success",
-          });
-        })
-        .catch((_) => {
-          this.$message({
-            showClose: true,
-            message: "好像有哪里不太对，联系开发者看看呀",
-            type: "warning",
-          });
+      let allPass = true;
+      this.videoListForm.videos.forEach((item, index) => {
+        this.$refs["videoListForm" + index][0].validate((valid) => {
+          if (!valid) {
+            allPass = false;
+            return;
+          }
         });
+      });
+      if (allPass) {
+        let videoList = {};
+        videoList.videos = [];
+        this.videoListForm.videos.forEach((video) => {
+          videoList.videos.push(JSON.parse(JSON.stringify(video)));
+        });
+        videoList.videos.forEach((video) => {
+          if (video.BV.substring(0, 2) !== "BV") {
+            video.BV = "BV" + video.BV;
+          }
+        });
+
+        this.$store
+          .dispatch("video/submitVideoList", videoList)
+          .then((_) => {
+            this.$message({
+              showClose: true,
+              message: "上传上去啦",
+              type: "success",
+            });
+          })
+          .catch((_) => {
+            this.$message({
+              showClose: true,
+              message: "好像有哪里不太对，联系开发者看看呀",
+              type: "warning",
+            });
+          });
+      }
     },
     // 删除视频
     removeVideo(item) {
@@ -304,6 +358,7 @@ export default {
       if (this.videoListForm.videos.length > 1) {
         if (index !== -1) {
           this.videoListForm.videos.splice(index, 1);
+          this.setAll.splice(index, 1);
         }
       }
     },
@@ -320,6 +375,9 @@ export default {
         coverImg: "",
         set: false,
       });
+      this.setAll.splice(index + 1, 0, {
+        set: false,
+      });
     },
     // 检查表单有没有填完
     checkForm(index) {
@@ -334,15 +392,15 @@ export default {
         }
       }
       if (complete) {
-        this.videoListForm.videos[index]["set"] = true;
+        this.setAll[index]["set"] = true;
       } else {
-        this.videoListForm.videos[index]["set"] = false;
+        this.setAll[index]["set"] = false;
       }
     },
     //获取视频详细信息
     getVideoInfo(index) {
-      this.$refs["videoListForm" + index][0].validate((valid) => {
-        if (valid) {
+      this.$refs["videoListForm" + index][0].validateField('BV', valid => {
+        if (valid==='') {
           let bvNumber = this.videoListForm.videos[index]["BV"];
           this.$store
             .dispatch("video/getVideoInfo", bvNumber)

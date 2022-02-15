@@ -5104,7 +5104,6 @@ module.exports = [
                         'author': "杨颜同学",
                         'videoLink': "https://www.bilibili.com/video/BV19b4y1v7Wa",
                         'coverImg': "https://i0.hdslb.com/bfs/archive/ad102b8851a3f629bc6bab9596e3b8f9a75d390d.jpg@200w_125h_1c.webp",
-                        'set': true,
                     },
                     {
                         'BV': "BV1r3411a7Kg",
@@ -5114,7 +5113,6 @@ module.exports = [
                         'author': "四木攰",
                         'videoLink': "https://www.bilibili.com/video/BV1r3411a7Kg",
                         'coverImg': "https://i1.hdslb.com/bfs/archive/44d3ab354c59f9549f20925e99ddeb55793e8eef.jpg@200w_125h.webp",
-                        'set': true,
                     },
                 ],
             }

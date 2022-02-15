@@ -17,7 +17,8 @@
                 "个， 从" +
                 announcement.starTime +
                 "显示到" +
-                announcement.overTime
+                announcement.overTime +
+                (setAll[index].set ? "  (已完成) " : "  (未完成) ")
               }}
             </div>
             <div>
@@ -49,11 +50,15 @@
               <el-input
                 v-model="announcement.imgUrl"
                 placeholder="请输入图片链接"
-                @blur="getImg(index)"
+                @blur="getImg(index), checkForm(index)"
               ></el-input>
             </el-form-item>
             <el-form-item label="内容" prop="content">
-              <tinymce v-model="announcement.content" :height="100" />
+              <tinymce
+                v-model="announcement.content"
+                :height="100"
+                @blur="checkForm(index)"
+              />
             </el-form-item>
             <el-form-item label="显示时间" prop="starTime">
               <el-date-picker
@@ -64,6 +69,7 @@
                 :picker-options="pickerStarTime"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 @focus="activeIndex = index"
+                @blur="checkForm(index)"
               />
               -
               <el-date-picker
@@ -74,6 +80,7 @@
                 :picker-options="pickerOverTime"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 @focus="activeIndex = index"
+                @blur="checkForm(index)"
               />
             </el-form-item>
             <el-form-item label="是否推送" prop="notice">
@@ -81,6 +88,7 @@
                 v-model="announcement.notice"
                 active-color="#ffba4b"
                 inactive-color="#97a8be"
+                @blur="checkForm(index)"
               >
               </el-switch>
             </el-form-item>
@@ -139,6 +147,11 @@ export default {
           },
         ],
       },
+      setAll: [
+        {
+          set: false,
+        },
+      ],
       imgList: [
         {
           img: "",
@@ -305,9 +318,13 @@ export default {
         .dispatch("announcement/getAnnouncementList")
         .then((response) => {
           response.data.announcements.map((announcement, index) => {
-            // console.log(announcement)
-            if (index > 0) {
-              this.imgList.splice(index + 1, 0, {
+            if (index == 0) {
+              this.setAll[index]["set"] = true;
+            } else {
+              this.setAll.splice(index, 0, {
+                set: true,
+              });
+              this.imgList.splice(index, 0, {
                 img: "",
               });
             }
@@ -329,7 +346,10 @@ export default {
       });
       if (allPass) {
         this.$store
-          .dispatch("announcement/submitAnnouncementList", this.announcementForm)
+          .dispatch(
+            "announcement/submitAnnouncementList",
+            this.announcementForm
+          )
           .then((_) => {
             this.$message({
               showClose: true,
@@ -395,6 +415,24 @@ export default {
       this.imgList.splice(index + 1, 0, {
         img: "",
       });
+    },
+    // 检查表单有没有填完
+    checkForm(index) {
+      let complete = true;
+      for (let detail in this.announcementForm.announcements[index]) {
+        if (
+          this.announcementForm.announcements[index][detail] == null ||
+          this.announcementForm.announcements[index][detail] === ""
+        ) {
+          complete = false;
+          break;
+        }
+      }
+      if (complete) {
+        this.setAll[index]["set"] = true;
+      } else {
+        this.setAll[index]["set"] = false;
+      }
     },
   },
 };

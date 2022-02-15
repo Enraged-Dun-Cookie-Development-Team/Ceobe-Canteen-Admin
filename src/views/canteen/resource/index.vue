@@ -32,7 +32,8 @@
                 "从" +
                 (item.starTime ? item.starTime : " ") +
                 "显示到" +
-                item.overTime
+                item.overTime+
+                (setAll[index].set ? "  (已完成) " : "  (未完成) ")
               }}
             </div>
             <div>
@@ -65,6 +66,7 @@
                 class="width50"
                 v-model="item.text"
                 placeholder="请输入标题"
+                @blur="checkForm(index)"
               ></el-input>
             </el-form-item>
             <el-form-item label="描述" prop="remark">
@@ -72,6 +74,7 @@
                 class="width50"
                 v-model="item.remark"
                 placeholder="请输入描述"
+                @blur="checkForm(index)"
               ></el-input>
             </el-form-item>
             <el-form-item label="显示时间" prop="starTime" required>
@@ -83,6 +86,7 @@
                 :picker-options="pickerStarTime"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 @focus="activeIndex = index"
+                @blur="checkForm(index)"
               />
               -
               <el-date-picker
@@ -93,6 +97,7 @@
                 :picker-options="pickerOverTime"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 @focus="activeIndex = index"
+                @blur="checkForm(index)"
               />
             </el-form-item>
             <el-form-item label="倒计时终点" prop="time">
@@ -102,6 +107,7 @@
                 placeholder="选择倒计时终点时间"
                 align="center"
                 value-format="yyyy-MM-dd HH:mm:ss"
+                @blur="checkForm(index)"
               />
               <el-button round @click="syncTime(index)" class="sync-btn"
                 >同步显示结束时间</el-button
@@ -149,6 +155,11 @@ export default {
           },
         ],
       },
+      setAll: [
+        {
+          set: false,
+        },
+      ],
       resourceRules: {
         resources: [
           {
@@ -276,6 +287,15 @@ export default {
   methods: {
     init() {
       this.$store.dispatch("resource/getResourceList").then((response) => {
+        response.data.countdown.map((countdown, index) => {
+          if (index == 0) {
+            this.setAll[index]["set"] = true;
+          } else {
+            this.setAll.splice(index, 0, {
+              set: true,
+            });
+          }
+        });
         this.resourceForm = JSON.parse(JSON.stringify(response.data));
       });
     },
@@ -321,10 +341,11 @@ export default {
       if (this.resourceForm.countdown.length > 1) {
         if (index !== -1) {
           this.resourceForm.countdown.splice(index, 1);
+          this.setAll.splice(index, 1);
         }
       }
     },
-    // 添加视频
+    // 添加单次资源
     addItem(index) {
       this.resourceForm.countdown.splice(index + 1, 0, {
         text: "",
@@ -333,6 +354,27 @@ export default {
         starTime: "",
         overTime: "",
       });
+      this.setAll.splice(index + 1, 0, {
+        set: false,
+      });
+    },
+    // 检查表单有没有填完
+    checkForm(index) {
+      let complete = true;
+      for (let detail in this.resourceForm.countdown[index]) {
+        if (
+          this.resourceForm.countdown[index][detail] == null ||
+          this.resourceForm.countdown[index][detail] === ""
+        ) {
+          complete = false;
+          break;
+        }
+      }
+      if (complete) {
+        this.setAll[index]["set"] = true;
+      } else {
+        this.setAll[index]["set"] = false;
+      }
     },
     // 将显示结束时间赋值给倒计时终点时间
     syncTime(index) {
