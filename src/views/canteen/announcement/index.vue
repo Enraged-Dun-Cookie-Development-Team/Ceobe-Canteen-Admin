@@ -54,10 +54,8 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="内容" prop="content">
-              <tinymce
+              <rich-editor
                 v-model="announcement.content"
-                :height="100"
-                @blur="checkForm(index)"
               />
             </el-form-item>
             <el-form-item label="显示时间" prop="starTime">
@@ -115,11 +113,11 @@
 
 <script>
 import TimeUtil from "@/utils/time";
-import Tinymce from "@/components/Tinymce";
+import RichEditor from "@/components/RichEditor";
 import FormButton from "@/components/FormButton/index";
 
 export default {
-  components: { Tinymce, FormButton },
+  components: { RichEditor, FormButton },
   data() {
     let that = this;
     let timeValidate = (rule, value, callback) => {
