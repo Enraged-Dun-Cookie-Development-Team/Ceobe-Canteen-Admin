@@ -29,7 +29,7 @@
                 round
               ></el-button>
               <el-button
-                @click.stop="removeAnnouncement(announcements)"
+                @click.stop="removeAnnouncement(announcement)"
                 icon="el-icon-delete"
                 class="btn-editor btn-delete"
                 round
@@ -54,7 +54,7 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="内容" prop="content">
-              <rich-editor v-model="announcement.content" />
+              <rich-editor v-model="announcement.content" :key="index"/>
             </el-form-item>
             <el-form-item label="显示时间" prop="starTime">
               <el-date-picker
@@ -394,8 +394,10 @@ export default {
       let index = this.announcementForm.announcements.indexOf(item);
       if (this.announcementForm.announcements.length > 1) {
         if (index !== -1) {
+          debugger
           this.announcementForm.announcements.splice(index, 1);
           this.imgList.splice(index, 1);
+          this.setAll.splice(index, 1);
         }
       }
     },
@@ -410,6 +412,9 @@ export default {
       });
       this.imgList.splice(index + 1, 0, {
         img: "",
+      });
+      this.setAll.splice(index + 1, 0, {
+        set: false,
       });
     },
     // 检查表单有没有填完

@@ -27,7 +27,6 @@ export default {
     initEditor() {
       const editor = new wangEditor(this.$refs.richtext);
       
-      
       const tagsKey = "tagsKey";
       this.editor = editor;
 
