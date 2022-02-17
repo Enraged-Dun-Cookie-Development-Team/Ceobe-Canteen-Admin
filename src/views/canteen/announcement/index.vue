@@ -54,9 +54,7 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="内容" prop="content">
-              <rich-editor
-                v-model="announcement.content"
-              />
+              <rich-editor v-model="announcement.content" />
             </el-form-item>
             <el-form-item label="显示时间" prop="starTime">
               <el-date-picker
@@ -304,7 +302,7 @@ export default {
         ],
       },
       activeIndex: 0,
-      activeName: 0,
+      activeName: 1,
     };
   },
   mounted() {
@@ -469,6 +467,7 @@ export default {
       font-size: 14px;
     }
 
+    // 模拟公告样式
     .list-html {
       padding: 3px;
       width: 634px;
@@ -494,7 +493,7 @@ export default {
       /deep/ .online-area .online-title-img {
         height: 100px;
         margin-right: 10px;
-        min-width: 100px;
+        min-height: 100px;
       }
 
       /deep/ .online-area .online-title-img.radius {
