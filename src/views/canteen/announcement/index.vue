@@ -302,7 +302,7 @@ export default {
         ],
       },
       activeIndex: 0,
-      activeName: 1,
+      activeName: 0,
     };
   },
   mounted() {
