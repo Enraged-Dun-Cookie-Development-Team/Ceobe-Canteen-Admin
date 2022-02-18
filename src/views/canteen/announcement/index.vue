@@ -134,13 +134,7 @@ export default {
     return {
       announcementForm: {
         announcements: [
-          {
-            starTime: "",
-            overTime: "",
-            imgUrl: "",
-            content: "",
-            notice: false,
-          },
+
         ],
       },
       setAll: [
@@ -313,6 +307,7 @@ export default {
       this.$store
         .dispatch("announcement/getAnnouncementList")
         .then((response) => {
+          this.announcementForm = [];
           response.data.announcements.map((announcement, index) => {
             if (index == 0) {
               this.setAll[index]["set"] = true;
@@ -327,7 +322,15 @@ export default {
             this.getImg(index, announcement.imgUrl);
           });
           this.announcementForm = JSON.parse(JSON.stringify(response.data));
+        }).catch(_ => {
+        this.announcementForm.announcements.splice(0, 0, {
+          starTime: "",
+          overTime: "",
+          imgUrl: "",
+          content: "",
+          notice: false,
         });
+      });
     },
     // 提交表单到服务器
     submitAnnouncementList() {
@@ -360,7 +363,6 @@ export default {
               type: "warning",
             });
           });
-        // console.log(JSON.stringify(this.announcementForm))
       }
     },
     // 获取图片展示

@@ -12,25 +12,17 @@ export default {
   data() {
     return {
       editor: "",
-      change: false,
     };
-  },
-  watch: {
-    value() {
-      if (!this.change) {
-        this.editor.txt.html(this.value);
-        this.change = true;
-      }
-    },
   },
   methods: {
     initEditor() {
       const editor = new wangEditor(this.$refs.richtext);
-      
+
       const tagsKey = "tagsKey";
       this.editor = editor;
 
       editor.config.height = 150;
+      editor.config.zIndex = 1 ;
       editor.config.onchange = (newHtml) => {
         if (newHtml) {
           this.$emit("input", newHtml);
@@ -70,6 +62,7 @@ export default {
   },
   mounted() {
     this.initEditor();
+    this.editor.txt.html(this.value);
   },
 };
 </script>
