@@ -22,7 +22,7 @@ export default {
       this.editor = editor;
 
       editor.config.height = 150;
-      editor.config.zIndex = 1 ;
+      editor.config.zIndex = 1;
       editor.config.onchange = (newHtml) => {
         if (newHtml) {
           this.$emit("input", newHtml);
@@ -59,10 +59,14 @@ export default {
 
       editor.create();
     },
+
+    updateHtml() {
+      this.editor.txt.html(this.value);
+    },
   },
   mounted() {
     this.initEditor();
-    this.editor.txt.html(this.value);
+    this.updateHtml();
   },
 };
 </script>

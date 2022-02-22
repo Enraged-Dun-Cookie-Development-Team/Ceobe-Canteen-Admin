@@ -54,7 +54,11 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="内容" prop="content">
-              <rich-editor v-model="announcement.content" :key="index"/>
+              <rich-editor
+                :ref="'richtext' + index"
+                v-model="announcement.content"
+                :key="index"
+              />
             </el-form-item>
             <el-form-item label="显示时间" prop="starTime">
               <el-date-picker
@@ -133,9 +137,7 @@ export default {
     };
     return {
       announcementForm: {
-        announcements: [
-
-        ],
+        announcements: [],
       },
       setAll: [
         {
@@ -322,15 +324,16 @@ export default {
             this.getImg(index, announcement.imgUrl);
           });
           this.announcementForm = JSON.parse(JSON.stringify(response.data));
-        }).catch(_ => {
-        this.announcementForm.announcements.splice(0, 0, {
-          starTime: "",
-          overTime: "",
-          imgUrl: "",
-          content: "",
-          notice: false,
+        })
+        .catch((_) => {
+          this.announcementForm.announcements.splice(0, 0, {
+            starTime: "",
+            overTime: "",
+            imgUrl: "",
+            content: "",
+            notice: false,
+          });
         });
-      });
     },
     // 提交表单到服务器
     submitAnnouncementList() {
@@ -396,12 +399,16 @@ export default {
       let index = this.announcementForm.announcements.indexOf(item);
       if (this.announcementForm.announcements.length > 1) {
         if (index !== -1) {
-          debugger
           this.announcementForm.announcements.splice(index, 1);
           this.imgList.splice(index, 1);
           this.setAll.splice(index, 1);
         }
       }
+      setTimeout(() => {
+        this.announcementForm.announcements.forEach((item, index) => {
+          this.$refs["richtext" + index][0].updateHtml();
+        });
+      }, 500);
     },
     // 添加新增公告
     addAnnouncement(index) {
@@ -418,6 +425,11 @@ export default {
       this.setAll.splice(index + 1, 0, {
         set: false,
       });
+      setTimeout(() => {
+        this.announcementForm.announcements.forEach((item, index) => {
+          this.$refs["richtext" + index][0].updateHtml();
+        });
+      }, 500);
     },
     // 检查表单有没有填完
     checkForm(index) {
