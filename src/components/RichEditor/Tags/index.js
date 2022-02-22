@@ -1,20 +1,10 @@
 import E from "wangeditor";
 import isActive from "./is-active";
-import { createPanelConf } from "./create-panel-conf";
 
-const { $, PanelMenu, Panel, BtnMenu } = E
+const { $, BtnMenu } = E
 
-/**
- * @description 加粗
- * @author wangfupeng
- */
 
-//  import BtnMenu from '../menu-constructors/BtnMenu'
-//  import $ from '../../utils/dom-core'
-//  import Editor from '../../editor/index'
-//  import { MenuActive } from '../menu-constructors/Menu'
-
-class Bold extends PanelMenu {
+class Bold extends BtnMenu {
     constructor(editor) {
         const $elem = $(
             `<div class="w-e-menu" data-title="自定义标签">
@@ -40,8 +30,7 @@ class Bold extends PanelMenu {
         } else {
             // 菜单未被激活，说明选区不在链接里
             if (editor.selection.isSelectionEmpty()) {
-                // 选区是空的，未选中内容
-                this.createPanel('', '')
+                return
             } else {
                 // 行内代码处理 选中了非代码内容
                 this.insertLineTag(selectionText)
@@ -74,17 +63,6 @@ class Bold extends PanelMenu {
         editor.selection.createRangeByElem($code, false)
         editor.selection.restoreSelection()
     }
-
-    /**
-     * 创建 panel
-     * @param text 代码文本
-     */
-    createPanel(text) {
-        const conf = createPanelConf(this.editor, text)
-        const panel = new Panel(this, conf)
-        panel.create()
-    }
-
 
     /**
      * 尝试修改菜单激活状态

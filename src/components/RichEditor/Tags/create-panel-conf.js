@@ -22,7 +22,7 @@ export function createPanelConf(editor, text) {
      */
     function insertTag(text) {
         // 选区未处于链接中，直接插入即可
-        editor.cmd.do('insertHTML', `<drawer>${text}</drawer>`)
+        editor.cmd.do('insertHTML', `<drawer style="color: #dd558a;">${text}</drawer>`)
     }
 
     const conf = {

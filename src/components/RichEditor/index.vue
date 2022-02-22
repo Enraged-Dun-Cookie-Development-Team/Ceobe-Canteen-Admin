@@ -6,6 +6,7 @@
 <script>
 import wangEditor from "wangeditor";
 import Tags from "./Tags/index";
+// import Link from "./link/index";
 export default {
   name: "RichEditor",
   props: ["value"], // 通过props绑定父组件的value
@@ -19,6 +20,7 @@ export default {
       const editor = new wangEditor(this.$refs.richtext);
 
       const tagsKey = "tagsKey";
+      const linksKey = "tagsKey";
       this.editor = editor;
 
       editor.config.height = 150;
@@ -53,6 +55,9 @@ export default {
         "#353535",
         "#795548",
       ];
+      // wangEditor.registerMenu(linksKey, Link);
+      // editor.config.menus = editor.config.menus.concat(linksKey);
+
       // 添加自定义按钮
       wangEditor.registerMenu(tagsKey, Tags);
       editor.config.menus = editor.config.menus.concat(tagsKey);

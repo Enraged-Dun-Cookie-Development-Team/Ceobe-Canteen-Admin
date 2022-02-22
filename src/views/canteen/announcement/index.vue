@@ -55,6 +55,7 @@
             </el-form-item>
             <el-form-item label="内容" prop="content">
               <rich-editor
+                class="rich-editor"
                 :ref="'richtext' + index"
                 v-model="announcement.content"
                 :key="index"
@@ -484,6 +485,12 @@ export default {
       margin-right: 10px;
       color: #606266;
       font-size: 14px;
+    }
+
+    /deep/ .rich-editor {
+      drawer {
+        color: #dd558a;
+      }
     }
 
     // 模拟公告样式
