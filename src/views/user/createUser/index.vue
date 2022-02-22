@@ -7,11 +7,17 @@
       label-position="left"
       label-width="100px"
     >
-      <el-form-item label="职位" text-color="#ffba4b">
-        <el-radio v-model="permission" label="chef">主厨</el-radio>
-        <el-radio v-model="permission" label="cooker">厨师</el-radio>
-        <el-radio v-model="permission" label="architect">建造师</el-radio>
-        <el-button class="btn-submit" type="primary" @click="entryCanteen"
+      <el-form-item label="职位">
+        <el-radio class="radio" v-model="permission" label="chef"
+          >主厨</el-radio
+        >
+        <el-radio class="radio" v-model="permission" label="cooker"
+          >厨师</el-radio
+        >
+        <el-radio class="radio" v-model="permission" label="architect"
+          >建造师</el-radio
+        >
+        <el-button class="btn-confirm" type="primary" @click="entryCanteen"
           >确定入职</el-button
         >
       </el-form-item>
@@ -33,7 +39,7 @@
       <el-form-item>
         <el-button
           type="primary"
-          class="btn-submit"
+          class="btn-copy"
           v-clipboard:copy="copytext"
           v-clipboard:success="onCopy"
           v-clipboard:error="onError"
@@ -98,12 +104,26 @@ export default {
   /deep/ label {
     font-weight: 500;
   }
-  .btn-submit {
+  /deep/.radio {
+    .is-checked {
+      .el-radio__inner {
+        border-color: #ffba4b;
+        background: #ffba4b;
+      }
+    }
+    .is-checked + .el-radio__label {
+      color: #ffba4b;
+    }
+  }
+  .btn-confirm,
+  .btn-copy {
     background-color: #ffba4b;
     border-color: #ffba4b;
   }
-  .btn-submit:focus,
-  .btn-submit:hover {
+  .btn-confirm:focus,
+  .btn-confirm:hover,
+  .btn-copy:focus,
+  .btn-copy:hover {
     background-color: #ffc76e;
     border-color: #ffc76e;
   }

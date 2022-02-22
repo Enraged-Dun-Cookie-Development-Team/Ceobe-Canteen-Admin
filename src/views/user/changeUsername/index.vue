@@ -18,7 +18,7 @@
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button class="btn-submit" type="primary" @click="changeUsername">提交修改</el-button>
+        <el-button class="btn-username" type="primary" @click="changeUsername">提交修改</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -79,12 +79,12 @@ export default {
   /deep/ label {
     font-weight: 500;
   }
-  .btn-submit {
+  .btn-username {
     background-color: #ffba4b;
     border-color: #ffba4b;
   }
-  .btn-submit:focus,
-  .btn-submit:hover {
+  .btn-username:focus,
+  .btn-username:hover {
     background-color: #ffc76e;
     border-color: #ffc76e;
   }
