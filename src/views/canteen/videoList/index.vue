@@ -324,10 +324,7 @@ export default {
       });
       if (allPass) {
         let videoList = {};
-        videoList.videos = [];
-        this.videoListForm.videos.forEach((video) => {
-          videoList.videos.push(JSON.parse(JSON.stringify(video)));
-        });
+        videoList = JSON.parse(JSON.stringify(this.videoListForm));
         videoList.videos.forEach((video) => {
           if (video.BV.substring(0, 2) !== "BV") {
             video.BV = "BV" + video.BV;
@@ -399,8 +396,8 @@ export default {
     },
     //获取视频详细信息
     getVideoInfo(index) {
-      this.$refs["videoListForm" + index][0].validateField('BV', valid => {
-        if (valid==='') {
+      this.$refs["videoListForm" + index][0].validateField("BV", (valid) => {
+        if (valid === "") {
           let bvNumber = this.videoListForm.videos[index]["BV"];
           this.$store
             .dispatch("video/getVideoInfo", bvNumber)

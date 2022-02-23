@@ -3,23 +3,23 @@
     <h3>大厦信息</h3>
     <el-form
       ref="infoForm"
-      :model="mansionForm.info"
+      :model="mansionForm.imansionInfo"
       :rules="mansionRules"
       label-width="100px"
       label-position="left"
     >
       <el-form-item label="大厦号" prop="id">
         <el-input
-          v-model="mansionForm.info.id"
+          v-model="mansionForm.imansionInfo.id"
           placeholder="请输入大厦号"
           class="width30"
-          @blur="updateId(mansionForm.info.id)"
+          @blur="updateId(mansionForm.imansionInfo.id)"
         >
         </el-input>
       </el-form-item>
       <el-form-item label="描述" prop="description">
         <el-input
-          v-model="mansionForm.info.description"
+          v-model="mansionForm.imansionInfo.description"
           placeholder="请输入描述"
           class="width30"
         >
@@ -27,7 +27,7 @@
       </el-form-item>
       <el-form-item label="CV号" prop="cvlink">
         <el-input
-          v-model="mansionForm.info.cvlink"
+          v-model="mansionForm.imansionInfo.cvlink"
           placeholder="请输入CV号"
           class="width30"
         >
@@ -37,13 +37,13 @@
       <el-form-item label="自信度" prop="fraction">
         <el-slider
           class="fraction-slider"
-          v-model="mansionForm.info.fraction"
+          v-model="mansionForm.imansionInfo.fraction"
           :min="1"
           :max="5"
           :step="1"
         >
         </el-slider>
-      </el-form-item> 
+      </el-form-item>
     </el-form>
     <h3>每日信息</h3>
     <el-collapse
@@ -116,6 +116,7 @@
                   placeholder="请输入预测信息"
                   class="width50"
                   @blur="checkForm(index)"
+                  @focus="activeIndex = index"
                 >
                 </el-input>
                 <el-radio-group
@@ -180,6 +181,25 @@ import FormButton from "@/components/FormButton";
 export default {
   components: { RichEditor, FormButton },
   data() {
+    let validCV = (rule, value, callback) => {
+      let pattern = /^(cv)?\d*$/i;
+      if (!pattern.test(value)) {
+        callback(new Error("你这cv号好像不太对诶,说不定是cv的大小写原因？"));
+      } else {
+        callback();
+      }
+    };
+    let forecastAllSet = (rule, value, callback) => {
+      let allSet = true;
+      this.mansionForm.daily[this.activeIndex].info.forEach((item, index) => {
+        if (item.forecast === "") {
+          allSet = false;
+        }
+      });
+      if (!allSet) {
+        callback(new Error("预测内容呢内容呢"));
+      }
+    };
     return {
       upload: false, // 当次表单删除完成
       activeIndex: 0,
@@ -192,7 +212,7 @@ export default {
       ],
       selectIdShow: "",
       OldMansionForm: {
-        info: {
+        mansionInfo: {
           idBefore: "",
           id: "",
           description: "",
@@ -213,7 +233,7 @@ export default {
         ],
       },
       mansionForm: {
-        info: {
+        imansionInfo: {
           idBefore: "",
           id: "",
           description: "",
@@ -238,7 +258,41 @@ export default {
           set: false,
         },
       ],
-      mansionRules: {},
+      mansionRules: {
+        id: [
+          {
+            required: true,
+            message: "给个单独编号哦",
+            trigger: "blur",
+          },
+        ],
+        cvlink: [
+          {
+            validator: validCV,
+            message: "你这cv号好像不太对诶,说不定是cv的大小写原因？",
+            trigger: "blur",
+          },
+        ],
+        datetime: [
+          {
+            required: true,
+            message: "这是预测的哪天呀，偶不知道呀",
+            trigger: "blur",
+          },
+        ],
+        forecast: [
+          {
+            validator: forecastAllSet,
+            message: "预测内容呢内容呢",
+            trigger: "blur",
+          },
+          {
+            required: true,
+            message: "预测内容呢内容呢",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   mounted() {
@@ -254,9 +308,37 @@ export default {
     },
     // 提交表单到服务器
     submitMansionList() {
-      // TODO: 上传表单到服务器
-      this.upload = true;
-      this.mansionForm = JSON.parse(JSON.stringify(this.OldMansionForm));
+      let allPass = true;
+      this.$refs["infoForm"].validate((valid) => {
+        if (valid) {
+          this.mansionForm.daily.forEach((item, index) => {
+            this.$refs["dailyForm" + index][0].validate((valid) => {
+              if (!valid) {
+                allPass = false;
+                return;
+              }
+            });
+          });
+        } else {
+          allPass = false;
+        }
+      });
+      // 上传表单到服务器
+      if (allPass) {
+        
+        let mansionList = {};
+        mansionList = JSON.parse(JSON.stringify(this.mansionForm));
+        if (
+          mansionList.imansionInfo.cvlink.substring(0, 2) !== "cv" &&
+          mansionList.imansionInfo.cvlink.substring(0, 2) !== "CV"
+        ) {
+          mansionList.imansionInfo.cvlink =
+            "cv" + mansionList.imansionInfo.cvlink;
+        }
+
+        this.upload = true;
+        this.OldMansionForm = JSON.parse(JSON.stringify(this.mansionForm));
+      }
     },
 
     // 增删单日信息
@@ -332,7 +414,7 @@ export default {
       });
       if (!empty) {
         let mansion = {
-          info: {
+          imansionInfo: {
             idBefore: "",
             id: "",
             description: "",
@@ -383,7 +465,7 @@ export default {
         if (id == item.value && this.selectIdShow != item.value) {
           repetition = true;
         }
-        if (this.mansionForm.info.idBefore == item.value) {
+        if (this.mansionForm.imansionInfo.idBefore == item.value) {
           idIndex = index;
         }
       });
