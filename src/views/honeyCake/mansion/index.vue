@@ -3,23 +3,23 @@
     <h3>大厦信息</h3>
     <el-form
       ref="infoForm"
-      :model="mansionForm.imansionInfo"
+      :model="mansionForm.mansionInfo"
       :rules="mansionRules"
       label-width="100px"
       label-position="left"
     >
       <el-form-item label="大厦号" prop="id">
         <el-input
-          v-model="mansionForm.imansionInfo.id"
+          v-model="mansionForm.mansionInfo.id"
           placeholder="请输入大厦号"
           class="width30"
-          @blur="updateId(mansionForm.imansionInfo.id)"
+          @blur="updateId(mansionForm.mansionInfo.id)"
         >
         </el-input>
       </el-form-item>
       <el-form-item label="描述" prop="description">
         <el-input
-          v-model="mansionForm.imansionInfo.description"
+          v-model="mansionForm.mansionInfo.description"
           placeholder="请输入描述"
           class="width30"
         >
@@ -27,7 +27,7 @@
       </el-form-item>
       <el-form-item label="CV号" prop="cvlink">
         <el-input
-          v-model="mansionForm.imansionInfo.cvlink"
+          v-model="mansionForm.mansionInfo.cvlink"
           placeholder="请输入CV号"
           class="width30"
         >
@@ -37,7 +37,7 @@
       <el-form-item label="自信度" prop="fraction">
         <el-slider
           class="fraction-slider"
-          v-model="mansionForm.imansionInfo.fraction"
+          v-model="mansionForm.mansionInfo.fraction"
           :min="1"
           :max="5"
           :step="1"
@@ -211,48 +211,8 @@ export default {
         },
       ],
       selectIdShow: "",
-      OldMansionForm: {
-        mansionInfo: {
-          idBefore: "",
-          id: "",
-          description: "",
-          cvlink: "",
-          fraction: 1,
-        },
-        daily: [
-          {
-            datetime: "",
-            info: [
-              {
-                forecast: "",
-                isTrue: "yet",
-              },
-            ],
-            content: "",
-          },
-        ],
-      },
-      mansionForm: {
-        imansionInfo: {
-          idBefore: "",
-          id: "",
-          description: "",
-          cvlink: "",
-          fraction: 1,
-        },
-        daily: [
-          {
-            datetime: "",
-            info: [
-              {
-                forecast: "",
-                isTrue: "yet",
-              },
-            ],
-            content: "",
-          },
-        ],
-      },
+      OldMansionForm: {},
+      mansionForm: {},
       setAll: [
         {
           set: false,
@@ -300,11 +260,69 @@ export default {
   },
   methods: {
     init() {
-      // TODO: 从服务器获取ID数组
-      //       ID数组写入IdOpeion
-      //       获取IDoption最后一位写入showid
-      //       通过showID请求服务器数据，并复制给两个form
-      //       upload状态改为已上传
+      // 从服务器获取ID数组
+      this.$store
+        .dispatch("mansion/getIdArray")
+        .then((response) => {
+          // ID数组写入idOption
+          response.data.forEach((item, index) => {
+            if (index == 0) {
+              this.idOptions[index]["value"] = item;
+              this.idOptions[index]["label"] = item;
+            } else {
+              this.idOptions.splice(index, 0, {
+                value: item,
+                label: item,
+              });
+            }
+          });
+          // 获取IDoption最后一位写入showid
+          let newId = this.idOptions[this.idOptions.length - 1].value;
+          this.$store
+            .dispatch("mansion/getMansion", newId)
+            .then((response) => {
+              // 更新大厦信息
+              this.updateMansionInfo(response);
+              this.$message({
+                showClose: true,
+                message: "获取大厦成功",
+                type: "success",
+              });
+            })
+            .catch((_) => {
+              this.$message({
+                showClose: true,
+                message: "获取大厦失败",
+                type: "error",
+              });
+            });
+        })
+        .catch(() => {
+          let mansion = {
+            mansionInfo: {
+              idBefore: "",
+              id: "",
+              description: "",
+              cvlink: "",
+              fraction: 1,
+            },
+            daily: [
+              {
+                datetime: "",
+                info: [
+                  {
+                    forecast: "",
+                    isTrue: "yet",
+                  },
+                ],
+                content: "",
+              },
+            ],
+          };
+          
+          this.OldMansionForm = JSON.parse(JSON.stringify(mansion));
+          this.mansionForm = JSON.parse(JSON.stringify(mansion));
+        });
     },
     // 提交表单到服务器
     submitMansionList() {
@@ -325,19 +343,33 @@ export default {
       });
       // 上传表单到服务器
       if (allPass) {
-        
         let mansionList = {};
         mansionList = JSON.parse(JSON.stringify(this.mansionForm));
         if (
-          mansionList.imansionInfo.cvlink.substring(0, 2) !== "cv" &&
-          mansionList.imansionInfo.cvlink.substring(0, 2) !== "CV"
+          mansionList.mansionInfo.cvlink.substring(0, 2) !== "cv" &&
+          mansionList.mansionInfo.cvlink.substring(0, 2) !== "CV"
         ) {
-          mansionList.imansionInfo.cvlink =
-            "cv" + mansionList.imansionInfo.cvlink;
+          mansionList.mansionInfo.cvlink =
+            "cv" + mansionList.mansionInfo.cvlink;
         }
-
-        this.upload = true;
-        this.OldMansionForm = JSON.parse(JSON.stringify(this.mansionForm));
+        this.$store
+          .dispatch("mansion/uploadMansion", mansionList)
+          .then((_) => {
+            this.upload = true;
+            this.OldMansionForm = JSON.parse(JSON.stringify(this.mansionForm));
+            this.$message({
+              showClose: true,
+              message: "上传大厦成功",
+              type: "success",
+            });
+          })
+          .catch(() => {
+            this.$message({
+              showClose: true,
+              message: "上传大厦失败",
+              type: "error",
+            });
+          });
       }
     },
 
@@ -393,7 +425,6 @@ export default {
 
     // 增删大厦
     addMansion() {
-      debugger;
       if (
         JSON.stringify(this.OldMansionForm) !=
           JSON.stringify(this.mansionForm) ||
@@ -414,12 +445,12 @@ export default {
       });
       if (!empty) {
         let mansion = {
-          imansionInfo: {
+          mansionInfo: {
             idBefore: "",
             id: "",
             description: "",
             cvlink: "",
-            fraction: "",
+            fraction: 1,
           },
           daily: [
             {
@@ -436,6 +467,7 @@ export default {
         };
         this.OldMansionForm = JSON.parse(JSON.stringify(mansion));
         this.mansionForm = JSON.parse(JSON.stringify(mansion));
+        this.setAll = [{set:false}];
         this.idOptions.push({
           value: "",
           label: "",
@@ -451,21 +483,79 @@ export default {
       }
     },
     removeMansion() {
-      // TODO: 根据id号上传服务器删除大厦
-      //       根据showid删除对应的IdOption数组元素
-      //       根据IdOption最后一个的value去请求对应大厦信息
-      //       更新大厦信息
+      // 根据id号上传服务器删除大厦
+      this.$store
+        .dispatch("mansion/deleteMansion", this.selectIdShow)
+        .then((_) => {
+          //  根据showid删除对应的IdOption数组元素
+          let idIndex = -1;
+          this.idOptions.forEach((item, index) => {
+            if (this.selectIdShow == item.value) {
+              idIndex = index;
+            }
+          });
+          this.idOptions.splice(idIndex, 1);
+          this.setAll = [
+            {
+              set: false,
+            },
+          ];
+          //  根据IdOption最后一个的value去请求对应大厦信息
+          let newId = this.idOptions[this.idOptions.length - 1].value;
+          this.$store
+            .dispatch("mansion/getMansion", newId)
+            .then((response) => {
+              // 更新大厦信息
+              this.updateMansionInfo(response);
+              this.$message({
+                showClose: true,
+                message: "删除大厦成功",
+                type: "success",
+              });
+            })
+            .catch(() => {
+              this.$message({
+                showClose: true,
+                message: "获取大厦失败",
+                type: "error",
+              });
+            });
+        })
+        .catch(() => {
+          this.$message({
+            showClose: true,
+            message: "更新大厦失败",
+            type: "error",
+          });
+        });
+    },
+
+    // 获取服务器消息后更新大厦信息
+    updateMansionInfo(response) {
+      response.data.daily.map((item, index) => {
+        if (index == 0) {
+          this.setAll[index]["set"] = true;
+        } else {
+          this.setAll.splice(index, 0, {
+            set: true,
+          });
+        }
+      });
+      this.OldMansionForm = JSON.parse(JSON.stringify(response.data));
+      this.mansionForm = JSON.parse(JSON.stringify(response.data));
+      this.selectIdShow = this.mansionForm.mansionInfo.id;
+      this.upload = true;
     },
 
     // 更新id值
     updateId(id) {
       let repetition = false;
-      let idIndex = 0;
+      let idIndex = -1;
       this.idOptions.forEach((item, index) => {
         if (id == item.value && this.selectIdShow != item.value) {
           repetition = true;
         }
-        if (this.mansionForm.imansionInfo.idBefore == item.value) {
+        if (this.mansionForm.mansionInfo.idBefore == item.value) {
           idIndex = index;
         }
       });

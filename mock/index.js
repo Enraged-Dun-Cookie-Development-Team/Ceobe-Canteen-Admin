@@ -7,6 +7,8 @@ const video = require('./video')
 const resource = require('./resource')
 const version = require('./version')
 const announcement = require("./announcement")
+const mansion = require('./mansion')
+
 
 const mocks = [
   ...user,
@@ -15,6 +17,7 @@ const mocks = [
   ...resource,
   ...version,
   ...announcement,
+  ...mansion,
 ]
 
 // for front mock
