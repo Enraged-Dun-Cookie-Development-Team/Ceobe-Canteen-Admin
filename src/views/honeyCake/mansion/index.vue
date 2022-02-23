@@ -8,19 +8,12 @@
       label-width="100px"
       label-position="left"
     >
-      <el-form-item label="标题" prop="title">
-        <el-input
-          v-model="mansionForm.info.title"
-          placeholder="请输入标题"
-          class="width30"
-        >
-        </el-input>
-      </el-form-item>
       <el-form-item label="大厦号" prop="id">
         <el-input
           v-model="mansionForm.info.id"
           placeholder="请输入大厦号"
           class="width30"
+          @blur="updateId(mansionForm.info.id)"
         >
         </el-input>
       </el-form-item>
@@ -50,7 +43,7 @@
           :step="1"
         >
         </el-slider>
-      </el-form-item>
+      </el-form-item> 
     </el-form>
     <h3>每日信息</h3>
     <el-collapse
@@ -99,9 +92,9 @@
                 type="datetime"
                 placeholder="选择开始显示日期时间"
                 align="center"
-                :picker-options="pickerStarTime"
                 format="yyyy-MM-dd"
                 value-format="yyyy-MM-dd"
+                @blur="checkForm(index)"
               />
             </el-form-item>
             <el-form-item label="动态" prop="content">
@@ -112,7 +105,7 @@
                 :key="index"
               />
             </el-form-item>
-            <el-form-item label="预测详细" prop="content">
+            <el-form-item label="预测详细" prop="forecast">
               <div
                 class="forecast-info"
                 :key="i"
@@ -122,6 +115,7 @@
                   v-model="detail.forecast"
                   placeholder="请输入预测信息"
                   class="width50"
+                  @blur="checkForm(index)"
                 >
                 </el-input>
                 <el-radio-group
@@ -152,11 +146,11 @@
     <div class="id-option">
       <el-select
         label="大厦号"
-        v-model="mansionForm.info.id"
+        v-model="selectIdShow"
         placeholder="请选择大厦号"
       >
         <el-option
-          v-for="item in IdOptions"
+          v-for="item in idOptions"
           :key="item.value"
           :label="item.label"
           :value="item.value"
@@ -187,21 +181,23 @@ export default {
   components: { RichEditor, FormButton },
   data() {
     return {
+      upload: false, // 当次表单删除完成
       activeIndex: 0,
       activeName: 0,
-      IdOptions: [
+      idOptions: [
         {
           value: "",
           label: "",
         },
       ],
-      mansionForm: {
+      selectIdShow: "",
+      OldMansionForm: {
         info: {
-          title: "",
+          idBefore: "",
           id: "",
           description: "",
           cvlink: "",
-          fraction: "",
+          fraction: 1,
         },
         daily: [
           {
@@ -211,9 +207,26 @@ export default {
                 forecast: "",
                 isTrue: "yet",
               },
+            ],
+            content: "",
+          },
+        ],
+      },
+      mansionForm: {
+        info: {
+          idBefore: "",
+          id: "",
+          description: "",
+          cvlink: "",
+          fraction: 1,
+        },
+        daily: [
+          {
+            datetime: "",
+            info: [
               {
                 forecast: "",
-                isTrue: "true",
+                isTrue: "yet",
               },
             ],
             content: "",
@@ -232,10 +245,47 @@ export default {
     this.init();
   },
   methods: {
-    init() {},
+    init() {
+      // TODO: 从服务器获取ID数组
+      //       ID数组写入IdOpeion
+      //       获取IDoption最后一位写入showid
+      //       通过showID请求服务器数据，并复制给两个form
+      //       upload状态改为已上传
+    },
     // 提交表单到服务器
-    submitMansionList() {},
-    // 删除视频
+    submitMansionList() {
+      // TODO: 上传表单到服务器
+      this.upload = true;
+      this.mansionForm = JSON.parse(JSON.stringify(this.OldMansionForm));
+    },
+
+    // 增删单日信息
+    addItem(index) {
+      // 新加一日信息默认增一天
+      let newDatetime = "";
+      if (this.mansionForm.daily[index].datetime != "") {
+        newDatetime = TimeUtil.format(
+          TimeUtil.passSecondTime(
+            new Date(this.mansionForm.daily[index].datetime),
+            60 * 60 * 24
+          ),
+          "yyyy-MM-dd"
+        );
+      }
+      this.mansionForm.daily.splice(index + 1, 0, {
+        datetime: newDatetime,
+        info: [
+          {
+            forecast: "",
+            isTrue: "yet",
+          },
+        ],
+        content: "",
+      });
+      this.setAll.splice(index + 1, 0, {
+        set: false,
+      });
+    },
     removeItem(item) {
       let index = this.mansionForm.daily.indexOf(item);
       if (this.mansionForm.daily.length > 1) {
@@ -245,32 +295,126 @@ export default {
         }
       }
     },
-    // 添加单次资源
-    addItem(index) {
-      this.mansionForm.daily.splice(index + 1, 0, {
-        datetime: "",
-        info: [
-          {
-            forecast: "",
-            isTrue: "",
-          },
-        ],
-        content: "",
+
+    // 预测信息增加和删除
+    addForecast(index, i) {
+      this.mansionForm.daily[index].info.splice(i + 1, 0, {
+        forecast: "",
+        isTrue: "yet",
       });
-      this.setAll.splice(index + 1, 0, {
-        set: false,
-      });
+      this.setAll[index]["set"] = false;
     },
+    removeForecast(index, i) {
+      this.mansionForm.daily[index].info.splice(i, 1);
+      this.checkForm(index);
+    },
+
+    // 增删大厦
+    addMansion() {
+      debugger;
+      if (
+        JSON.stringify(this.OldMansionForm) !=
+          JSON.stringify(this.mansionForm) ||
+        !this.upload
+      ) {
+        this.$message({
+          showClose: true,
+          message: "要先上传这个大厦才能再盖噢",
+          type: "warning",
+        });
+        return;
+      }
+      let empty = false;
+      this.idOptions.forEach((item, index) => {
+        if (item.label == "") {
+          empty = true;
+        }
+      });
+      if (!empty) {
+        let mansion = {
+          info: {
+            idBefore: "",
+            id: "",
+            description: "",
+            cvlink: "",
+            fraction: "",
+          },
+          daily: [
+            {
+              datetime: "",
+              info: [
+                {
+                  forecast: "",
+                  isTrue: "yet",
+                },
+              ],
+              content: "",
+            },
+          ],
+        };
+        this.OldMansionForm = JSON.parse(JSON.stringify(mansion));
+        this.mansionForm = JSON.parse(JSON.stringify(mansion));
+        this.idOptions.push({
+          value: "",
+          label: "",
+        });
+        this.selectIdShow = "";
+        this.upload = false;
+      } else {
+        this.$message({
+          showClose: true,
+          message: "有大厦缺少大厦号，请先填写补全",
+          type: "warning",
+        });
+      }
+    },
+    removeMansion() {
+      // TODO: 根据id号上传服务器删除大厦
+      //       根据showid删除对应的IdOption数组元素
+      //       根据IdOption最后一个的value去请求对应大厦信息
+      //       更新大厦信息
+    },
+
+    // 更新id值
+    updateId(id) {
+      let repetition = false;
+      let idIndex = 0;
+      this.idOptions.forEach((item, index) => {
+        if (id == item.value && this.selectIdShow != item.value) {
+          repetition = true;
+        }
+        if (this.mansionForm.info.idBefore == item.value) {
+          idIndex = index;
+        }
+      });
+      if (!repetition) {
+        this.idOptions[idIndex].value = id;
+        this.idOptions[idIndex].label = id;
+        this.selectIdShow = id;
+      } else {
+        this.$message({
+          showClose: true,
+          message: "重复id，请重新填写",
+          type: "error",
+        });
+      }
+    },
+
     // 检查表单有没有填完
     checkForm(index) {
       let complete = true;
-      for (let detail in this.resourceForm.countdown[index]) {
-        if (
-          this.resourceForm.countdown[index][detail] == null ||
-          this.resourceForm.countdown[index][detail] === ""
-        ) {
-          complete = false;
-          break;
+
+      if (this.mansionForm.daily[index]["datetime"] === "") {
+        complete = false;
+      } else {
+        for (let i in this.mansionForm.daily[index]["info"]) {
+          if (
+            this.mansionForm.daily[index].info[i].forecast == "" ||
+            this.mansionForm.daily[index].info[i].forecast == null
+          ) {
+            complete = false;
+            break;
+          }
         }
       }
       if (complete) {
@@ -284,6 +428,9 @@ export default {
 </script>
 <style lang="less" scoped>
 #mainWindow {
+  /deep/ label {
+    font-weight: 500;
+  }
   .fraction-slider {
     width: 20%;
   }
@@ -306,9 +453,6 @@ export default {
   .single-card {
     margin: 10px;
 
-    /deep/ label {
-      font-weight: 500;
-    }
     .forecast-info {
       margin-bottom: 10px;
       /deep/.radio-group {

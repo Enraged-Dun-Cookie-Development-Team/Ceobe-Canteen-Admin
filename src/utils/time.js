@@ -63,19 +63,19 @@ class TimeUtil {
 
   // 返回当日4点
   static fourTime(date) {
-    if(isNaN(date.getTime())) {
+    if (isNaN(date.getTime())) {
       date = new Date();
     }
-    const datetime = new Date(`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} 04:00:00`);
+    const datetime = new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 04:00:00`);
     return datetime;
   }
 
   // 返回当日16点
   static sixteenTime(date) {
-    if(isNaN(date.getTime())) {
+    if (isNaN(date.getTime())) {
       date = new Date();
     }
-    const datetime = new Date(`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} 16:00:00`);
+    const datetime = new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 16:00:00`);
     return datetime;
   }
 
@@ -86,7 +86,7 @@ class TimeUtil {
       return：几秒后
       */
   static passSecondTime(date, seconds) {
-    if(isNaN(date.getTime())) {
+    if (isNaN(date.getTime())) {
       date = new Date();
     }
     date = new Date(date);
