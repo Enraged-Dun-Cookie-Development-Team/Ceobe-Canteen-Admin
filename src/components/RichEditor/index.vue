@@ -5,7 +5,8 @@
 </template>
 <script>
 import wangEditor from "wangeditor";
-import Tags from "./Tags/index";
+import Drawer from "./Tags/DrawerBtn/index";
+import Setting from "./Tags/SettingBtn/index";
 // import Link from "./link/index";
 export default {
   name: "RichEditor",
@@ -19,8 +20,8 @@ export default {
     initEditor() {
       const editor = new wangEditor(this.$refs.richtext);
 
-      const tagsKey = "tagsKey";
-      const linksKey = "tagsKey";
+      const drawerKey = "drawerKey";
+      const settingKey = "settingsKey";
       this.editor = editor;
 
       editor.config.height = 150;
@@ -55,12 +56,12 @@ export default {
         "#353535",
         "#795548",
       ];
-      // wangEditor.registerMenu(linksKey, Link);
-      // editor.config.menus = editor.config.menus.concat(linksKey);
 
       // 添加自定义按钮
-      wangEditor.registerMenu(tagsKey, Tags);
-      editor.config.menus = editor.config.menus.concat(tagsKey);
+      wangEditor.registerMenu(drawerKey, Drawer);
+      editor.config.menus = editor.config.menus.concat(drawerKey);
+      wangEditor.registerMenu(settingKey, Setting);
+      editor.config.menus = editor.config.menus.concat(settingKey);
 
       editor.create();
     },

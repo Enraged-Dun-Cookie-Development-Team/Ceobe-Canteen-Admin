@@ -1,14 +1,21 @@
 import E from "wangeditor";
-import isActive from "./is-active";
 
 const { $, BtnMenu } = E
 
-
-class Bold extends BtnMenu {
-    constructor(editor) {
+class selfBtn extends BtnMenu {
+    constructor(editor, mode) {
+        let icon = "el-icon-files";
+        let title = "自定义标签";
+        if (mode === 'drawer') {
+            icon = 'el-icon-files';
+            title = "二级菜单"
+        } else if (mode === 'setting') {
+            icon = 'el-icon-setting';
+            title = "进入设置"
+        }
         const $elem = $(
-            `<div class="w-e-menu" data-title="自定义标签">
-                               <i class="el-icon-files"></i>
+            `<div class="w-e-menu" data-title="${title}">
+                               <i class="${icon}"></i>
                            </div>`
         )
         super($elem, editor)
@@ -21,7 +28,7 @@ class Bold extends BtnMenu {
         const editor = this.editor
         const selectionText = editor.selection.getSelectionText()
 
-        if (this.isActive) {
+        if (this.isActive(editor)) {
             // 选中整个链接
             let $selectedTag = this.selectLinkElem()
             // 用文本替换链接
@@ -40,7 +47,7 @@ class Bold extends BtnMenu {
 
     selectLinkElem() {
         let editor = this.editor
-        if (!isActive(editor)) return
+        if (!this.isActive(editor)) return
 
         const $tagElem = editor.selection.getSelectionContainerElem()
         if (!$tagElem) return
@@ -56,12 +63,7 @@ class Bold extends BtnMenu {
     * @return null
     */
     insertLineTag(text) {
-        let editor = this.editor
-        // 行内代码处理
-        let $code = $(`<drawer>${text}</drawer>`)
-        editor.cmd.do('insertElem', $code)
-        editor.selection.createRangeByElem($code, false)
-        editor.selection.restoreSelection()
+        console.log("insertLineTag:该功能还为实现")
     }
 
     /**
@@ -69,12 +71,20 @@ class Bold extends BtnMenu {
      */
     tryChangeActive() {
         const editor = this.editor
-        if (isActive(editor)) {
+        if (this.isActive(editor)) {
             this.active()
         } else {
             this.unActive()
         }
     }
+
+    /**
+     * @description 检查选区是否在链接中，即菜单是否应该 active
+     */
+
+     isActive(editor) {
+        console.log("isActive:该功能还为实现")
+    }
 }
 
-export default Bold
+export default selfBtn
