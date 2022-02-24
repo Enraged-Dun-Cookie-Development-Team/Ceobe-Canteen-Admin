@@ -123,6 +123,7 @@
                   class="radio-group"
                   v-model="detail.isTrue"
                   fill="#ffba4b"
+                  text-color="#ffffff"
                 >
                   <el-radio-button label="yet">还没到</el-radio-button>
                   <el-radio-button label="true">正确</el-radio-button>
@@ -149,6 +150,7 @@
         label="大厦号"
         v-model="selectIdShow"
         placeholder="请选择大厦号"
+        @change="changeId"
       >
         <el-option
           v-for="item in idOptions"
@@ -212,7 +214,9 @@ export default {
       ],
       selectIdShow: "",
       OldMansionForm: {},
-      mansionForm: {},
+      mansionForm: {
+        mansionInfo:{}
+      },
       setAll: [
         {
           set: false,
@@ -319,7 +323,7 @@ export default {
               },
             ],
           };
-          
+
           this.OldMansionForm = JSON.parse(JSON.stringify(mansion));
           this.mansionForm = JSON.parse(JSON.stringify(mansion));
         });
@@ -347,7 +351,7 @@ export default {
         mansionList = JSON.parse(JSON.stringify(this.mansionForm));
         if (
           mansionList.mansionInfo.cvlink.substring(0, 2) !== "cv" &&
-          mansionList.mansionInfo.cvlink.substring(0, 2) !== "CV"
+          mansionList.mansionInfo.cvlink !== ""
         ) {
           mansionList.mansionInfo.cvlink =
             "cv" + mansionList.mansionInfo.cvlink;
@@ -467,13 +471,14 @@ export default {
         };
         this.OldMansionForm = JSON.parse(JSON.stringify(mansion));
         this.mansionForm = JSON.parse(JSON.stringify(mansion));
-        this.setAll = [{set:false}];
+        this.setAll = [{ set: false }];
         this.idOptions.push({
           value: "",
           label: "",
         });
         this.selectIdShow = "";
         this.upload = false;
+        this.updateRichtextHtml();
       } else {
         this.$message({
           showClose: true,
@@ -545,6 +550,15 @@ export default {
       this.mansionForm = JSON.parse(JSON.stringify(response.data));
       this.selectIdShow = this.mansionForm.mansionInfo.id;
       this.upload = true;
+      this.updateRichtextHtml();
+    },
+
+    updateRichtextHtml() {
+      setTimeout(() => {
+        this.mansionForm.daily.forEach((item, index) => {
+          this.$refs["richtext" + index][0].updateHtml();
+        });
+      }, 500);
     },
 
     // 更新id值
@@ -595,6 +609,29 @@ export default {
         this.setAll[index]["set"] = false;
       }
     },
+
+    // 切换id
+    changeId() {
+      let newId = this.selectIdShow;
+      this.$store
+        .dispatch("mansion/getMansion", newId)
+        .then((response) => {
+          // 更新大厦信息
+          this.updateMansionInfo(response);
+          this.$message({
+            showClose: true,
+            message: "获取大厦成功",
+            type: "success",
+          });
+        })
+        .catch((_) => {
+          this.$message({
+            showClose: true,
+            message: "获取大厦失败",
+            type: "error",
+          });
+        });
+    },
   },
 };
 </script>
@@ -629,13 +666,17 @@ export default {
       margin-bottom: 10px;
       /deep/.radio-group {
         margin-left: 15px;
-
+        .el-radio-button__orig-radio:checked +.el-radio-button__inner {
+          background-color: #ffba4b;
+          border-color: #ffba4b;
+          box-shadow: -1px 0 0 0 #ffba4b;
+        }
         .el-radio-button__inner:hover {
-          color: #ffba4b;
+          color: #ffba4b !important;
         }
         .is-active {
           .el-radio-button__inner:hover {
-            color: #ffffff;
+            color: #ffffff !important;
           }
         }
       }
