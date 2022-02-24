@@ -15,7 +15,7 @@
           >厨师</el-radio
         >
         <el-radio class="radio" v-model="permission" label="architect"
-          >建造师</el-radio
+          >饼学家</el-radio
         >
         <el-button class="btn-confirm" type="primary" @click="entryCanteen"
           >确定入职</el-button
