@@ -5,7 +5,7 @@ const actions = {
     // 获取现有列表
     getResourceList() {
         return new Promise((resolve, reject) => {
-            getResourceList(store.getters.token).then(response => {
+            getResourceList({ token: store.getters.token }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)
@@ -15,7 +15,7 @@ const actions = {
     // 上传资源信息
     submitResourceList({ }, resouceList) {
         return new Promise((resolve, reject) => {
-            submitResourceList({ token: store.getters.token, info: resouceList }).then(response => {
+            submitResourceList({ token: store.getters.token }, { data: resouceList }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)

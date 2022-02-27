@@ -2,7 +2,9 @@ module.exports = [
     {
         url: '/admin/resource/list',
         type: 'get',
-        response: _ => {
+        response: config => {
+            const { token } = config.headers
+            console.log(token)
             let data = {
                 "resources": [
                     "2021-11-22 16:00:00",
@@ -88,7 +90,8 @@ module.exports = [
         url: '/admin/resource/submitList',
         type: 'post',
         response: config => {
-
+            const { token } = config.headers
+            console.log(token)
             console.log(config.body)
 
             return {

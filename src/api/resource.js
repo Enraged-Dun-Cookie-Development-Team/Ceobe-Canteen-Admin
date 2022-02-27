@@ -4,14 +4,15 @@ export async function getResourceList(token) {
     return request({
         url: `/admin/resource/list`,
         method: 'get',
-        params: { token }
+        headers: token,
     })
 }
 
-export async function submitResourceList(data) {
+export async function submitResourceList(token, data) {
     return request({
         url: `/admin/resource/submitList`,
         method: 'post',
+        headers: token,
         data: data
     })
 }

@@ -3,7 +3,7 @@ module.exports = [
         url: '/admin/mansion/getId',
         type: 'get',
         response: config => {
-            const { token } = config.query
+            const { token } = config.headers
             console.log(token)
 
             let data = ["16", "16.3", "16.6", "17"]
@@ -17,12 +17,13 @@ module.exports = [
         url: '/admin/mansion/getInfo',
         type: 'get',
         response: config => {
-            const { token, info } = config.query
+            const { mansionId } = config.query
+            const { token } = config.headers
             console.log(token)
-            console.log(info)
+            console.log(mansionId)
 
             let data
-            switch (info) {
+            switch (mansionId) {
                 case "16":
                     data = {
                         "mansionInfo": {
@@ -655,7 +656,8 @@ module.exports = [
         url: '/admin/mansion/upload',
         type: 'post',
         response: config => {
-
+            const { token } = config.headers
+            console.log(token)
             console.log(config.body)
 
             return {
@@ -668,7 +670,8 @@ module.exports = [
         url: '/admin/mansion/delete',
         type: 'post',
         response: config => {
-
+            const { token } = config.headers
+            console.log(token)
             console.log(config.body)
 
             return {

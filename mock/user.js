@@ -63,7 +63,7 @@ module.exports = [
     url: '/admin/user/login',
     type: 'post',
     response: config => {
-      const { username, password } = config.body
+      const { username, password } = config.body.data
       let token
       if (password === md5(userpassword[username].password)) {
         token = tokens[username]
@@ -89,7 +89,7 @@ module.exports = [
     url: '/admin/user/info',
     type: 'get',
     response: config => {
-      const { token } = config.query
+      const { token } = config.headers
       const info = users[token]
 
       // mock error
@@ -123,7 +123,8 @@ module.exports = [
     url: '/admin/user/create',
     type: 'get',
     response: config => {
-      const { token, permission } = config.query
+      const { token } = config.headers
+      const { permission } = config.query
 
       if (token == 'chef-token') {
         const userInfo = newUser[permission]
@@ -145,7 +146,9 @@ module.exports = [
     url: '/admin/user/changeusername',
     type: 'post',
     response: config => {
-      const { token, username } = config.body
+
+      const { token } = config.headers
+      const { username } = config.body.data
 
       const info = users[token]
       if (username == info.name) {
@@ -168,8 +171,11 @@ module.exports = [
     url: '/admin/user/changepassword',
     type: 'post',
     response: config => {
-      const { token, password } = config.body
-      let data={
+
+      const { token } = config.headers
+      const body = config.body
+      console.log(body)
+      let data = {
         token: "test"
       }
 

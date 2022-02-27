@@ -51,7 +51,7 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
+      getInfo({ token: state.token }).then(response => {
         const { data } = response
 
         if (!data) {
@@ -72,7 +72,7 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
+      logout().then(() => {
         removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')
@@ -95,7 +95,7 @@ const actions = {
   // 创建一个用户
   createUser({ state }, permission) {
     return new Promise((resolve, reject) => {
-      createUser({ token: state.token, permission: permission }).then(response => {
+      createUser({ token: state.token }, { permission: permission }).then(response => {
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -106,7 +106,7 @@ const actions = {
   // 修改用户名
   changeUsername({ state, commit }, username) {
     return new Promise((resolve, reject) => {
-      changeUsername({ token: state.token, username: username }).then(response => {
+      changeUsername({ token: state.token }, { username: username }).then(response => {
         const { data } = response;
         commit('SET_NAME', data.username);
 
@@ -118,9 +118,9 @@ const actions = {
   },
 
   // 修改密码
-  changePassword({ state, commit }, password) {
+  changePassword({ state, commit }, { oldpassword, newpassword }) {
     return new Promise((resolve, reject) => {
-      changePassword({ token: state.token, password: password }).then(response => {
+      changePassword({ token: state.token }, { oldpassword: md5(oldpassword), newpassword: md5(newpassword) }).then(response => {
         const { data } = response;
 
         commit('SET_TOKEN', data.token)

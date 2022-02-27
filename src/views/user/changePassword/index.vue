@@ -59,7 +59,9 @@
         </span>
       </el-form-item>
       <el-form-item>
-        <el-button class="btn-password" type="primary" @click="changePassword">提交修改</el-button>
+        <el-button class="btn-password" type="primary" @click="changePassword"
+          >提交修改</el-button
+        >
       </el-form-item>
     </el-form>
   </div>
@@ -115,8 +117,11 @@ export default {
       this.$refs["passwordForm"].validate((valid) => {
         if (valid) {
           this.$store
-            .dispatch("user/changePassword", this.passwordForm.newpassword)
-            .then(_ => {
+            .dispatch("user/changePassword", {
+              oldpassword: this.passwordForm.oldpassword,
+              newpassword: this.passwordForm.newpassword,
+            })
+            .then((_) => {
               this.$message({
                 showClose: true,
                 message: "修改密码成功",

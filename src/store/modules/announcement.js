@@ -5,7 +5,7 @@ const actions = {
     // 上传插件版本信息
     getAnnouncementList() {
         return new Promise((resolve, reject) => {
-            getAnnouncementList(store.getters.token).then(response => {
+            getAnnouncementList({ token: store.getters.token }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)
@@ -15,7 +15,7 @@ const actions = {
     // 上传手机版本信息
     submitAnnouncementList({ }, AnnouncementList) {
         return new Promise((resolve, reject) => {
-            submitAnnouncementList({ token: store.getters.token, info: AnnouncementList }).then(response => {
+            submitAnnouncementList({ token: store.getters.token }, { data: AnnouncementList }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)

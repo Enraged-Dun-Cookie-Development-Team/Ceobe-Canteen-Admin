@@ -1,8 +1,10 @@
 module.exports = [
     {
-        url: '/admin/video/detail\.*',
+        url: '/admin/video/detail',
         type: 'get',
         response: config => {
+            const { token } = config.headers
+            console.log(token)
             console.log(config.query)
             let data = {
                 "code": 0,
@@ -5094,6 +5096,8 @@ module.exports = [
         url: '/admin/video/list',
         type: 'get',
         response: config => {
+            const { token } = config.headers
+            console.log(token)
             let data = {
                 'videos': [
                     {
@@ -5108,7 +5112,7 @@ module.exports = [
                     {
                         'BV': "BV1r3411a7Kg",
                         'starTime': "2022-01-20 04:00:00",
-                        'overTime': "2022-01-24 15:59:59", 
+                        'overTime': "2022-01-24 15:59:59",
                         'title': "【手书/四木攰】 旅途",
                         'author': "四木攰",
                         'videoLink': "https://www.bilibili.com/video/BV1r3411a7Kg",
@@ -5135,7 +5139,8 @@ module.exports = [
         url: '/admin/video/submitList',
         type: 'post',
         response: config => {
-
+            const { token } = config.headers
+            console.log(token)
             console.log(config.body)
 
             return {
