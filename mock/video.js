@@ -5107,18 +5107,18 @@ module.exports = [
                         'title': "【杨颜同学】风雪过境录播 全流程剧情+推关",
                         'author': "杨颜同学",
                         'videoLink': "https://www.bilibili.com/video/BV19b4y1v7Wa",
-                        'coverImg': "https://i0.hdslb.com/bfs/archive/ad102b8851a3f629bc6bab9596e3b8f9a75d390d.jpg@200w_125h_1c.webp",
+                        'coverImg': "https://i0.hdslb.com/bfs/archive/ad102b8851a3f629bc6bab9596e3b8f9a75d390d.jpg@200w_125h_1c.webp"
                     },
                     {
                         'BV': "BV1r3411a7Kg",
                         'starTime': "2022-01-20 04:00:00",
-                        'overTime': "2022-01-24 15:59:59",
+                        'overTime': "2022-01-24 15:59:59", 
                         'title': "【手书/四木攰】 旅途",
                         'author': "四木攰",
                         'videoLink': "https://www.bilibili.com/video/BV1r3411a7Kg",
-                        'coverImg': "https://i1.hdslb.com/bfs/archive/44d3ab354c59f9549f20925e99ddeb55793e8eef.jpg@200w_125h.webp",
-                    },
-                ],
+                        'coverImg': "https://i1.hdslb.com/bfs/archive/44d3ab354c59f9549f20925e99ddeb55793e8eef.jpg@200w_125h.webp"
+                    }
+                ]
             }
 
             if (!data) {

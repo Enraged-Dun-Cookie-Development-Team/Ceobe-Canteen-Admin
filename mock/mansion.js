@@ -6,7 +6,7 @@ module.exports = [
             const { token } = config.headers
             console.log(token)
 
-            let data = ["16", "16.3", "16.6", "17"]
+            let data = { ids: ["16", "16.3", "16.6", "17"] }
             return {
                 code: 20000,
                 data: data
@@ -588,11 +588,11 @@ module.exports = [
                                     },
                                     {
                                         "isTrue": true,
-                                        "forecast": " 六星召唤师  - 令 [限定]"
+                                        "forecast": "六星召唤师  - 令 [限定]"
                                     },
                                     {
                                         "isTrue": true,
-                                        "forecast": " 【山城茶馆】主题家具"
+                                        "forecast": "【山城茶馆】主题家具"
                                     }
                                 ],
                                 "content": "<p>#明日方舟##饼学大厦# \\n世界未解之谜之一被解开了：\\n昨天不发饼的原因是\\n从暮落开始YJ有意更新干员基建/技能介绍的动图的新样式（每年一次）</p>"
@@ -606,10 +606,10 @@ module.exports = [
                                 "datetime": "2022-01-25",
                                 "info": [
                                     {
-                                        "forecast": " 令EP"
+                                        "forecast": "令EP"
                                     },
                                     {
-                                        "forecast": " Sidestory「将进酒」开启"
+                                        "forecast": "Sidestory「将进酒」开启"
                                     }
                                 ],
                                 "content": ""

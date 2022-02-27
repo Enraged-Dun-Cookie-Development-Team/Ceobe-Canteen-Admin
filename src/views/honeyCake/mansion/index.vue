@@ -269,7 +269,7 @@ export default {
         .dispatch("mansion/getIdArray")
         .then((response) => {
           // ID数组写入idOption
-          response.data.forEach((item, index) => {
+          response.data.ids.forEach((item, index) => {
             if (index == 0) {
               this.idOptions[index]["value"] = item;
               this.idOptions[index]["label"] = item;

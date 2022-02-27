@@ -2,7 +2,7 @@ import { getAnnouncementList, submitAnnouncementList } from '@/api/announcement'
 import store from '..'
 
 const actions = {
-    // 上传插件版本信息
+    // 获取公告信息
     getAnnouncementList() {
         return new Promise((resolve, reject) => {
             getAnnouncementList({ token: store.getters.token }).then(response => {
@@ -12,7 +12,7 @@ const actions = {
             })
         })
     },
-    // 上传手机版本信息
+    // 上传公告信息
     submitAnnouncementList({ }, AnnouncementList) {
         return new Promise((resolve, reject) => {
             submitAnnouncementList({ token: store.getters.token }, { data: AnnouncementList }).then(response => {

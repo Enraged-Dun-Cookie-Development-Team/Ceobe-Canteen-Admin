@@ -42,17 +42,14 @@ const newUser = {
 const users = {
   'chef-token': {
     roles: ['chef'],
-    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: 'chef'
   },
   'cooker-token': {
     roles: ['cooker'],
-    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: 'cooker'
   },
   'architect-token': {
     roles: ['architect'],
-    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: 'architect'
   }
 }
@@ -174,7 +171,6 @@ module.exports = [
 
       const { token } = config.headers
       const body = config.body
-      console.log(body)
       let data = {
         token: "test"
       }
