@@ -2,7 +2,7 @@ import { getIdArray, getMansion, uploadMansion, deleteMansion } from '@/api/mans
 import store from '..'
 
 const actions = {
-    // 上传插件版本信息
+    // 获取最近id
     getIdArray() {
         return new Promise((resolve, reject) => {
             getIdArray({ token: store.getters.token },).then(response => {
@@ -12,7 +12,7 @@ const actions = {
             })
         })
     },
-    // 上传手机版本信息
+    // 根据id获取大厦信息
     getMansion({ }, id) {
         return new Promise((resolve, reject) => {
             getMansion({ token: store.getters.token }, { mansionId: id }).then(response => {
@@ -22,9 +22,12 @@ const actions = {
             })
         })
     },
-    uploadMansion({ }, mansionList) {
+    uploadMansion({ }, { mansionList, idBefore }) {
+        if(idBefore == "") {
+            idBefore = undefined;
+        }
         return new Promise((resolve, reject) => {
-            uploadMansion({ token: store.getters.token }, { data: mansionList }).then(response => {
+            uploadMansion({ token: store.getters.token }, { data: mansionList }, { idBefore: idBefore }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)

@@ -26,7 +26,6 @@ module.exports = [
             switch (mansionId) {
                 case "16":
                     data = {
-                        "idBefore": "16",
                         "id": "16",
                         "description": "",
                         "cvlink": "",
@@ -184,7 +183,6 @@ module.exports = [
                     break;
                 case "16.3":
                     data = {
-                        "idBefore": "16.3",
                         "id": "16.3",
                         "description": "ver.画中人ss",
                         "cvlink": "",
@@ -342,7 +340,6 @@ module.exports = [
                     break;
                 case "16.6":
                     data = {
-                        "idBefore": "16.6",
                         "id": "16.6",
                         "description": "",
                         "cvlink": "",
@@ -500,7 +497,6 @@ module.exports = [
                     break;
                 case "17":
                     data = {
-                        "idBefore": "17",
                         "id": "17",
                         "description": "",
                         "cvlink": "",
@@ -671,6 +667,8 @@ module.exports = [
             const { token } = config.headers
             console.log(token)
             console.log(config.body)
+            const {idBefore} = config.query
+            console.log(idBefore)
 
             return {
                 code: 20000,

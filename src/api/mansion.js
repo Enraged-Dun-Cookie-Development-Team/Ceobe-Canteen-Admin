@@ -17,12 +17,13 @@ export async function getMansion(token, mansionId) {
     })
 }
 
-export async function uploadMansion(token, data) {
+export async function uploadMansion(token, data, idBefore) {
     return request({
         url: `/admin/mansion/upload`,
         method: 'post',
         headers: token,
-        data: data
+        data: data,
+        params: idBefore
     })
 }
 

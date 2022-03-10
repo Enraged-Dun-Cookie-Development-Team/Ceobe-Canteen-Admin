@@ -166,7 +166,7 @@
         class="btn-editor btn-addForecast"
       ></el-button>
       <el-button
-        @click.stop="removeMansion()"
+        @click.stop="deleteMansion()"
         icon="el-icon-delete"
         class="btn-editor btn-deleteForecast"
       ></el-button>
@@ -213,9 +213,9 @@ export default {
         },
       ],
       selectIdShow: "",
+      idBefore: "",
       OldMansionForm: {},
-      mansionForm: {
-      },
+      mansionForm: {},
       setAll: [
         {
           set: false,
@@ -302,7 +302,6 @@ export default {
         })
         .catch(() => {
           let mansion = {
-            idBefore: "",
             id: "",
             description: "",
             cvlink: "",
@@ -320,7 +319,7 @@ export default {
               },
             ],
           };
-
+          this.idBefore = "";
           this.OldMansionForm = JSON.parse(JSON.stringify(mansion));
           this.mansionForm = JSON.parse(JSON.stringify(mansion));
         });
@@ -350,14 +349,17 @@ export default {
           mansionList.cvlink.substring(0, 2) !== "cv" &&
           mansionList.cvlink !== ""
         ) {
-          mansionList.cvlink =
-            "cv" + mansionList.cvlink;
+          mansionList.cvlink = "cv" + mansionList.cvlink;
         }
         this.$store
-          .dispatch("mansion/uploadMansion", mansionList)
+          .dispatch("mansion/uploadMansion", {
+            mansionList: mansionList,
+            idBefore: this.idBefore,
+          })
           .then((_) => {
             this.upload = true;
             this.OldMansionForm = JSON.parse(JSON.stringify(this.mansionForm));
+            this.idBefore = this.mansionForm.id;
             this.$message({
               showClose: true,
               message: "上传大厦成功",
@@ -446,7 +448,6 @@ export default {
       });
       if (!empty) {
         let mansion = {
-          idBefore: "",
           id: "",
           description: "",
           cvlink: "",
@@ -464,7 +465,8 @@ export default {
             },
           ],
         };
-        this.OldMansionForm = JSON.parse(JSON.stringify(mansion));
+        (this.idBefore = ""),
+          (this.OldMansionForm = JSON.parse(JSON.stringify(mansion)));
         this.mansionForm = JSON.parse(JSON.stringify(mansion));
         this.setAll = [{ set: false }];
         this.idOptions.push({
@@ -482,49 +484,57 @@ export default {
         });
       }
     },
-    removeMansion() {
+    deleteMansion() {
       // 根据id号上传服务器删除大厦
-      this.$store
-        .dispatch("mansion/deleteMansion", this.selectIdShow)
-        .then((_) => {
-          //  根据showid删除对应的IdOption数组元素
-          let idIndex = -1;
-          this.idOptions.forEach((item, index) => {
-            if (this.selectIdShow == item.value) {
-              idIndex = index;
-            }
-          });
-          this.idOptions.splice(idIndex, 1);
-          this.setAll = [
-            {
-              set: false,
-            },
-          ];
-          //  根据IdOption最后一个的value去请求对应大厦信息
-          let newId = this.idOptions[this.idOptions.length - 1].value;
-          this.$store
-            .dispatch("mansion/getMansion", newId)
-            .then((response) => {
-              // 更新大厦信息
-              this.updateMansionInfo(response);
-              this.$message({
-                showClose: true,
-                message: "删除大厦成功",
-                type: "success",
-              });
-            })
-            .catch(() => {
-              this.$message({
-                showClose: true,
-                message: "获取大厦失败",
-                type: "error",
-              });
+      if (this.idBefore !== "") {
+        this.$store
+          .dispatch("mansion/deleteMansion", this.idBefore)
+          .then((_) => {
+            this.removeMansion();
+          })
+          .catch(() => {
+            this.$message({
+              showClose: true,
+              message: "更新大厦失败",
+              type: "error",
             });
+          });
+      } else {
+        this.removeMansion();
+      }
+    },
+
+    removeMansion() {
+      //  根据idBefore删除对应的IdOption数组元素
+      let idIndex = -1;
+      this.idOptions.forEach((item, index) => {
+        if (this.idBefore == item.value) {
+          idIndex = index;
+        }
+      });
+      this.idOptions.splice(idIndex, 1);
+      this.setAll = [
+        {
+          set: false,
+        },
+      ];
+      //  根据IdOption最后一个的value去请求对应大厦信息
+      let newId = this.idOptions[this.idOptions.length - 1].value;
+      this.$store
+        .dispatch("mansion/getMansion", newId)
+        .then((response) => {
+          // 更新大厦信息
+          this.updateMansionInfo(response);
+          this.$message({
+            showClose: true,
+            message: "删除大厦成功",
+            type: "success",
+          });
         })
         .catch(() => {
           this.$message({
             showClose: true,
-            message: "更新大厦失败",
+            message: "获取大厦失败",
             type: "error",
           });
         });
@@ -541,6 +551,7 @@ export default {
           });
         }
       });
+      this.idBefore = response.data.id;
       this.OldMansionForm = JSON.parse(JSON.stringify(response.data));
       this.mansionForm = JSON.parse(JSON.stringify(response.data));
       this.selectIdShow = this.mansionForm.id;
@@ -564,7 +575,7 @@ export default {
         if (id == item.value && this.selectIdShow != item.value) {
           repetition = true;
         }
-        if (this.mansionForm.idBefore == item.value) {
+        if (this.idBefore == item.value) {
           idIndex = index;
         }
       });
