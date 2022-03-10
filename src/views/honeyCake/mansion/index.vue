@@ -3,23 +3,23 @@
     <h3>大厦信息</h3>
     <el-form
       ref="infoForm"
-      :model="mansionForm.mansionInfo"
+      :model="mansionForm"
       :rules="mansionRules"
       label-width="100px"
       label-position="left"
     >
       <el-form-item label="大厦号" prop="id">
         <el-input
-          v-model="mansionForm.mansionInfo.id"
+          v-model="mansionForm.id"
           placeholder="请输入大厦号"
           class="width30"
-          @blur="updateId(mansionForm.mansionInfo.id)"
+          @blur="updateId(mansionForm.id)"
         >
         </el-input>
       </el-form-item>
       <el-form-item label="描述" prop="description">
         <el-input
-          v-model="mansionForm.mansionInfo.description"
+          v-model="mansionForm.description"
           placeholder="请输入描述"
           class="width30"
         >
@@ -27,7 +27,7 @@
       </el-form-item>
       <el-form-item label="CV号" prop="cvlink">
         <el-input
-          v-model="mansionForm.mansionInfo.cvlink"
+          v-model="mansionForm.cvlink"
           placeholder="请输入CV号"
           class="width30"
         >
@@ -37,7 +37,7 @@
       <el-form-item label="自信度" prop="fraction">
         <el-slider
           class="fraction-slider"
-          v-model="mansionForm.mansionInfo.fraction"
+          v-model="mansionForm.fraction"
           :min="1"
           :max="5"
           :step="1"
@@ -125,7 +125,7 @@
                   fill="#ffba4b"
                   text-color="#ffffff"
                 >
-                  <el-radio-button label="yet">还没到</el-radio-button>
+                  <el-radio-button label="unknown">还没到</el-radio-button>
                   <el-radio-button label="true">正确</el-radio-button>
                   <el-radio-button label="false">错误</el-radio-button>
                 </el-radio-group>
@@ -215,7 +215,6 @@ export default {
       selectIdShow: "",
       OldMansionForm: {},
       mansionForm: {
-        mansionInfo:{}
       },
       setAll: [
         {
@@ -269,7 +268,7 @@ export default {
         .dispatch("mansion/getIdArray")
         .then((response) => {
           // ID数组写入idOption
-          response.data.ids.forEach((item, index) => {
+          response.data.forEach((item, index) => {
             if (index == 0) {
               this.idOptions[index]["value"] = item;
               this.idOptions[index]["label"] = item;
@@ -303,20 +302,18 @@ export default {
         })
         .catch(() => {
           let mansion = {
-            mansionInfo: {
-              idBefore: "",
-              id: "",
-              description: "",
-              cvlink: "",
-              fraction: 1,
-            },
+            idBefore: "",
+            id: "",
+            description: "",
+            cvlink: "",
+            fraction: 1,
             daily: [
               {
                 datetime: "",
                 info: [
                   {
                     forecast: "",
-                    isTrue: "yet",
+                    isTrue: "unknown",
                   },
                 ],
                 content: "",
@@ -350,11 +347,11 @@ export default {
         let mansionList = {};
         mansionList = JSON.parse(JSON.stringify(this.mansionForm));
         if (
-          mansionList.mansionInfo.cvlink.substring(0, 2) !== "cv" &&
-          mansionList.mansionInfo.cvlink !== ""
+          mansionList.cvlink.substring(0, 2) !== "cv" &&
+          mansionList.cvlink !== ""
         ) {
-          mansionList.mansionInfo.cvlink =
-            "cv" + mansionList.mansionInfo.cvlink;
+          mansionList.cvlink =
+            "cv" + mansionList.cvlink;
         }
         this.$store
           .dispatch("mansion/uploadMansion", mansionList)
@@ -395,7 +392,7 @@ export default {
         info: [
           {
             forecast: "",
-            isTrue: "yet",
+            isTrue: "unknown",
           },
         ],
         content: "",
@@ -418,7 +415,7 @@ export default {
     addForecast(index, i) {
       this.mansionForm.daily[index].info.splice(i + 1, 0, {
         forecast: "",
-        isTrue: "yet",
+        isTrue: "unknown",
       });
       this.setAll[index]["set"] = false;
     },
@@ -449,20 +446,18 @@ export default {
       });
       if (!empty) {
         let mansion = {
-          mansionInfo: {
-            idBefore: "",
-            id: "",
-            description: "",
-            cvlink: "",
-            fraction: 1,
-          },
+          idBefore: "",
+          id: "",
+          description: "",
+          cvlink: "",
+          fraction: 1,
           daily: [
             {
               datetime: "",
               info: [
                 {
                   forecast: "",
-                  isTrue: "yet",
+                  isTrue: "unknown",
                 },
               ],
               content: "",
@@ -548,7 +543,7 @@ export default {
       });
       this.OldMansionForm = JSON.parse(JSON.stringify(response.data));
       this.mansionForm = JSON.parse(JSON.stringify(response.data));
-      this.selectIdShow = this.mansionForm.mansionInfo.id;
+      this.selectIdShow = this.mansionForm.id;
       this.upload = true;
       this.updateRichtextHtml();
     },
@@ -569,7 +564,7 @@ export default {
         if (id == item.value && this.selectIdShow != item.value) {
           repetition = true;
         }
-        if (this.mansionForm.mansionInfo.idBefore == item.value) {
+        if (this.mansionForm.idBefore == item.value) {
           idIndex = index;
         }
       });
@@ -666,7 +661,7 @@ export default {
       margin-bottom: 10px;
       /deep/.radio-group {
         margin-left: 15px;
-        .el-radio-button__orig-radio:checked +.el-radio-button__inner {
+        .el-radio-button__orig-radio:checked + .el-radio-button__inner {
           background-color: #ffba4b;
           border-color: #ffba4b;
           box-shadow: -1px 0 0 0 #ffba4b;
