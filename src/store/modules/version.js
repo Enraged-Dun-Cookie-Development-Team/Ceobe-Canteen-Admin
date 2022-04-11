@@ -5,7 +5,7 @@ const actions = {
     // 上传插件版本信息
     submitPluginVersion({ }, pluginForm) {
         return new Promise((resolve, reject) => {
-            submitPluginVersion({ token: store.getters.token }, { data: pluginForm }).then(response => {
+            submitPluginVersion({ token: store.getters.token }, pluginForm).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)
@@ -15,7 +15,7 @@ const actions = {
     // 上传手机版本信息
     submitPhoneVersion({ }, phoneForm) {
         return new Promise((resolve, reject) => {
-            submitPhoneVersion({ token: store.getters.token }, { data: phoneForm }).then(response => {
+            submitPhoneVersion({ token: store.getters.token }, phoneForm).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)

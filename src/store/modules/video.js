@@ -25,7 +25,7 @@ const actions = {
     // 上传视频信息
     submitVideoList({ }, videoList) {
         return new Promise((resolve, reject) => {
-            submitVideoList({ token: store.getters.token }, { data: videoList }).then(response => {
+            submitVideoList({ token: store.getters.token }, videoList).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)

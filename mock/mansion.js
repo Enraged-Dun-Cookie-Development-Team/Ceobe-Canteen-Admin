@@ -666,8 +666,8 @@ module.exports = [
         response: config => {
             const { token } = config.headers
             console.log(token)
-            console.log(config.body)
-            const {idBefore} = config.query
+            console.log(JSON.stringify(config.body))
+            const idBefore = config.query
             console.log(idBefore)
 
             return {

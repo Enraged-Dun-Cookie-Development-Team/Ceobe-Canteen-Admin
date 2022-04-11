@@ -60,7 +60,7 @@ module.exports = [
     url: '/admin/user/login',
     type: 'post',
     response: config => {
-      const { username, password } = config.body.data
+      const { username, password } = config.body
       let token
       if (password === md5(userpassword[username].password)) {
         token = tokens[username]
@@ -118,7 +118,7 @@ module.exports = [
 
   {
     url: '/admin/user/create',
-    type: 'get',
+    type: 'post',
     response: config => {
       const { token } = config.headers
       const { permission } = config.query
@@ -140,12 +140,13 @@ module.exports = [
 
   // 改用户名
   {
-    url: '/admin/user/changeusername',
+    url: '/admin/user/changeUsername',
     type: 'post',
     response: config => {
 
       const { token } = config.headers
-      const { username } = config.body.data
+      const { username } = config.body
+      console.log(username)
 
       const info = users[token]
       if (username == info.name) {
@@ -165,7 +166,7 @@ module.exports = [
 
   // 修改密码
   {
-    url: '/admin/user/changepassword',
+    url: '/admin/user/changePassword',
     type: 'post',
     response: config => {
 

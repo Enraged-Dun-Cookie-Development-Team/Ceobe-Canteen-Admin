@@ -4,7 +4,7 @@ export function login(data) {
   return request({
     url: '/admin/user/login',
     method: 'post',
-    data: { data }
+    data: data 
   })
 }
 
@@ -26,7 +26,7 @@ export function logout() {
 export function createUser(token, permission) {
   return request({
     url: '/admin/user/create',
-    method: 'get',
+    method: 'post',
     headers: token,
     params: permission
   })
@@ -34,19 +34,19 @@ export function createUser(token, permission) {
 
 export function changeUsername(token, data) {
   return request({
-    url: '/admin/user/changeusername',
+    url: '/admin/user/changeUsername',
     method: 'post',
     headers: token,
-    data: { data }
+    data: data 
   })
 }
 
 export function changePassword(token, data) {
   return request({
-    url: '/admin/user/changepassword',
+    url: '/admin/user/changePassword',
     method: 'post',
     headers: token,
-    data: { data }
+    data: data 
   })
 }
 

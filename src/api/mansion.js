@@ -32,6 +32,6 @@ export async function deleteMansion(token, data) {
         url: `/admin/mansion/delete`,
         method: 'post',
         headers: token,
-        data: {data}
+        params: data
     })
 }

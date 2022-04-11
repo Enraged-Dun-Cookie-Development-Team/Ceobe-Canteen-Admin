@@ -15,7 +15,7 @@ const actions = {
     // 上传资源信息
     submitResourceList({ }, resouceList) {
         return new Promise((resolve, reject) => {
-            submitResourceList({ token: store.getters.token }, { data: resouceList }).then(response => {
+            submitResourceList({ token: store.getters.token }, resouceList).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)

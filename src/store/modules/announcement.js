@@ -15,7 +15,7 @@ const actions = {
     // 上传公告信息
     submitAnnouncementList({ }, AnnouncementList) {
         return new Promise((resolve, reject) => {
-            submitAnnouncementList({ token: store.getters.token }, { data: AnnouncementList }).then(response => {
+            submitAnnouncementList({ token: store.getters.token }, AnnouncementList).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)

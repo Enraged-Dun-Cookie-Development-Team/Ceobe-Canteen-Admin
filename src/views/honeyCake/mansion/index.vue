@@ -343,6 +343,17 @@ export default {
       });
       // 上传表单到服务器
       if (allPass) {
+        if (
+          JSON.stringify(this.OldMansionForm) ==
+          JSON.stringify(this.mansionForm)
+        ) {
+          this.$message({
+            showClose: true,
+            message: "已经上传过了，不要重复上传噢",
+            type: "warning",
+          });
+          return;
+        }
         let mansionList = {};
         mansionList = JSON.parse(JSON.stringify(this.mansionForm));
         if (
@@ -580,6 +591,10 @@ export default {
         }
       });
       if (!repetition) {
+        if (id.indexOf(".") == -1) {
+          id += ".0";
+          this.mansionForm.id = id;
+        }
         this.idOptions[idIndex].value = id;
         this.idOptions[idIndex].label = id;
         this.selectIdShow = id;
