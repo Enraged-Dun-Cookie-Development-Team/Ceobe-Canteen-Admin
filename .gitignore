@@ -6,7 +6,6 @@ yarn-debug.log*
 yarn-error.log*
 tests/**/coverage/
 .env.development
-.env.production
 .env.staging
 
 # Editor directories and files
