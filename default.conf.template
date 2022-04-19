@@ -4,7 +4,7 @@
 
 # If you are reverse proxying an API
 upstream api {
-    server API_SERVER_GOES_HERE:port;
+    server ${API_HOST}:${API_PORT};
 }
 
 server {
@@ -42,6 +42,6 @@ server {
         proxy_set_header Host $http_host;
         # If you have any long running API calls, the read timeout needs to be increased here
         # proxy_read_timeout 120s;
-        proxy_pass ${API_SERVER};
+        proxy_pass http://api/;
     }
 }
