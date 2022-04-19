@@ -8,7 +8,7 @@ upstream api {
 }
 
 server {
-    listen 80; // SSL is not configured, but would be configured here
+    listen 80; # SSL is not configured, but would be configured here
 
     # If you are proxied, and the proxy doesn't support URL re-writing, A rewrite rule can be added here
     # rewrite ^REWRITE_URL_GOES_HERE(.*)$ /$1;
