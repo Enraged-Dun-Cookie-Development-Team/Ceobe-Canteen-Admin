@@ -3,10 +3,6 @@
 # This goes in /etc/nginx/conf.d/default.conf
 
 # If you are reverse proxying an API
-upstream api {
-    server ${API_HOST}:${API_PORT};
-}
-
 server {
     listen 80; # SSL is not configured, but would be configured here
 
@@ -42,6 +38,6 @@ server {
         proxy_set_header Host $http_host;
         # If you have any long running API calls, the read timeout needs to be increased here
         # proxy_read_timeout 120s;
-        proxy_pass http://api/;
+        proxy_pass http://${API_HOST}:${API_PORT}/api/;
     }
 }
