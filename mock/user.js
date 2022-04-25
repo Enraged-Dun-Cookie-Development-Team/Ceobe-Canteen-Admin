@@ -62,7 +62,7 @@ module.exports = [
     response: config => {
       const { username, password } = config.body
       let token
-      if (password === md5(userpassword[username].password)) {
+      if (userpassword[username] && password === md5(userpassword[username].password)) {
         token = tokens[username]
       }
 
@@ -76,7 +76,7 @@ module.exports = [
 
       return {
         code: 20000,
-        data: token
+        data: "token"
       }
     }
   },
