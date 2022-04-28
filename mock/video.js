@@ -5087,7 +5087,7 @@ module.exports = [
             }
 
             return {
-                code: 20000,
+                code: null,
                 data: data
             }
         }
@@ -5129,7 +5129,7 @@ module.exports = [
             }
 
             return {
-                code: 20000,
+                code: null,
                 data: data
             }
         }
@@ -5144,7 +5144,7 @@ module.exports = [
             console.log(config.body)
 
             return {
-                code: 20000,
+                code: null,
                 message: "成功上传"
             }
         }

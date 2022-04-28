@@ -75,8 +75,8 @@ module.exports = [
       }
 
       return {
-        code: 20000,
-        data: "token"
+        code: null,
+        data: token
       }
     }
   },
@@ -98,7 +98,7 @@ module.exports = [
       }
 
       return {
-        code: 20000,
+        code: null,
         data: info
       }
     }
@@ -110,7 +110,7 @@ module.exports = [
     type: 'post',
     response: _ => {
       return {
-        code: 20000,
+        code: null,
         data: 'success'
       }
     }
@@ -126,7 +126,7 @@ module.exports = [
       if (token == 'chef-token') {
         const userInfo = newUser[permission]
         return {
-          code: 20000,
+          code: null,
           data: userInfo
         }
       } else {
@@ -156,7 +156,7 @@ module.exports = [
         }
       } else {
         return {
-          code: 20000,
+          code: null,
           message: '修改用户名成功',
           data: { username }
         }
@@ -177,7 +177,7 @@ module.exports = [
       }
 
       return {
-        code: 20000,
+        code: null,
         message: '修改密码成功',
         data: data
       }
