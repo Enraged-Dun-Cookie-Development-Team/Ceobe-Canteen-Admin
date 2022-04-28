@@ -30,9 +30,9 @@
               {{
                 (item.text ? item.text : "未填写") +
                 "从" +
-                (item.starTime ? item.starTime : " ") +
+                (item.start_time ? item.start_time : " ") +
                 "显示到" +
-                item.overTime+
+                item.over_time+
                 (setAll[index].set ? "  (已完成) " : "  (未完成) ")
               }}
             </div>
@@ -77,9 +77,9 @@
                 @blur="checkForm(index)"
               ></el-input>
             </el-form-item>
-            <el-form-item label="显示时间" prop="starTime" required>
+            <el-form-item label="显示时间" prop="start_time" required>
               <el-date-picker
-                v-model="item.starTime"
+                v-model="item.start_time"
                 type="datetime"
                 placeholder="选择开始显示日期时间"
                 align="center"
@@ -90,7 +90,7 @@
               />
               -
               <el-date-picker
-                v-model="item.overTime"
+                v-model="item.over_time"
                 type="datetime"
                 placeholder="选择结束显示日期时间"
                 align="center"
@@ -130,10 +130,10 @@ export default {
     let that = this;
     let timeValidate = (rule, value, callback) => {
       if (
-        that.resourceForm.countdown[that.activeIndex].starTime == "" ||
-        that.resourceForm.countdown[that.activeIndex].overTime == "" ||
-        that.resourceForm.countdown[that.activeIndex].starTime == null ||
-        that.resourceForm.countdown[that.activeIndex].overTime == null
+        that.resourceForm.countdown[that.activeIndex].start_time == "" ||
+        that.resourceForm.countdown[that.activeIndex].over_time == "" ||
+        that.resourceForm.countdown[that.activeIndex].start_time == null ||
+        that.resourceForm.countdown[that.activeIndex].over_time == null
       ) {
         callback(new Error("我要什么时候显示呀"));
       } else {
@@ -150,8 +150,8 @@ export default {
             text: "",
             remark: "",
             time: "",
-            starTime: "",
-            overTime: "",
+            start_time: "",
+            over_time: "",
           },
         ],
       },
@@ -175,7 +175,7 @@ export default {
             trigger: "blur",
           },
         ],
-        starTime: [
+        start_time: [
           {
             required: true,
             message: "我要什么时候显示呀",
@@ -207,7 +207,7 @@ export default {
                     new Date(
                       that.activeIndex != 0
                         ? that.resourceForm.countdown[that.activeIndex - 1]
-                            .overTime
+                            .over_time
                         : ""
                     ),
                     1
@@ -225,7 +225,7 @@ export default {
                 TimeUtil.format(
                   TimeUtil.fourTime(
                     new Date(
-                      that.resourceForm.countdown[that.activeIndex].starTime
+                      that.resourceForm.countdown[that.activeIndex].start_time
                     )
                   ),
                   "yyyy-MM-dd hh:mm:ss"
@@ -241,7 +241,7 @@ export default {
                 TimeUtil.format(
                   TimeUtil.sixteenTime(
                     new Date(
-                      that.resourceForm.countdown[that.activeIndex].starTime
+                      that.resourceForm.countdown[that.activeIndex].start_time
                     )
                   ),
                   "yyyy-MM-dd hh:mm:ss"
@@ -259,7 +259,7 @@ export default {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
-                  that.resourceForm.countdown[that.activeIndex].starTime,
+                  that.resourceForm.countdown[that.activeIndex].start_time,
                   12
                 )
               );
@@ -271,7 +271,7 @@ export default {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
-                  that.resourceForm.countdown[that.activeIndex].starTime,
+                  that.resourceForm.countdown[that.activeIndex].start_time,
                   13 * 24 + 12
                 )
               );
@@ -351,8 +351,8 @@ export default {
         text: "",
         remark: "",
         time: "",
-        starTime: "",
-        overTime: "",
+        start_time: "",
+        over_time: "",
       });
       this.setAll.splice(index + 1, 0, {
         set: false,
@@ -378,9 +378,9 @@ export default {
     },
     // 将显示结束时间赋值给倒计时终点时间
     syncTime(index) {
-      if (this.resourceForm.countdown[index]["overTime"] != "") {
+      if (this.resourceForm.countdown[index]["over_time"] != "") {
         this.resourceForm.countdown[index]["time"] =
-          this.resourceForm.countdown[index]["overTime"];
+          this.resourceForm.countdown[index]["over_time"];
       }
     },
   },

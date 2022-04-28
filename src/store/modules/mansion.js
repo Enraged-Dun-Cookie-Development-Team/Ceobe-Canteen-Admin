@@ -15,19 +15,19 @@ const actions = {
     // 根据id获取大厦信息
     getMansion({ }, id) {
         return new Promise((resolve, reject) => {
-            getMansion({ token: store.getters.token }, { mansionId: id }).then(response => {
+            getMansion({ token: store.getters.token }, { mansion_id: id }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)
             })
         })
     },
-    uploadMansion({ }, { mansionList, idBefore }) {
-        if (idBefore == "") {
-            idBefore = undefined;
+    uploadMansion({ }, { mansionList, id_before }) {
+        if (id_before == "") {
+            id_before = undefined;
         }
         return new Promise((resolve, reject) => {
-            uploadMansion({ token: store.getters.token }, mansionList, { idBefore: idBefore }).then(response => {
+            uploadMansion({ token: store.getters.token }, mansionList, { mansion_id: id_before }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)
@@ -36,7 +36,7 @@ const actions = {
     },
     deleteMansion({ }, id) {
         return new Promise((resolve, reject) => {
-            deleteMansion({ token: store.getters.token }, { mansionId: id }).then(response => {
+            deleteMansion({ token: store.getters.token }, { mansion_id: id }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)

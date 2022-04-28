@@ -3,9 +3,9 @@ import store from '..'
 
 const actions = {
     // 获取视频消息信息
-    getVideoInfo({ }, bvNumber) {
+    getVideoInfo({ }, bv_number) {
         return new Promise((resolve, reject) => {
-            getVideoInfo({ token: store.getters.token }, { bvNumber: bvNumber }).then(response => {
+            getVideoInfo({ token: store.getters.token }, { bv_number: bv_number }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)
