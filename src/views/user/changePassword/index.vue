@@ -10,11 +10,11 @@
       label-position="left"
       label-width="100px"
     >
-      <el-form-item label="旧密码" class="width50" prop="oldpassword">
+      <el-form-item label="旧密码" class="width50" prop="old_password">
         <el-input
           ref="oldpasswordType"
           :type="passwordType.oldpasswordType"
-          v-model="passwordForm.oldpassword"
+          v-model="passwordForm.old_password"
           placeholder="请输入旧密码进行验证"
         >
         </el-input>
@@ -26,11 +26,11 @@
           />
         </span>
       </el-form-item>
-      <el-form-item label="新密码" class="width50" prop="newpassword">
+      <el-form-item label="新密码" class="width50" prop="new_password">
         <el-input
           ref="newpasswordType"
           :type="passwordType.newpasswordType"
-          v-model="passwordForm.newpassword"
+          v-model="passwordForm.new_password"
           placeholder="请输入新密码"
         >
         </el-input>
@@ -70,7 +70,7 @@
 export default {
   data() {
     const validateRepassword = (rule, value, callback) => {
-      if (value !== this.passwordForm.newpassword) {
+      if (value !== this.passwordForm.new_password) {
         return callback(new Error("两次密码不一致"));
       } else {
         return callback();
@@ -78,8 +78,8 @@ export default {
     };
     return {
       passwordForm: {
-        oldpassword: "",
-        newpassword: "",
+        old_password: "",
+        new_password: "",
         repassword: "",
       },
       passwordType: {
@@ -88,10 +88,10 @@ export default {
         repasswordType: "password",
       },
       passwordRules: {
-        oldpassword: [
+        old_password: [
           { required: true, message: "请输入旧密码", trigger: "blur" },
         ],
-        newpassword: [
+        new_password: [
           { required: true, message: "请输入新密码", trigger: "blur" },
         ],
         repassword: [
@@ -118,8 +118,8 @@ export default {
         if (valid) {
           this.$store
             .dispatch("user/changePassword", {
-              oldpassword: this.passwordForm.oldpassword,
-              newpassword: this.passwordForm.newpassword,
+              old_password: this.passwordForm.old_password,
+              new_password: this.passwordForm.new_password,
             })
             .then((_) => {
               this.$message({

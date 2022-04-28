@@ -113,9 +113,9 @@ const actions = {
   },
 
   // 修改密码
-  changePassword({ state, commit }, { oldpassword, newpassword }) {
+  changePassword({ state, commit }, { old_password, new_password }) {
     return new Promise((resolve, reject) => {
-      changePassword({ token: state.token }, { oldpassword: md5(oldpassword), newpassword: md5(newpassword) }).then(response => {
+      changePassword({ token: state.token }, { old_password: md5(old_password), new_password: md5(new_password) }).then(response => {
         const { data } = response;
 
         commit('SET_TOKEN', data.token)
