@@ -17,9 +17,9 @@
                 "个，标题：" +
                 video.title.substring(0, 40) +
                 "， 从" +
-                video.starTime +
+                video.start_time +
                 "显示到" +
-                video.overTime +
+                video.over_time +
                 (setAll[index].set ? "  (已完成) " : "  (未完成) ")
               }}
             </div>
@@ -48,9 +48,9 @@
             label-width="100px"
             label-position="left"
           >
-            <el-form-item label="BV号" prop="BV">
+            <el-form-item label="BV号" prop="bv">
               <el-input
-                v-model="video.BV"
+                v-model="video.bv"
                 placeholder="请输入BV号"
                 class="width30"
                 @blur="getVideoInfo(index)"
@@ -58,9 +58,9 @@
                 <template slot="prepend">BV</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="显示时间" prop="starTime">
+            <el-form-item label="显示时间" prop="start_time">
               <el-date-picker
-                v-model="video.starTime"
+                v-model="video.start_time"
                 type="datetime"
                 placeholder="选择开始显示日期时间"
                 align="center"
@@ -70,7 +70,7 @@
               />
               -
               <el-date-picker
-                v-model="video.overTime"
+                v-model="video.over_time"
                 type="datetime"
                 placeholder="选择结束显示日期时间"
                 align="center"
@@ -94,15 +94,15 @@
                 class="width30"
               ></el-input>
             </el-form-item>
-            <el-form-item label="视频链接" prop="videoLink">
-              <el-input v-model="video.videoLink" :disabled="true"></el-input>
+            <el-form-item label="视频链接" prop="video_link">
+              <el-input v-model="video.video_link" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="封面链接" prop="coverImg">
-              <el-input v-model="video.coverImg" :disabled="true"></el-input>
+            <el-form-item label="封面链接" prop="cover_img">
+              <el-input v-model="video.cover_img" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item>
               <iframe
-                :src="'//player.bilibili.com/player.html?bvid=' + video.BV"
+                :src="'//player.bilibili.com/player.html?bvid=' + video.bv"
                 scrolling="no"
                 border="0"
                 frameborder="no"
@@ -136,10 +136,10 @@ export default {
     };
     let timeValidate = (rule, value, callback) => {
       if (
-        that.videoListForm.videos[that.activeIndex].starTime == "" ||
-        that.videoListForm.videos[that.activeIndex].overTime == "" ||
-        that.videoListForm.videos[that.activeIndex].starTime == null ||
-        that.videoListForm.videos[that.activeIndex].overTime == null
+        that.videoListForm.videos[that.activeIndex].start_time == "" ||
+        that.videoListForm.videos[that.activeIndex].over_time == "" ||
+        that.videoListForm.videos[that.activeIndex].start_time == null ||
+        that.videoListForm.videos[that.activeIndex].over_time == null
       ) {
         callback(new Error("我要什么时候显示呀"));
       } else {
@@ -151,13 +151,13 @@ export default {
       videoListForm: {
         videos: [
           {
-            BV: "",
-            starTime: null,
-            overTime: null,
+            bv: "",
+            start_time: null,
+            over_time: null,
             title: "",
             author: "",
-            videoLink: "",
-            coverImg: "",
+            video_link: "",
+            cover_img: "",
           },
         ],
       },
@@ -167,14 +167,14 @@ export default {
         },
       ],
       videoRules: {
-        BV: [
+        bv: [
           {
             validator: validBV,
             message: "你这BV号好像不太对诶",
             trigger: "blur",
           },
         ],
-        starTime: [
+        start_time: [
           {
             required: true,
             message: "我要什么时候显示呀",
@@ -258,7 +258,7 @@ export default {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
-                  that.videoListForm.videos[that.activeIndex].starTime,
+                  that.videoListForm.videos[that.activeIndex].start_time,
                   6 * 24 + 12
                 )
               );
@@ -270,7 +270,7 @@ export default {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
-                  that.videoListForm.videos[that.activeIndex].starTime,
+                  that.videoListForm.videos[that.activeIndex].start_time,
                   9 * 24 + 12
                 )
               );
@@ -282,7 +282,7 @@ export default {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
-                  that.videoListForm.videos[that.activeIndex].starTime,
+                  that.videoListForm.videos[that.activeIndex].start_time,
                   13 * 24 + 12
                 )
               );
@@ -326,8 +326,8 @@ export default {
         let videoList = {};
         videoList = JSON.parse(JSON.stringify(this.videoListForm));
         videoList.videos.forEach((video) => {
-          if (video.BV.substring(0, 2) !== "BV") {
-            video.BV = "BV" + video.BV;
+          if (video.bv.substring(0, 2) !== "BV") {
+            video.bv = "BV" + video.bv;
           }
         });
 
@@ -362,14 +362,14 @@ export default {
     // 添加视频
     addVideo(index) {
       this.videoListForm.videos.splice(index + 1, 0, {
-        BV: "",
-        starTime: null,
-        overTime: null,
+        bv: "",
+        start_time: null,
+        over_time: null,
         radius: true,
         title: "",
         author: "",
-        videoLink: "",
-        coverImg: "",
+        video_link: "",
+        cover_img: "",
         set: false,
       });
       this.setAll.splice(index + 1, 0, {
@@ -396,9 +396,9 @@ export default {
     },
     //获取视频详细信息
     getVideoInfo(index) {
-      this.$refs["videoListForm" + index][0].validateField("BV", (valid) => {
+      this.$refs["videoListForm" + index][0].validateField("bv", (valid) => {
         if (valid === "") {
-          let bvNumber = this.videoListForm.videos[index]["BV"];
+          let bvNumber = this.videoListForm.videos[index]["bv"];
           this.$store
             .dispatch("video/getVideoInfo", bvNumber)
             .then((response) => {
@@ -412,11 +412,11 @@ export default {
               }
               this.videoListForm.videos[index]["title"] =
                 response.data.data.title;
-              this.videoListForm.videos[index]["coverImg"] =
+              this.videoListForm.videos[index]["cover_img"] =
                 response.data.data.pic + "@@200w_125h_1c.webp";
               this.videoListForm.videos[index]["author"] =
                 response.data.data.owner.name;
-              this.videoListForm.videos[index]["videoLink"] =
+              this.videoListForm.videos[index]["video_link"] =
                 "https://www.bilibili.com/video/" + bvNumber;
               this.checkForm(index);
             })
