@@ -37,15 +37,15 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    // before: require('./mock/mock-server.js'),
-    proxy: {
-      // change xxx-api/login => mock/login
-      // detail: https://cli.vuejs.org/config/#devserver-proxy
-      '/api/v0/admin': {
-        target: process.env.TARGET_API,
-        changeOrigin: true
-      }
-    }
+    before: require('./mock/mock-server.js'),
+    // proxy: {
+    //   // change xxx-api/login => mock/login
+    //   // detail: https://cli.vuejs.org/config/#devserver-proxy
+    //   '/api/v0/admin': {
+    //     target: process.env.TARGET_API,
+    //     changeOrigin: true
+    //   }
+    // }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

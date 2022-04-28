@@ -6,9 +6,9 @@ module.exports = [
             const { token } = config.headers
             console.log(token)
 
-            let data = ["16", "16.3", "16.6", "17"]
+            let data = []
             return {
-                code: 20000,
+                code: null,
                 data: data
             }
         }
@@ -17,29 +17,29 @@ module.exports = [
         url: '/admin/mansion/getInfo',
         type: 'get',
         response: config => {
-            const { mansionId } = config.query
+            const { mansion_id } = config.query
             const { token } = config.headers
             console.log(token)
-            console.log(mansionId)
+            console.log(mansion_id)
 
             let data
-            switch (mansionId) {
+            switch (mansion_id) {
                 case "16":
                     data = {
                         "id": "16",
                         "description": "",
-                        "cvlink": "",
+                        "cv_link": "",
                         "fraction": 1,
                         "daily": [
                             {
                                 "datetime": "2022-01-16",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "<签到服饰>“待晴日”- 深靛"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "<签到家具>“ 山中弈 ”&“ 亭上雪"
                                     }
                                 ],
@@ -49,11 +49,11 @@ module.exports = [
                                 "datetime": "2022-01-17",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "<活动异格>五星速射手 -寒芒克洛丝"
                                     },
                                     {
-                                        "isTrue": "false",
+                                        "forecast_status": "false",
                                         "forecast": "“且试箸”- 食铁兽"
                                     }
                                 ],
@@ -63,11 +63,11 @@ module.exports = [
                                 "datetime": "2022-01-18",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "五星战术家 - 夜半"
                                     },
                                     {
-                                        "isTrue": "false",
+                                        "forecast_status": "false",
                                         "forecast": "【常驻标准寻访预告】"
                                     }
                                 ],
@@ -77,11 +77,11 @@ module.exports = [
                                 "datetime": "2022-01-19",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "闪断更新公告"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": " “冷山月” - 乌有"
                                     }
                                 ],
@@ -91,7 +91,7 @@ module.exports = [
                                 "datetime": "2022-01-21",
                                 "info": [
                                     {
-                                        "isTrue": "false",
+                                        "forecast_status": "false",
                                         "forecast": "“染尘烟” - 夕"
                                     }
                                 ],
@@ -101,11 +101,11 @@ module.exports = [
                                 "datetime": "2022-01-22",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "#罗德岛闲逛部#"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "六星行商 - 老鲤"
                                     }
                                 ],
@@ -115,15 +115,15 @@ module.exports = [
                                 "datetime": "2022-01-23",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "#罗德岛相簿#"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "六星召唤师 - 令 [限定]"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "【山城茶馆】主题家具"
                                     }
                                 ],
@@ -138,11 +138,11 @@ module.exports = [
                                 "datetime": "2022-01-25",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "令EP"
                                     },
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "Sidestory「将进酒」开启"
                                     }
                                 ],
@@ -152,7 +152,7 @@ module.exports = [
                                 "datetime": "2022-01-26",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "老鲤EP"
                                     }
                                 ],
@@ -162,7 +162,7 @@ module.exports = [
                                 "datetime": "2022-01-30",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "#罗德岛相簿#（可能延后至02.01）"
                                     }
                                 ],
@@ -172,7 +172,7 @@ module.exports = [
                                 "datetime": "2022-02-01",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "春节贺图"
                                     }
                                 ],
@@ -185,18 +185,18 @@ module.exports = [
                     data = {
                         "id": "16.3",
                         "description": "ver.画中人ss",
-                        "cvlink": "",
+                        "cv_link": "",
                         "fraction": 5,
                         "daily": [
                             {
                                 "datetime": "2022-01-16",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "<签到服饰>“待晴日”- 深靛"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "<签到家具>“ 山中弈 ”&“ 亭上雪"
                                     }
                                 ],
@@ -206,11 +206,11 @@ module.exports = [
                                 "datetime": "2022-01-17",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "<活动异格>五星速射手 -寒芒克洛丝"
                                     },
                                     {
-                                        "isTrue": "false",
+                                        "forecast_status": "false",
                                         "forecast": "“且试箸”- 食铁兽"
                                     }
                                 ],
@@ -220,11 +220,11 @@ module.exports = [
                                 "datetime": "2022-01-18",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "五星战术家 - 夜半"
                                     },
                                     {
-                                        "isTrue": "false",
+                                        "forecast_status": "false",
                                         "forecast": "【常驻标准寻访预告】"
                                     }
                                 ],
@@ -234,11 +234,11 @@ module.exports = [
                                 "datetime": "2022-01-19",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "闪断更新公告"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": " “冷山月” - 乌有"
                                     }
                                 ],
@@ -248,7 +248,7 @@ module.exports = [
                                 "datetime": "2022-01-21",
                                 "info": [
                                     {
-                                        "isTrue": "false",
+                                        "forecast_status": "false",
                                         "forecast": "“染尘烟” - 夕"
                                     }
                                 ],
@@ -258,11 +258,11 @@ module.exports = [
                                 "datetime": "2022-01-22",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "#罗德岛闲逛部#"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "六星行商 - 老鲤"
                                     }
                                 ],
@@ -272,15 +272,15 @@ module.exports = [
                                 "datetime": "2022-01-23",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "#罗德岛相簿#"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "六星召唤师 - 令 [限定]"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "【山城茶馆】主题家具"
                                     }
                                 ],
@@ -295,11 +295,11 @@ module.exports = [
                                 "datetime": "2022-01-25",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "令EP"
                                     },
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "Sidestory「将进酒」开启"
                                     }
                                 ],
@@ -309,7 +309,7 @@ module.exports = [
                                 "datetime": "2022-01-26",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "老鲤EP"
                                     }
                                 ],
@@ -319,7 +319,7 @@ module.exports = [
                                 "datetime": "2022-01-30",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "#罗德岛相簿#（可能延后至02.01）"
                                     }
                                 ],
@@ -329,7 +329,27 @@ module.exports = [
                                 "datetime": "2022-02-01",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
+                                        "forecast": "春节贺图"
+                                    }
+                                ],
+                                "content": ""
+                            },
+                            {
+                                "datetime": "2022-01-30",
+                                "info": [
+                                    {
+                                        "forecast_status": "unknown",
+                                        "forecast": "#罗德岛相簿#（可能延后至02.01）"
+                                    }
+                                ],
+                                "content": ""
+                            },
+                            {
+                                "datetime": "2022-02-01",
+                                "info": [
+                                    {
+                                        "forecast_status": "unknown",
                                         "forecast": "春节贺图"
                                     }
                                 ],
@@ -342,18 +362,18 @@ module.exports = [
                     data = {
                         "id": "16.6",
                         "description": "",
-                        "cvlink": "",
+                        "cv_link": "",
                         "fraction": 4,
                         "daily": [
                             {
                                 "datetime": "2022-01-16",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "<签到服饰>“待晴日”- 深靛"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "<签到家具>“ 山中弈 ”&“ 亭上雪"
                                     }
                                 ],
@@ -363,11 +383,11 @@ module.exports = [
                                 "datetime": "2022-01-17",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "<活动异格>五星速射手 -寒芒克洛丝"
                                     },
                                     {
-                                        "isTrue": "false",
+                                        "forecast_status": "false",
                                         "forecast": "“且试箸”- 食铁兽"
                                     }
                                 ],
@@ -377,11 +397,11 @@ module.exports = [
                                 "datetime": "2022-01-18",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "五星战术家 - 夜半"
                                     },
                                     {
-                                        "isTrue": "false",
+                                        "forecast_status": "false",
                                         "forecast": "【常驻标准寻访预告】"
                                     }
                                 ],
@@ -391,11 +411,11 @@ module.exports = [
                                 "datetime": "2022-01-19",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "闪断更新公告"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": " “冷山月” - 乌有"
                                     }
                                 ],
@@ -405,7 +425,7 @@ module.exports = [
                                 "datetime": "2022-01-21",
                                 "info": [
                                     {
-                                        "isTrue": "false",
+                                        "forecast_status": "false",
                                         "forecast": "“染尘烟” - 夕"
                                     }
                                 ],
@@ -415,11 +435,11 @@ module.exports = [
                                 "datetime": "2022-01-22",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "#罗德岛闲逛部#"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "六星行商 - 老鲤"
                                     }
                                 ],
@@ -429,15 +449,15 @@ module.exports = [
                                 "datetime": "2022-01-23",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "#罗德岛相簿#"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "六星召唤师 - 令 [限定]"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "【山城茶馆】主题家具"
                                     }
                                 ],
@@ -452,11 +472,11 @@ module.exports = [
                                 "datetime": "2022-01-25",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "令EP"
                                     },
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "Sidestory「将进酒」开启"
                                     }
                                 ],
@@ -466,7 +486,7 @@ module.exports = [
                                 "datetime": "2022-01-26",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "老鲤EP"
                                     }
                                 ],
@@ -476,7 +496,7 @@ module.exports = [
                                 "datetime": "2022-01-30",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "#罗德岛相簿#（可能延后至02.01）"
                                     }
                                 ],
@@ -486,7 +506,7 @@ module.exports = [
                                 "datetime": "2022-02-01",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "春节贺图"
                                     }
                                 ],
@@ -499,18 +519,18 @@ module.exports = [
                     data = {
                         "id": "17",
                         "description": "",
-                        "cvlink": "",
+                        "cv_link": "",
                         "fraction": 1,
                         "daily": [
                             {
                                 "datetime": "2022-01-16",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "<签到服饰>“待晴日”- 深靛"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "<签到家具>“ 山中弈 ”&“ 亭上雪"
                                     }
                                 ],
@@ -520,11 +540,11 @@ module.exports = [
                                 "datetime": "2022-01-17",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "<活动异格>五星速射手 -寒芒克洛丝"
                                     },
                                     {
-                                        "isTrue": "false",
+                                        "forecast_status": "false",
                                         "forecast": "“且试箸”- 食铁兽"
                                     }
                                 ],
@@ -534,11 +554,11 @@ module.exports = [
                                 "datetime": "2022-01-18",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "五星战术家 - 夜半"
                                     },
                                     {
-                                        "isTrue": "false",
+                                        "forecast_status": "false",
                                         "forecast": "【常驻标准寻访预告】"
                                     }
                                 ],
@@ -548,11 +568,11 @@ module.exports = [
                                 "datetime": "2022-01-19",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "闪断更新公告"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": " “冷山月” - 乌有"
                                     }
                                 ],
@@ -562,7 +582,7 @@ module.exports = [
                                 "datetime": "2022-01-21",
                                 "info": [
                                     {
-                                        "isTrue": "false",
+                                        "forecast_status": "false",
                                         "forecast": "“染尘烟” - 夕"
                                     }
                                 ],
@@ -572,11 +592,11 @@ module.exports = [
                                 "datetime": "2022-01-22",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "#罗德岛闲逛部#"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "六星行商 - 老鲤"
                                     }
                                 ],
@@ -586,15 +606,15 @@ module.exports = [
                                 "datetime": "2022-01-23",
                                 "info": [
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "#罗德岛相簿#"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "六星召唤师 - 令 [限定]"
                                     },
                                     {
-                                        "isTrue": "true",
+                                        "forecast_status": "true",
                                         "forecast": "【山城茶馆】主题家具"
                                     }
                                 ],
@@ -609,11 +629,11 @@ module.exports = [
                                 "datetime": "2022-01-25",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "令EP"
                                     },
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "Sidestory「将进酒」开启"
                                     }
                                 ],
@@ -623,7 +643,7 @@ module.exports = [
                                 "datetime": "2022-01-26",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "老鲤EP"
                                     }
                                 ],
@@ -633,7 +653,7 @@ module.exports = [
                                 "datetime": "2022-01-30",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "#罗德岛相簿#（可能延后至02.01）"
                                     }
                                 ],
@@ -643,7 +663,7 @@ module.exports = [
                                 "datetime": "2022-02-01",
                                 "info": [
                                     {
-                                        "isTrue": "unknown",
+                                        "forecast_status": "unknown",
                                         "forecast": "春节贺图"
                                     }
                                 ],
@@ -655,7 +675,7 @@ module.exports = [
             }
 
             return {
-                code: 20000,
+                code: null,
                 data: data
             }
         }
@@ -667,11 +687,11 @@ module.exports = [
             const { token } = config.headers
             console.log(token)
             console.log(JSON.stringify(config.body))
-            const idBefore = config.query
-            console.log(idBefore)
+            const {mansion_id} = config.query
+            console.log(mansion_id)
 
             return {
-                code: 20000,
+                code: null,
                 message: "成功上传"
             }
         }
@@ -682,10 +702,11 @@ module.exports = [
         response: config => {
             const { token } = config.headers
             console.log(token)
-            console.log(config.body)
+            const {mansion_id} = config.query
+            console.log(mansion_id)
 
             return {
-                code: 20000,
+                code: null,
                 message: "成功删除"
             }
         }

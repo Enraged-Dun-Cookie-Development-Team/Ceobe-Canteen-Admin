@@ -22,9 +22,9 @@
         >
         </el-switch>
       </el-form-item>
-      <el-form-item label="上次强制版本" prop="lastForceVersion">
+      <el-form-item label="上次强制版本" prop="last_force_version">
         <el-input
-          v-model="phoneForm.lastForceVersion"
+          v-model="phoneForm.last_force_version"
           placeholder="请输入标题"
         ></el-input>
       </el-form-item>
@@ -56,7 +56,7 @@ export default {
       phoneForm: {
         version: "",
         forcus: true,
-        lastForceVersion: "",
+        last_force_version: "",
         description: "",
       },
       phoneRules: {
@@ -79,7 +79,7 @@ export default {
             trigger: "blur",
           },
         ],
-        lastForceVersion: [
+        last_force_version: [
           {
             required: true,
             message: "别空着别空着",
