@@ -72,9 +72,9 @@
           placeholder="请输入百度云链接"
         ></el-input>
       </el-form-item>
-      <el-form-item label="百度云描述" prop="spareText">
+      <el-form-item label="百度云描述" prop="spare_text">
         <el-input
-          v-model="pluginForm.down.spareText"
+          v-model="pluginForm.down.spare_text"
           placeholder="请输入百度云描述"
         ></el-input>
       </el-form-item>
@@ -138,7 +138,7 @@ export default {
           crx: "",
           zip: "",
           spare: "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
-          spareText: "备用下载（提取码 jzq9）",
+          spare_text: "备用下载（提取码 jzq9）",
           chrome:
             "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN",
           edge: "https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN",
@@ -203,7 +203,7 @@ export default {
             trigger: ["change", "blur"],
           },
         ],
-        spareText: [
+        spare_text: [
           {
             required: true,
             message: "这个也不能为空啊",
