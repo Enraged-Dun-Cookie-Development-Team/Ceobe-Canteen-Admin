@@ -398,9 +398,9 @@ export default {
     getVideoInfo(index) {
       this.$refs["videoListForm" + index][0].validateField("bv", (valid) => {
         if (valid === "") {
-          let bvNumber = this.videoListForm.videos[index]["bv"];
+          let bv_number = this.videoListForm.videos[index]["bv"];
           this.$store
-            .dispatch("video/getVideoInfo", bvNumber)
+            .dispatch("video/getVideoInfo", bv_number)
             .then((response) => {
               if (response.data.code != 0) {
                 this.$message({
@@ -417,7 +417,7 @@ export default {
               this.videoListForm.videos[index]["author"] =
                 response.data.data.owner.name;
               this.videoListForm.videos[index]["video_link"] =
-                "https://www.bilibili.com/video/" + bvNumber;
+                "https://www.bilibili.com/video/" + bv_number;
               this.checkForm(index);
             })
             .catch((e) => {
