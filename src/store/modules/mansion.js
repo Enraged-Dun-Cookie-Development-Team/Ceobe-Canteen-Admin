@@ -22,12 +22,12 @@ const actions = {
             })
         })
     },
-    uploadMansion({ }, { mansionList, id_before }) {
-        if (id_before == "") {
-            id_before = undefined;
+    uploadMansion({ }, { mansionList, idBefore }) {
+        if (idBefore == "") {
+            idBefore = undefined;
         }
         return new Promise((resolve, reject) => {
-            uploadMansion({ token: store.getters.token }, mansionList, { mansion_id: id_before }).then(response => {
+            uploadMansion({ token: store.getters.token }, mansionList, { mansion_id: idBefore }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)

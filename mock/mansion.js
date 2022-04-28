@@ -6,7 +6,7 @@ module.exports = [
             const { token } = config.headers
             console.log(token)
 
-            let data = []
+            let data = ["16", "16.3", "16.6", "17"]
             return {
                 code: null,
                 data: data
