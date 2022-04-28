@@ -15,9 +15,9 @@
                 "第" +
                 (index + 1) +
                 "个， 从" +
-                announcement.starTime +
+                announcement.start_time +
                 "显示到" +
-                announcement.overTime +
+                announcement.over_time +
                 (setAll[index].set ? "  (已完成) " : "  (未完成) ")
               }}
             </div>
@@ -46,9 +46,9 @@
             label-width="100px"
             label-position="left"
           >
-            <el-form-item label="图片链接" prop="imgUrl">
+            <el-form-item label="图片链接" prop="img_url">
               <el-input
-                v-model="announcement.imgUrl"
+                v-model="announcement.img_url"
                 placeholder="请输入图片链接"
                 @blur="getImg(index), checkForm(index)"
               ></el-input>
@@ -61,9 +61,9 @@
                 :key="index"
               />
             </el-form-item>
-            <el-form-item label="显示时间" prop="starTime">
+            <el-form-item label="显示时间" prop="start_time">
               <el-date-picker
-                v-model="announcement.starTime"
+                v-model="announcement.start_time"
                 type="datetime"
                 placeholder="选择开始显示日期时间"
                 align="center"
@@ -74,7 +74,7 @@
               />
               -
               <el-date-picker
-                v-model="announcement.overTime"
+                v-model="announcement.over_time"
                 type="datetime"
                 placeholder="选择结束显示日期时间"
                 align="center"
@@ -125,11 +125,11 @@ export default {
     let that = this;
     let timeValidate = (rule, value, callback) => {
       if (
-        that.announcementForm.announcements[that.activeIndex].starTime == "" ||
-        that.announcementForm.announcements[that.activeIndex].overTime == "" ||
-        that.announcementForm.announcements[that.activeIndex].starTime ==
+        that.announcementForm.announcements[that.activeIndex].start_time == "" ||
+        that.announcementForm.announcements[that.activeIndex].over_time == "" ||
+        that.announcementForm.announcements[that.activeIndex].start_time ==
           null ||
-        that.announcementForm.announcements[that.activeIndex].overTime == null
+        that.announcementForm.announcements[that.activeIndex].over_time == null
       ) {
         callback(new Error("我要什么时候显示呀"));
       } else {
@@ -163,7 +163,7 @@ export default {
                       that.activeIndex != 0
                         ? that.announcementForm.announcements[
                             that.activeIndex - 1
-                          ].overTime
+                          ].over_time
                         : ""
                     ),
                     1
@@ -236,7 +236,7 @@ export default {
                 "pick",
                 TimeUtil.passHourTime(
                   that.announcementForm.announcements[that.activeIndex]
-                    .starTime,
+                    .start_time,
                   6 * 24 + 12
                 )
               );
@@ -249,7 +249,7 @@ export default {
                 "pick",
                 TimeUtil.passHourTime(
                   that.announcementForm.announcements[that.activeIndex]
-                    .starTime,
+                    .start_time,
                   9 * 24 + 12
                 )
               );
@@ -262,7 +262,7 @@ export default {
                 "pick",
                 TimeUtil.passHourTime(
                   that.announcementForm.announcements[that.activeIndex]
-                    .starTime,
+                    .start_time,
                   13 * 24 + 12
                 )
               );
@@ -271,7 +271,7 @@ export default {
         ],
       },
       announcementRules: {
-        imgUrl: [
+        img_url: [
           {
             required: true,
             message: "没图多不好看呀",
@@ -285,7 +285,7 @@ export default {
             trigger: "blur",
           },
         ],
-        starTime: [
+        start_time: [
           {
             required: true,
             message: "我要什么时候显示呀",
@@ -322,15 +322,15 @@ export default {
                 img: "",
               });
             }
-            this.getImg(index, announcement.imgUrl);
+            this.getImg(index, announcement.img_url);
           });
           this.announcementForm = JSON.parse(JSON.stringify(response.data));
         })
         .catch((_) => {
           this.announcementForm.announcements.splice(0, 0, {
-            starTime: "",
-            overTime: "",
-            imgUrl: "",
+            start_time: "",
+            over_time: "",
+            img_url: "",
             content: "",
             notice: false,
           });
@@ -370,28 +370,28 @@ export default {
       }
     },
     // 获取图片展示
-    getImg(index, imgUrl = "") {
-      if (imgUrl === "") {
+    getImg(index, img_url = "") {
+      if (img_url === "") {
         if (
-          this.announcementForm.announcements[index].imgUrl.indexOf("icon") !=
+          this.announcementForm.announcements[index].img_url.indexOf("icon") !=
             -1 &&
-          this.announcementForm.announcements[index].imgUrl.indexOf("http") ==
+          this.announcementForm.announcements[index].img_url.indexOf("http") ==
             -1
         ) {
           this.imgList[index].img = require("../../../assets/image/logo/" +
-            this.announcementForm.announcements[index].imgUrl +
+            this.announcementForm.announcements[index].img_url +
             ".png");
         } else {
           this.imgList[index].img =
-            this.announcementForm.announcements[index].imgUrl;
+            this.announcementForm.announcements[index].img_url;
         }
       } else {
-        if (imgUrl.indexOf("icon") != -1 && imgUrl.indexOf("http") == -1) {
+        if (img_url.indexOf("icon") != -1 && img_url.indexOf("http") == -1) {
           this.imgList[index].img = require("../../../assets/image/logo/" +
-            imgUrl +
+            img_url +
             ".png");
         } else {
-          this.imgList[index].img = imgUrl;
+          this.imgList[index].img = img_url;
         }
       }
     },
@@ -414,9 +414,9 @@ export default {
     // 添加新增公告
     addAnnouncement(index) {
       this.announcementForm.announcements.splice(index + 1, 0, {
-        starTime: "",
-        overTime: "",
-        imgUrl: "",
+        start_time: "",
+        over_time: "",
+        img_url: "",
         content: "",
         notice: false,
       });
