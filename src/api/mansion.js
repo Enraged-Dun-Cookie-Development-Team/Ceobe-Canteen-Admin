@@ -8,30 +8,30 @@ export async function getIdArray(token) {
     })
 }
 
-export async function getMansion(token, mansionId) {
+export async function getMansion(token, mansion_id) {
     return request({
         url: `/admin/mansion/getInfo`,
         method: 'get',
         headers: token,
-        params: mansionId
+        params: mansion_id
     })
 }
 
-export async function uploadMansion(token, data, idBefore) {
+export async function uploadMansion(token, data, mansion_id) {
     return request({
         url: `/admin/mansion/upload`,
         method: 'post',
         headers: token,
         data: data,
-        params: idBefore
+        params: mansion_id
     })
 }
 
-export async function deleteMansion(token, data) {
+export async function deleteMansion(token, mansion_id) {
     return request({
         url: `/admin/mansion/delete`,
         method: 'post',
         headers: token,
-        params: data
+        params: mansion_id
     })
 }
