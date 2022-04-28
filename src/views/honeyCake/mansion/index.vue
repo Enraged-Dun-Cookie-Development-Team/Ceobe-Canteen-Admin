@@ -25,9 +25,9 @@
         >
         </el-input>
       </el-form-item>
-      <el-form-item label="CV号" prop="cvlink">
+      <el-form-item label="CV号" prop="cv_link">
         <el-input
-          v-model="mansionForm.cvlink"
+          v-model="mansionForm.cv_link"
           placeholder="请输入CV号"
           class="width30"
         >
@@ -121,7 +121,7 @@
                 </el-input>
                 <el-radio-group
                   class="radio-group"
-                  v-model="detail.isTrue"
+                  v-model="detail.forecast_status"
                   fill="#ffba4b"
                   text-color="#ffffff"
                 >
@@ -229,7 +229,7 @@ export default {
             trigger: "blur",
           },
         ],
-        cvlink: [
+        cv_link: [
           {
             validator: validCV,
             message: "你这cv号好像不太对诶,说不定是cv的大小写原因？",
@@ -298,31 +298,39 @@ export default {
                 message: "获取大厦失败",
                 type: "error",
               });
+              this.initMansion();
             });
         })
         .catch(() => {
-          let mansion = {
-            id: "",
-            description: "",
-            cvlink: "",
-            fraction: 1,
-            daily: [
+          this.initMansion();
+        });
+    },
+    initMansion() {
+      let mansion = {
+        id: "",
+        description: "",
+        cv_link: "",
+        fraction: 1,
+        daily: [
+          {
+            datetime: "",
+            info: [
               {
-                datetime: "",
-                info: [
-                  {
-                    forecast: "",
-                    isTrue: "unknown",
-                  },
-                ],
-                content: "",
+                forecast: "",
+                forecast_status: "unknown",
               },
             ],
-          };
-          this.idBefore = "";
-          this.OldMansionForm = JSON.parse(JSON.stringify(mansion));
-          this.mansionForm = JSON.parse(JSON.stringify(mansion));
-        });
+            content: "",
+          },
+        ],
+      };
+      this.idBefore = "";
+      this.OldMansionForm = JSON.parse(JSON.stringify(mansion));
+      this.mansionForm = JSON.parse(JSON.stringify(mansion));
+      this.setAll = [{ set: false }];
+      this.selectIdShow = "";
+      this.upload = false;
+      this.updateRichtextHtml();
     },
     // 提交表单到服务器
     submitMansionList() {
@@ -357,10 +365,10 @@ export default {
         let mansionList = {};
         mansionList = JSON.parse(JSON.stringify(this.mansionForm));
         if (
-          mansionList.cvlink.substring(0, 2) !== "cv" &&
-          mansionList.cvlink !== ""
+          mansionList.cv_link.substring(0, 2) !== "cv" &&
+          mansionList.cv_link !== ""
         ) {
-          mansionList.cvlink = "cv" + mansionList.cvlink;
+          mansionList.cv_link = "cv" + mansionList.cv_link;
         }
         this.$store
           .dispatch("mansion/uploadMansion", {
@@ -405,7 +413,7 @@ export default {
         info: [
           {
             forecast: "",
-            isTrue: "unknown",
+            forecast_status: "unknown",
           },
         ],
         content: "",
@@ -428,7 +436,7 @@ export default {
     addForecast(index, i) {
       this.mansionForm.daily[index].info.splice(i + 1, 0, {
         forecast: "",
-        isTrue: "unknown",
+        forecast_status: "unknown",
       });
       this.setAll[index]["set"] = false;
     },
@@ -461,7 +469,7 @@ export default {
         let mansion = {
           id: "",
           description: "",
-          cvlink: "",
+          cv_link: "",
           fraction: 1,
           daily: [
             {
@@ -469,15 +477,15 @@ export default {
               info: [
                 {
                   forecast: "",
-                  isTrue: "unknown",
+                  forecast_status: "unknown",
                 },
               ],
               content: "",
             },
           ],
         };
-        (this.idBefore = ""),
-          (this.OldMansionForm = JSON.parse(JSON.stringify(mansion)));
+        this.idBefore = "";
+        this.OldMansionForm = JSON.parse(JSON.stringify(mansion));
         this.mansionForm = JSON.parse(JSON.stringify(mansion));
         this.setAll = [{ set: false }];
         this.idOptions.push({
@@ -506,7 +514,7 @@ export default {
           .catch(() => {
             this.$message({
               showClose: true,
-              message: "更新大厦失败",
+              message: "删除大厦失败",
               type: "error",
             });
           });
@@ -518,17 +526,22 @@ export default {
     removeMansion() {
       //  根据idBefore删除对应的IdOption数组元素
       let idIndex = -1;
+      
       this.idOptions.forEach((item, index) => {
         if (this.idBefore == item.value) {
           idIndex = index;
         }
       });
       this.idOptions.splice(idIndex, 1);
-      this.setAll = [
-        {
-          set: false,
-        },
-      ];
+      if (this.idOptions.length == 0) {
+          this.initMansion();
+          this.idOptions.push({
+            value: "",
+            label: "",
+          });
+          return
+      }
+      
       //  根据IdOption最后一个的value去请求对应大厦信息
       let newId = this.idOptions[this.idOptions.length - 1].value;
       this.$store
@@ -538,7 +551,7 @@ export default {
           this.updateMansionInfo(response);
           this.$message({
             showClose: true,
-            message: "删除大厦成功",
+            message: "获取大厦成功",
             type: "success",
           });
         })
@@ -553,6 +566,7 @@ export default {
 
     // 获取服务器消息后更新大厦信息
     updateMansionInfo(response) {
+      this.setAll = [{ set: false }];
       response.data.daily.map((item, index) => {
         if (index == 0) {
           this.setAll[index]["set"] = true;
