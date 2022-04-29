@@ -65,16 +65,9 @@ const actions = {
 
   // user logout
   logout({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      logout().then(() => {
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
+    removeToken() // must remove  token  first
+    resetRouter()
+    commit('RESET_STATE')
   },
 
   // remove token
@@ -102,7 +95,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       changeUsername({ token: state.token }, { username: username }).then(response => {
         const { data } = response;
-        
+
         commit('SET_NAME', data.username);
 
         resolve(response)

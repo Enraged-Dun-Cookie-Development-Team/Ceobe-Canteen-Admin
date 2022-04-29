@@ -526,7 +526,7 @@ export default {
     removeMansion() {
       //  根据idBefore删除对应的IdOption数组元素
       let idIndex = -1;
-      
+
       this.idOptions.forEach((item, index) => {
         if (this.idBefore == item.value) {
           idIndex = index;
@@ -534,14 +534,14 @@ export default {
       });
       this.idOptions.splice(idIndex, 1);
       if (this.idOptions.length == 0) {
-          this.initMansion();
-          this.idOptions.push({
-            value: "",
-            label: "",
-          });
-          return
+        this.initMansion();
+        this.idOptions.push({
+          value: "",
+          label: "",
+        });
+        return;
       }
-      
+
       //  根据IdOption最后一个的value去请求对应大厦信息
       let newId = this.idOptions[this.idOptions.length - 1].value;
       this.$store
