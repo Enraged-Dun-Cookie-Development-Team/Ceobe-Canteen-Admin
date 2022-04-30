@@ -45,7 +45,15 @@
         </el-slider>
       </el-form-item>
     </el-form>
-    <h3>每日信息</h3>
+    <div class="info_title">
+      <h3>每日信息</h3>
+      <el-button
+        @click.stop="addItem(-1)"
+        icon="el-icon-plus"
+        class="btn-editor btn-add"
+        round
+      ></el-button>
+    </div>
     <el-collapse
       v-for="(item, index) in mansionForm.daily"
       :key="index"
@@ -397,17 +405,20 @@ export default {
 
     // 增删单日信息
     addItem(index) {
-      // 新加一日信息默认增一天
       let newDatetime = "";
-      if (this.mansionForm.daily[index].datetime != "") {
-        newDatetime = TimeUtil.format(
-          TimeUtil.passSecondTime(
-            new Date(this.mansionForm.daily[index].datetime),
-            60 * 60 * 24
-          ),
-          "yyyy-MM-dd"
-        );
+      // 新加一日信息默认增一天
+      if (index != -1) {
+        if (this.mansionForm.daily[index].datetime != "") {
+          newDatetime = TimeUtil.format(
+            TimeUtil.passSecondTime(
+              new Date(this.mansionForm.daily[index].datetime),
+              60 * 60 * 24
+            ),
+            "yyyy-MM-dd"
+          );
+        }
       }
+
       this.mansionForm.daily.splice(index + 1, 0, {
         datetime: newDatetime,
         info: [
@@ -421,6 +432,7 @@ export default {
       this.setAll.splice(index + 1, 0, {
         set: false,
       });
+      this.updateRichtextHtml();
     },
     removeItem(item) {
       let index = this.mansionForm.daily.indexOf(item);
@@ -430,6 +442,7 @@ export default {
           this.setAll.splice(index, 1);
         }
       }
+      this.updateRichtextHtml();
     },
 
     // 预测信息增加和删除
@@ -678,20 +691,31 @@ export default {
   .fraction-slider {
     width: 20%;
   }
+
+  .info_title {
+    display: flex;
+    justify-content: space-between;
+
+    .btn-add {
+      height: 40px;
+      margin-top: 10px;
+    }
+  }
+
   .collapse-header {
     display: flex;
     justify-content: space-between;
     width: 100%;
     margin-right: 10px;
+  }
 
-    .btn-add {
-      color: white;
-      background-color: #67c23a;
-    }
-    .btn-delete {
-      color: white;
-      background-color: #f56c6c;
-    }
+  .btn-add {
+    color: white;
+    background-color: #67c23a;
+  }
+  .btn-delete {
+    color: white;
+    background-color: #f56c6c;
   }
 
   .single-card {
