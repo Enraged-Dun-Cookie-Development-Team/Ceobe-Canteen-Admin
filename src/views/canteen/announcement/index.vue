@@ -311,7 +311,7 @@ export default {
         .dispatch("announcement/getAnnouncementList")
         .then((response) => {
           this.announcementForm = [];
-          response.data.announcements.map((announcement, index) => {
+          response.data.map((announcement, index) => {
             if (index == 0) {
               this.setAll[index]["set"] = true;
             } else {
@@ -324,7 +324,7 @@ export default {
             }
             this.getImg(index, announcement.img_url);
           });
-          this.announcementForm = JSON.parse(JSON.stringify(response.data));
+          this.announcementForm.announcements = JSON.parse(JSON.stringify(response.data));
         })
         .catch((_) => {
           this.announcementForm.announcements.splice(0, 0, {

@@ -299,7 +299,7 @@ export default {
   methods: {
     init() {
       this.$store.dispatch("video/getVideoList").then((response) => {
-        response.data.videos.map((video, index) => {
+        response.data.map((video, index) => {
           if (index == 0) {
             this.setAll[index]["set"] = true;
           } else {
@@ -308,7 +308,7 @@ export default {
             });
           }
         });
-        this.videoListForm = JSON.parse(JSON.stringify(response.data));
+        this.videoListForm.videos = JSON.parse(JSON.stringify(response.data));
       });
     },
     // 提交表单到服务器
