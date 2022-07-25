@@ -1,98 +1,51 @@
 <template>
   <div id="mainWindow">
     <h3>视频链接</h3>
-    <el-collapse
-      v-for="(video, index) in videoListForm.videos"
-      :key="index"
-      v-model="activeName"
-      accordion
-    >
+    <el-collapse v-for="(video, index) in videoListForm.videos" :key="index" v-model="activeName" accordion>
       <el-collapse-item :name="index" class="btn">
         <template slot="title">
           <div class="collapse-header">
             <div>
               {{
-                "第" +
-                (index + 1) +
-                "个，标题：" +
-                video.title.substring(0, 40) +
-                "， 从" +
-                video.start_time +
-                "显示到" +
-                video.over_time +
-                (setAll[index].set ? "  (已完成) " : "  (未完成) ")
+                  "第" +
+                  (index + 1) +
+                  "个，标题：" +
+                  video.title.substring(0, 40) +
+                  "， 从" +
+                  video.start_time +
+                  "显示到" +
+                  video.over_time +
+                  (setAll[index].set ? " (已完成) " : " (未完成) ")
               }}
             </div>
             <div>
-              <el-button
-                @click.stop="addVideo(index)"
-                icon="el-icon-plus"
-                class="btn-editor btn-add"
-                round
-              ></el-button>
-              <el-button
-                @click.stop="removeVideo(video)"
-                icon="el-icon-delete"
-                class="btn-editor btn-delete"
-                round
-              ></el-button>
+              <el-button @click.stop="addVideo(index)" icon="el-icon-plus" class="btn-editor btn-add" round></el-button>
+              <el-button @click.stop="removeVideo(video)" icon="el-icon-delete" class="btn-editor btn-delete" round>
+              </el-button>
             </div>
           </div>
         </template>
         <el-card class="single-card">
-          <el-form
-            :ref="'videoListForm' + index"
-            :model="videoListForm.videos[index]"
-            :rules="videoRules"
-            class="video-list"
-            label-width="100px"
-            label-position="left"
-          >
+          <el-form :ref="'videoListForm' + index" :model="videoListForm.videos[index]" :rules="videoRules"
+            class="video-list" label-width="100px" label-position="left">
             <el-form-item label="BV号" prop="bv">
-              <el-input
-                v-model="video.bv"
-                placeholder="请输入BV号"
-                class="width30"
-                @blur="getVideoInfo(index)"
-              >
+              <el-input v-model="video.bv" placeholder="请输入BV号" class="width30" @blur="getVideoInfo(index)">
                 <template slot="prepend">BV</template>
               </el-input>
             </el-form-item>
             <el-form-item label="显示时间" prop="start_time">
-              <el-date-picker
-                v-model="video.start_time"
-                type="datetime"
-                placeholder="选择开始显示日期时间"
-                align="center"
-                :picker-options="pickerStarTime"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                @blur="checkForm(index)"
-              />
+              <el-date-picker v-model="video.start_time" type="datetime" placeholder="选择开始显示日期时间" align="center"
+                :picker-options="pickerStarTime" value-format="yyyy-MM-dd HH:mm:ss" @blur="checkForm(index)" />
               -
-              <el-date-picker
-                v-model="video.over_time"
-                type="datetime"
-                placeholder="选择结束显示日期时间"
-                align="center"
-                :picker-options="pickerOverTime"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                @focus="activeIndex = index"
-                @blur="checkForm(index)"
-              />
+              <el-date-picker v-model="video.over_time" type="datetime" placeholder="选择结束显示日期时间" align="center"
+                :picker-options="pickerOverTime" value-format="yyyy-MM-dd HH:mm:ss" @focus="activeIndex = index"
+                @blur="checkForm(index)" />
             </el-form-item>
             <el-form-item label="视频标题" prop="title">
-              <el-input
-                v-model="video.title"
-                placeholder="请输入标题"
-                @blur="checkForm(index)"
-              ></el-input>
+              <el-input v-model="video.title" placeholder="请输入标题" @blur="checkForm(index)"></el-input>
             </el-form-item>
             <el-form-item label="up主" prop="author">
-              <el-input
-                v-model="video.author"
-                :disabled="true"
-                class="width30"
-              ></el-input>
+              <el-input v-model="video.author" :disabled="true" class="width30"></el-input>
             </el-form-item>
             <el-form-item label="视频链接" prop="video_link">
               <el-input v-model="video.video_link" :disabled="true"></el-input>
@@ -101,14 +54,8 @@
               <el-input v-model="video.cover_img" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item>
-              <iframe
-                :src="'//player.bilibili.com/player.html?bvid=' + video.bv"
-                scrolling="no"
-                border="0"
-                frameborder="no"
-                framespacing="0"
-                allowfullscreen="true"
-              >
+              <iframe :src="'//player.bilibili.com/player.html?bvid=' + video.bv" scrolling="no" border="0"
+                frameborder="no" framespacing="0" allowfullscreen="true">
               </iframe>
             </el-form-item>
           </el-form>
@@ -309,19 +256,47 @@ export default {
           }
         });
         this.videoListForm.videos = JSON.parse(JSON.stringify(response.data));
-      });
+      })
+        .then(_ => {
+          if (this.videoListForm.videos.length == 0) {
+            this.videoListForm.videos.splice(0, 0, {
+              bv: "",
+              start_time: null,
+              over_time: null,
+              title: "",
+              author: "",
+              video_link: "",
+              cover_img: "",
+            })
+          };
+        })
+
     },
     // 提交表单到服务器
     submitVideoList() {
       let allPass = true;
-      this.videoListForm.videos.forEach((item, index) => {
-        this.$refs["videoListForm" + index][0].validate((valid) => {
-          if (!valid) {
-            allPass = false;
-            return;
-          }
+      let empty = false
+      if (this.videoListForm.videos.length == 1 && JSON.stringify(this.videoListForm.videos) == JSON.stringify([{
+        bv: "",
+        start_time: null,
+        over_time: null,
+        title: "",
+        author: "",
+        video_link: "",
+        cover_img: "",
+      }])) {
+        empty = true
+      };
+      if (!empty) {
+        this.videoListForm.videos.forEach((item, index) => {
+          this.$refs["videoListForm" + index][0].validate((valid) => {
+            if (!valid) {
+              allPass = false;
+              return;
+            }
+          });
         });
-      });
+      }
       if (allPass) {
         let videoList = {};
         videoList = JSON.parse(JSON.stringify(this.videoListForm));
@@ -330,6 +305,9 @@ export default {
             video.bv = "BV" + video.bv;
           }
         });
+        if (empty) {
+          videoList.videos = [];
+        }
 
         this.$store
           .dispatch("video/submitVideoList", videoList.videos)
@@ -357,7 +335,20 @@ export default {
           this.videoListForm.videos.splice(index, 1);
           this.setAll.splice(index, 1);
         }
+      } else {
+        this.videoListForm.videos = [{
+          bv: "",
+          start_time: null,
+          over_time: null,
+          title: "",
+          author: "",
+          video_link: "",
+          cover_img: "",
+        }]
       }
+      this.setAll = [{
+        set: false,
+      }];
     },
     // 添加视频
     addVideo(index) {
@@ -402,6 +393,7 @@ export default {
           this.$store
             .dispatch("video/getVideoInfo", bv_number)
             .then((response) => {
+              response.data = JSON.parse(response.data)
               if (response.data.code != 0) {
                 this.$message({
                   showClose: true,
@@ -441,6 +433,7 @@ export default {
       color: white;
       background-color: #67c23a;
     }
+
     .btn-delete {
       color: white;
       background-color: #f56c6c;
