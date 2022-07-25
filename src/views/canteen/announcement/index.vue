@@ -1,96 +1,52 @@
 <template>
   <div id="mainWindow">
     <h3>公告内容</h3>
-    <el-collapse
-      v-for="(announcement, index) in announcementForm.announcements"
-      :key="index"
-      v-model="activeName"
-      accordion
-    >
+    <el-collapse v-for="(announcement, index) in announcementForm.announcements" :key="index" v-model="activeName"
+      accordion>
       <el-collapse-item :name="index" class="btn">
         <template slot="title">
           <div class="collapse-header">
             <div>
               {{
-                "第" +
-                (index + 1) +
-                "个， 从" +
-                announcement.start_time +
-                "显示到" +
-                announcement.over_time +
-                (setAll[index].set ? "  (已完成) " : "  (未完成) ")
+                  "第" +
+                  (index + 1) +
+                  "个， 从" +
+                  announcement.start_time +
+                  "显示到" +
+                  announcement.over_time +
+                  (setAll[index].set ? " (已完成) " : " (未完成) ")
               }}
             </div>
             <div>
-              <el-button
-                @click.stop="addAnnouncement(index)"
-                icon="el-icon-plus"
-                class="btn-editor btn-add"
-                round
-              ></el-button>
-              <el-button
-                @click.stop="removeAnnouncement(announcement)"
-                icon="el-icon-delete"
-                class="btn-editor btn-delete"
-                round
-              ></el-button>
+              <el-button @click.stop="addAnnouncement(index)" icon="el-icon-plus" class="btn-editor btn-add" round>
+              </el-button>
+              <el-button @click.stop="removeAnnouncement(announcement)" icon="el-icon-delete"
+                class="btn-editor btn-delete" round></el-button>
             </div>
           </div>
         </template>
         <el-card class="single-card">
-          <el-form
-            :ref="'announcementForm' + index"
-            :model="announcementForm.announcements[index]"
-            :rules="announcementRules"
-            class="announcement-list"
-            label-width="100px"
-            label-position="left"
-          >
+          <el-form :ref="'announcementForm' + index" :model="announcementForm.announcements[index]"
+            :rules="announcementRules" class="announcement-list" label-width="100px" label-position="left">
             <el-form-item label="图片链接" prop="img_url">
-              <el-input
-                v-model="announcement.img_url"
-                placeholder="请输入图片链接"
-                @blur="getImg(index), checkForm(index)"
-              ></el-input>
+              <el-input v-model="announcement.img_url" placeholder="请输入图片链接" @blur="getImg(index), checkForm(index)">
+              </el-input>
             </el-form-item>
             <el-form-item label="内容" prop="content">
-              <rich-editor
-                class="rich-editor"
-                :ref="'richtext' + index"
-                v-model="announcement.content"
-                :key="index"
-              />
+              <rich-editor class="rich-editor" :ref="'richtext' + index" v-model="announcement.content" :key="index" />
             </el-form-item>
             <el-form-item label="显示时间" prop="start_time">
-              <el-date-picker
-                v-model="announcement.start_time"
-                type="datetime"
-                placeholder="选择开始显示日期时间"
-                align="center"
-                :picker-options="pickerStarTime"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                @focus="activeIndex = index"
-                @blur="checkForm(index)"
-              />
+              <el-date-picker v-model="announcement.start_time" type="datetime" placeholder="选择开始显示日期时间" align="center"
+                :picker-options="pickerStarTime" value-format="yyyy-MM-dd HH:mm:ss" @focus="activeIndex = index"
+                @blur="checkForm(index)" />
               -
-              <el-date-picker
-                v-model="announcement.over_time"
-                type="datetime"
-                placeholder="选择结束显示日期时间"
-                align="center"
-                :picker-options="pickerOverTime"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                @focus="activeIndex = index"
-                @blur="checkForm(index)"
-              />
+              <el-date-picker v-model="announcement.over_time" type="datetime" placeholder="选择结束显示日期时间" align="center"
+                :picker-options="pickerOverTime" value-format="yyyy-MM-dd HH:mm:ss" @focus="activeIndex = index"
+                @blur="checkForm(index)" />
             </el-form-item>
             <el-form-item label="是否推送" prop="notice">
-              <el-switch
-                v-model="announcement.notice"
-                active-color="#ffba4b"
-                inactive-color="#97a8be"
-                @blur="checkForm(index)"
-              >
+              <el-switch v-model="announcement.notice" active-color="#ffba4b" inactive-color="#97a8be"
+                @blur="checkForm(index)">
               </el-switch>
             </el-form-item>
           </el-form>
@@ -99,10 +55,7 @@
             <span class="preview-label">快速预览</span>
             <div class="list-html margintb">
               <div class="online-area">
-                <img
-                  class="online-title-img radius"
-                  :src="imgList[index].img"
-                />
+                <img class="online-title-img radius" :src="imgList[index].img" />
                 <div v-html="announcement.content"></div>
               </div>
             </div>
@@ -128,7 +81,7 @@ export default {
         that.announcementForm.announcements[that.activeIndex].start_time == "" ||
         that.announcementForm.announcements[that.activeIndex].over_time == "" ||
         that.announcementForm.announcements[that.activeIndex].start_time ==
-          null ||
+        null ||
         that.announcementForm.announcements[that.activeIndex].over_time == null
       ) {
         callback(new Error("我要什么时候显示呀"));
@@ -162,8 +115,8 @@ export default {
                     new Date(
                       that.activeIndex != 0
                         ? that.announcementForm.announcements[
-                            that.activeIndex - 1
-                          ].over_time
+                          that.activeIndex - 1
+                        ].over_time
                         : ""
                     ),
                     1
@@ -310,7 +263,7 @@ export default {
       this.$store
         .dispatch("announcement/getAnnouncementList")
         .then((response) => {
-          this.announcementForm = [];
+          this.announcementForm.announcements = [];
           response.data.map((announcement, index) => {
             if (index == 0) {
               this.setAll[index]["set"] = true;
@@ -326,6 +279,17 @@ export default {
           });
           this.announcementForm.announcements = JSON.parse(JSON.stringify(response.data));
         })
+        .then(_ => {
+          if (this.announcementForm.announcements.length == 0) {
+            this.announcementForm.announcements.splice(0, 0, {
+              start_time: "",
+              over_time: "",
+              img_url: "",
+              content: "",
+              notice: false,
+            });
+          }
+        })
         .catch((_) => {
           this.announcementForm.announcements.splice(0, 0, {
             start_time: "",
@@ -339,19 +303,35 @@ export default {
     // 提交表单到服务器
     submitAnnouncementList() {
       let allPass = true;
-      this.announcementForm.announcements.forEach((item, index) => {
-        this.$refs["announcementForm" + index][0].validate((valid) => {
-          if (!valid) {
-            allPass = false;
-            return;
-          }
+      let empty = false;
+      if (this.announcementForm.announcements.length == 1 && JSON.stringify(this.announcementForm.announcements) == JSON.stringify([{
+        start_time: "",
+        over_time: "",
+        img_url: "",
+        content: "",
+        notice: false,
+      }])) {
+        empty = true
+      };
+      if (!empty) {
+        this.announcementForm.announcements.forEach((item, index) => {
+          this.$refs["announcementForm" + index][0].validate((valid) => {
+            if (!valid) {
+              allPass = false;
+              return;
+            }
+          });
         });
-      });
+      }
       if (allPass) {
+        let announcements = []
+        if (!empty) {
+          announcements = this.announcementForm.announcements
+        }
         this.$store
           .dispatch(
             "announcement/submitAnnouncementList",
-            this.announcementForm.announcements
+            announcements
           )
           .then((_) => {
             this.$message({
@@ -374,9 +354,9 @@ export default {
       if (img_url === "") {
         if (
           this.announcementForm.announcements[index].img_url.indexOf("icon") !=
-            -1 &&
+          -1 &&
           this.announcementForm.announcements[index].img_url.indexOf("http") ==
-            -1
+          -1
         ) {
           this.imgList[index].img = require("../../../assets/image/logo/" +
             this.announcementForm.announcements[index].img_url +
@@ -404,6 +384,20 @@ export default {
           this.imgList.splice(index, 1);
           this.setAll.splice(index, 1);
         }
+      } else if (this.announcementForm.announcements.length == 1) {
+        this.announcementForm.announcements = [{
+          start_time: "",
+          over_time: "",
+          img_url: "",
+          content: "",
+          notice: false,
+        }]
+        this.imgList = [{
+          img: "",
+        }]
+        this.setAll = [{
+          set: false,
+        }]
       }
       setTimeout(() => {
         this.announcementForm.announcements.forEach((item, index) => {
@@ -466,6 +460,7 @@ export default {
       color: white;
       background-color: #67c23a;
     }
+
     .btn-delete {
       color: white;
       background-color: #f56c6c;
