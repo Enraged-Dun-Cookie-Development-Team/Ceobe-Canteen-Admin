@@ -351,7 +351,7 @@ export default {
         this.$store
           .dispatch(
             "announcement/submitAnnouncementList",
-            this.announcementForm
+            this.announcementForm.announcements
           )
           .then((_) => {
             this.$message({
