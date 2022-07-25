@@ -332,7 +332,7 @@ export default {
         });
 
         this.$store
-          .dispatch("video/submitVideoList", videoList)
+          .dispatch("video/submitVideoList", videoList.videos)
           .then((_) => {
             this.$message({
               showClose: true,
