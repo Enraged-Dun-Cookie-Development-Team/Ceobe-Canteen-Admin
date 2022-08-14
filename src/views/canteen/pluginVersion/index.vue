@@ -8,7 +8,7 @@
       label-position="left"
       label-width="100px"
     >
-      <el-form-item label="LOGO" prop="logo">
+      <!-- <el-form-item label="LOGO" prop="logo">
         <el-select
           label="logo"
           v-model="pluginForm.logo"
@@ -24,7 +24,7 @@
           </el-option>
         </el-select>
         <span class="img-area"><img :src="logoImg" /></span>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="版本号" prop="version">
         <el-input
           v-model="pluginForm.version"
@@ -68,13 +68,13 @@
       </el-form-item>
       <el-form-item label="百度云" prop="spare">
         <el-input
-          v-model="pluginForm.down.spare"
+          v-model="pluginForm.down.spare[0]"
           placeholder="请输入百度云链接"
         ></el-input>
       </el-form-item>
       <el-form-item label="百度云描述" prop="spare_text">
         <el-input
-          v-model="pluginForm.down.spare_text"
+          v-model="pluginForm.down.spare[1]"
           placeholder="请输入百度云描述"
         ></el-input>
       </el-form-item>
@@ -113,6 +113,20 @@ export default {
         callback();
       }
     };
+    let spareValidate = (rule, value, callback) => {
+      if (this.pluginForm.down.spare[0] == "") {
+        callback(new Error("你怎么还是空着"));
+      } else {
+        callback();
+      }
+    };
+    let spareTextValidate = (rule, value, callback) => {
+      if (this.pluginForm.down.spare[1] == "") {
+        callback(new Error("这个也不能为空啊"));
+      } else {
+        callback();
+      }
+    };
     return {
       options: [
         {
@@ -128,17 +142,16 @@ export default {
           label: "圣诞",
         },
       ],
-      logoImg: require("../../../assets/image/logo/icon.png"),
+      // logoImg: require("../../../assets/image/logo/icon.png"),
       pluginForm: {
-        logo: "icon.png",
+        // logo: "icon.png",
         version: "",
         title: "",
         description: "",
         down: {
           crx: "",
           zip: "",
-          spare: "https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA",
-          spare_text: "备用下载（提取码 jzq9）",
+          spare: ["https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA", "备用下载（提取码 jzq9）"],
           chrome:
             "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN",
           edge: "https://microsoftedge.microsoft.com/addons/detail/%E5%B0%8F%E5%88%BB%E9%A3%9F%E5%A0%82-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknight/jimmfliacfpeabcifcghmdankmdnmfmn?hl=zh-CN",
@@ -147,17 +160,17 @@ export default {
         },
       },
       pluginRules: {
-        logo: [
-          {
-            required: true,
-            message: "全部都不要为空！",
-            trigger: ["change", "blur"],
-          },
-        ],
+        // logo: [
+        //   {
+        //     required: true,
+        //     message: "全部都不要为空！",
+        //     trigger: ["change", "blur"],
+        //   },
+        // ],
         version: [
           {
             required: true,
-            message: "第二遍，全部都不要为空！！",
+            message: "全部都不要为空！！",
             trigger: ["change", "blur"],
           },
           {
@@ -169,7 +182,7 @@ export default {
         title: [
           {
             required: true,
-            message: "第三遍，全部都不要为空！！！",
+            message: "第二遍，全部都不要为空！！！",
             trigger: ["change", "blur"],
           },
         ],
@@ -198,14 +211,14 @@ export default {
         ],
         spare: [
           {
-            required: true,
+            validator: spareValidate,
             message: "你怎么还是空着",
             trigger: ["change", "blur"],
           },
         ],
         spare_text: [
           {
-            required: true,
+            validator: spareTextValidate,
             message: "这个也不能为空啊",
             trigger: ["change", "blur"],
           },
@@ -241,12 +254,12 @@ export default {
     init() {},
     changeVersion() {
       this.pluginForm.title = `小刻食堂翻新啦 - ${this.pluginForm.version}`;
-      this.pluginForm.down.crx = `https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/${this.pluginForm.version}/Dun-Cookie-${this.pluginForm.version}.crx`;
-      this.pluginForm.down.zip = `https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/${this.pluginForm.version}/Dun-Cookie-${this.pluginForm.version}.zip`;
+      this.pluginForm.down.crx = `https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/${this.pluginForm.version}/Ceobe-Canteen-${this.pluginForm.version}.crx`;
+      this.pluginForm.down.zip = `https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/${this.pluginForm.version}/Ceobe-Canteen-${this.pluginForm.version}.zip`;
     },
-    changeLogo() {
-      this.logoImg = require(`../../../assets/image/logo/${this.pluginForm.logo}`);
-    },
+    // changeLogo() {
+    //   this.logoImg = require(`../../../assets/image/logo/${this.pluginForm.logo}`);
+    // },
     // 提交表单到服务器
     submitPluginVersion() {
       this.$refs["pluginForm"].validate((validPlugin) => {
