@@ -324,6 +324,9 @@ export default {
               message: "好像有哪里不太对，联系开发者看看呀",
               type: "warning",
             });
+          })
+          .finally((_) => {
+            this.init();
           });
       }
     },
@@ -344,11 +347,12 @@ export default {
           author: "",
           video_link: "",
           cover_img: "",
-        }]
+        }];
+        this.setAll = [{
+          set: false,
+        }];
       }
-      this.setAll = [{
-        set: false,
-      }];
+
     },
     // 添加视频
     addVideo(index) {
