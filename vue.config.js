@@ -41,7 +41,7 @@ module.exports = {
     // proxy: {
     //   // change xxx-api/login => mock/login
     //   // detail: https://cli.vuejs.org/config/#devserver-proxy
-    //   '/api/v1/admin': {
+    //   '/api/v0/admin': {
     //     target: process.env.TARGET_API,
     //     changeOrigin: true
     //   }

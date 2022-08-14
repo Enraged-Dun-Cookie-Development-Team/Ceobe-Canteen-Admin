@@ -346,9 +346,6 @@ export default {
               message: "好像有哪里不太对，联系开发者看看呀",
               type: "warning",
             });
-          })
-          .finally((_) => {
-            this.init();
           });
       }
     },

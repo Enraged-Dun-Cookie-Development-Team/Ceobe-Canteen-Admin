@@ -14,9 +14,9 @@
           placeholder="请输入版本号"
         ></el-input>
       </el-form-item>
-      <el-form-item label="强制更新" prop="force">
+      <el-form-item label="强制更新" prop="forcus">
         <el-switch
-          v-model="phoneForm.force"
+          v-model="phoneForm.forcus"
           active-color="#ffba4b"
           inactive-color="#97a8be"
         >
@@ -45,7 +45,7 @@ import FormButton from "@/components/FormButton/index"
 export default {
   data() {
     let VersionValidate = (rule, value, callback) => {
-      let pattern = /^\d*\.\d+\.\d+$/i;
+      let pattern = /^\d*\.\d+$/i;
       if (!pattern.test(value)) {
         callback(new Error("这不是正确版本号KUSO"));
       } else {
@@ -55,7 +55,7 @@ export default {
     return {
       phoneForm: {
         version: "",
-        force: true,
+        forcus: true,
         last_force_version: "",
         description: "",
       },
@@ -72,7 +72,7 @@ export default {
             trigger: "blur",
           },
         ],
-        force: [
+        forcus: [
           {
             required: true,
             message: "这里你也触发不出来",

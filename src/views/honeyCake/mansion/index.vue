@@ -1,71 +1,152 @@
 <template>
   <div id="mainWindow">
     <h3>大厦信息</h3>
-    <el-form ref="infoForm" :model="mansionForm" :rules="mansionRules" label-width="100px" label-position="left">
+    <el-form
+      ref="infoForm"
+      :model="mansionForm"
+      :rules="mansionRules"
+      label-width="100px"
+      label-position="left"
+    >
       <el-form-item label="大厦号" prop="id">
-        <el-input v-model="mansionForm.id" placeholder="请输入大厦号" class="width30" @blur="updateId(mansionForm.id)">
+        <el-input
+          v-model="mansionForm.id"
+          placeholder="请输入大厦号"
+          class="width30"
+          @blur="updateId(mansionForm.id)"
+        >
         </el-input>
       </el-form-item>
       <el-form-item label="描述" prop="description">
-        <el-input v-model="mansionForm.description" placeholder="请输入描述" class="width30">
+        <el-input
+          v-model="mansionForm.description"
+          placeholder="请输入描述"
+          class="width30"
+        >
         </el-input>
       </el-form-item>
       <el-form-item label="CV号" prop="cv_link">
-        <el-input v-model="mansionForm.cv_link" placeholder="请输入CV号" class="width30">
+        <el-input
+          v-model="mansionForm.cv_link"
+          placeholder="请输入CV号"
+          class="width30"
+        >
           <template slot="prepend">CV</template>
         </el-input>
       </el-form-item>
       <el-form-item label="自信度" prop="fraction">
-        <el-slider class="fraction-slider" v-model="mansionForm.fraction" :min="1" :max="5" :step="1">
+        <el-slider
+          class="fraction-slider"
+          v-model="mansionForm.fraction"
+          :min="1"
+          :max="5"
+          :step="1"
+        >
         </el-slider>
       </el-form-item>
     </el-form>
     <div class="info_title">
       <h3>每日信息</h3>
-      <el-button @click.stop="addItem(-1)" icon="el-icon-plus" class="btn-editor btn-add" round></el-button>
+      <el-button
+        @click.stop="addItem(-1)"
+        icon="el-icon-plus"
+        class="btn-editor btn-add"
+        round
+      ></el-button>
     </div>
-    <el-collapse v-for="(item, index) in mansionForm.daily" :key="index" v-model="activeName" accordion>
+    <el-collapse
+      v-for="(item, index) in mansionForm.daily"
+      :key="index"
+      v-model="activeName"
+      accordion
+    >
       <el-collapse-item :name="index" class="btn">
         <template slot="title">
           <div class="collapse-header">
             <div>
               {{
-                  item.datetime +
-                  (setAll[index].set ? " (已完成) " : " (未完成) ")
+                item.datetime +
+                (setAll[index].set ? "  (已完成) " : "  (未完成) ")
               }}
             </div>
             <div>
-              <el-button @click.stop="addItem(index)" icon="el-icon-plus" class="btn-editor btn-add" round></el-button>
-              <el-button @click.stop="removeItem(item)" icon="el-icon-delete" class="btn-editor btn-delete" round>
-              </el-button>
+              <el-button
+                @click.stop="addItem(index)"
+                icon="el-icon-plus"
+                class="btn-editor btn-add"
+                round
+              ></el-button>
+              <el-button
+                @click.stop="removeItem(item)"
+                icon="el-icon-delete"
+                class="btn-editor btn-delete"
+                round
+              ></el-button>
             </div>
           </div>
         </template>
         <el-card class="single-card">
-          <el-form :ref="'dailyForm' + index" :model="mansionForm.daily[index]" :rules="mansionRules" class="item-list"
-            label-width="100px" label-position="left">
+          <el-form
+            :ref="'dailyForm' + index"
+            :model="mansionForm.daily[index]"
+            :rules="mansionRules"
+            class="item-list"
+            label-width="100px"
+            label-position="left"
+          >
             <el-form-item label="日期" prop="datetime">
-              <el-date-picker v-model="item.datetime" type="datetime" placeholder="选择开始显示日期时间" align="center"
-                format="yyyy-MM-dd" value-format="yyyy-MM-dd" @blur="checkForm(index)" />
+              <el-date-picker
+                v-model="item.datetime"
+                type="datetime"
+                placeholder="选择开始显示日期时间"
+                align="center"
+                format="yyyy-MM-dd"
+                value-format="yyyy-MM-dd"
+                @blur="checkForm(index)"
+              />
             </el-form-item>
             <el-form-item label="动态" prop="content">
-              <rich-editor class="rich-editor" :ref="'richtext' + index" v-model="item.content" :key="index" />
+              <rich-editor
+                class="rich-editor"
+                :ref="'richtext' + index"
+                v-model="item.content"
+                :key="index"
+              />
             </el-form-item>
             <el-form-item label="预测详细" prop="forecast">
-              <div class="forecast-info" :key="i" v-for="(detail, i) in item.info">
-                <el-input v-model="detail.forecast" placeholder="请输入预测信息" class="width50" @blur="checkForm(index)"
-                  @focus="activeIndex = index">
+              <div
+                class="forecast-info"
+                :key="i"
+                v-for="(detail, i) in item.info"
+              >
+                <el-input
+                  v-model="detail.forecast"
+                  placeholder="请输入预测信息"
+                  class="width50"
+                  @blur="checkForm(index)"
+                  @focus="activeIndex = index"
+                >
                 </el-input>
-                <el-radio-group class="radio-group" v-model="detail.forecast_status" fill="#ffba4b"
-                  text-color="#ffffff">
+                <el-radio-group
+                  class="radio-group"
+                  v-model="detail.forecast_status"
+                  fill="#ffba4b"
+                  text-color="#ffffff"
+                >
                   <el-radio-button label="unknown">还没到</el-radio-button>
                   <el-radio-button label="true">正确</el-radio-button>
                   <el-radio-button label="false">错误</el-radio-button>
                 </el-radio-group>
-                <el-button @click.stop="addForecast(index, i)" icon="el-icon-plus" class="btn-editor btn-addForecast">
-                </el-button>
-                <el-button @click.stop="removeForecast(index, i)" icon="el-icon-delete"
-                  class="btn-editor btn-deleteForecast"></el-button>
+                <el-button
+                  @click.stop="addForecast(index, i)"
+                  icon="el-icon-plus"
+                  class="btn-editor btn-addForecast"
+                ></el-button>
+                <el-button
+                  @click.stop="removeForecast(index, i)"
+                  icon="el-icon-delete"
+                  class="btn-editor btn-deleteForecast"
+                ></el-button>
               </div>
             </el-form-item>
           </el-form>
@@ -73,12 +154,30 @@
       </el-collapse-item>
     </el-collapse>
     <div class="id-option">
-      <el-select label="大厦号" v-model="selectIdShow" placeholder="请选择大厦号" @change="changeId">
-        <el-option v-for="item in idOptions" :key="item.value" :label="item.label" :value="item.value">
+      <el-select
+        label="大厦号"
+        v-model="selectIdShow"
+        placeholder="请选择大厦号"
+        @change="changeId"
+      >
+        <el-option
+          v-for="item in idOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        >
         </el-option>
       </el-select>
-      <el-button @click.stop="addMansion()" icon="el-icon-plus" class="btn-editor btn-addForecast"></el-button>
-      <el-button @click.stop="deleteMansion()" icon="el-icon-delete" class="btn-editor btn-deleteForecast"></el-button>
+      <el-button
+        @click.stop="addMansion()"
+        icon="el-icon-plus"
+        class="btn-editor btn-addForecast"
+      ></el-button>
+      <el-button
+        @click.stop="deleteMansion()"
+        icon="el-icon-delete"
+        class="btn-editor btn-deleteForecast"
+      ></el-button>
     </div>
 
     <form-button @submit="submitMansionList()"></form-button>
@@ -176,13 +275,6 @@ export default {
       this.$store
         .dispatch("mansion/getIdArray")
         .then((response) => {
-          // 初始化idOptions
-          this.idOptions = [
-            {
-              value: "",
-              label: "",
-            },
-          ];
           // ID数组写入idOption
           response.data.forEach((item, index) => {
             if (index == 0) {
@@ -196,14 +288,9 @@ export default {
             }
           });
           // 获取IDoption最后一位写入showid
-          let mansion_id;
-          if (this.selectIdShow != "") {
-            mansion_id = this.selectIdShow
-          } else {
-            mansion_id = this.idOptions[this.idOptions.length - 1].value;
-          }
+          let newId = this.idOptions[this.idOptions.length - 1].value;
           this.$store
-            .dispatch("mansion/getMansion", mansion_id)
+            .dispatch("mansion/getMansion", newId)
             .then((response) => {
               // 更新大厦信息
               this.updateMansionInfo(response);
@@ -312,9 +399,6 @@ export default {
               message: "上传大厦失败",
               type: "error",
             });
-          })
-          .finally((_) => {
-            this.init();
           });
       }
     },
@@ -378,7 +462,7 @@ export default {
     addMansion() {
       if (
         JSON.stringify(this.OldMansionForm) !=
-        JSON.stringify(this.mansionForm) ||
+          JSON.stringify(this.mansionForm) ||
         !this.upload
       ) {
         this.$message({
@@ -604,7 +688,6 @@ export default {
   /deep/ label {
     font-weight: 500;
   }
-
   .fraction-slider {
     width: 20%;
   }
@@ -630,7 +713,6 @@ export default {
     color: white;
     background-color: #67c23a;
   }
-
   .btn-delete {
     color: white;
     background-color: #f56c6c;
@@ -641,20 +723,16 @@ export default {
 
     .forecast-info {
       margin-bottom: 10px;
-
       /deep/.radio-group {
         margin-left: 15px;
-
-        .el-radio-button__orig-radio:checked+.el-radio-button__inner {
+        .el-radio-button__orig-radio:checked + .el-radio-button__inner {
           background-color: #ffba4b;
           border-color: #ffba4b;
           box-shadow: -1px 0 0 0 #ffba4b;
         }
-
         .el-radio-button__inner:hover {
           color: #ffba4b !important;
         }
-
         .is-active {
           .el-radio-button__inner:hover {
             color: #ffffff !important;
@@ -669,7 +747,6 @@ export default {
     color: white;
     background-color: #67c23a;
   }
-
   .btn-deleteForecast {
     color: white;
     background-color: #f56c6c;
@@ -678,7 +755,6 @@ export default {
   .width30 {
     width: 30%;
   }
-
   .width50 {
     width: 50%;
   }
