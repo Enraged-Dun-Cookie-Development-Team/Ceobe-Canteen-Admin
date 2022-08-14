@@ -3,115 +3,56 @@
     <h3>资源全开放时间</h3>
     <el-form ref="openForm" :model="resourceForm" :rules="resourceRules">
       <el-form-item prop="resources">
-        <el-date-picker
-          v-model="resourceForm.resources"
-          class="resourceSelect"
-          type="datetimerange"
-          align="left"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :default-time="['16:00:00', '03:59:59']"
-        >
+        <el-date-picker v-model="resourceForm.resources" class="resourceSelect" type="datetimerange" align="left"
+          value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期"
+          :default-time="['16:00:00', '03:59:59']">
         </el-date-picker>
       </el-form-item>
     </el-form>
     <h3>倒计时管理</h3>
-    <el-collapse
-      v-for="(item, index) in resourceForm.countdown"
-      :key="index"
-      v-model="activeName"
-      accordion
-    >
+    <el-collapse v-for="(item, index) in resourceForm.countdown" :key="index" v-model="activeName" accordion>
       <el-collapse-item :name="index" class="btn">
         <template slot="title">
           <div class="collapse-header">
             <div>
               {{
-                (item.text ? item.text : "未填写") +
-                "从" +
-                (item.start_time ? item.start_time : " ") +
-                "显示到" +
-                item.over_time+
-                (setAll[index].set ? "  (已完成) " : "  (未完成) ")
+                  (item.text ? item.text : "未填写") +
+                  "从" +
+                  (item.start_time ? item.start_time : " ") +
+                  "显示到" +
+                  item.over_time +
+                  (setAll[index].set ? " (已完成) " : " (未完成) ")
               }}
             </div>
             <div>
-              <el-button
-                @click.stop="addItem(index)"
-                icon="el-icon-plus"
-                class="btn-editor btn-add"
-                round
-              ></el-button>
-              <el-button
-                @click.stop="removeItem(item)"
-                icon="el-icon-delete"
-                class="btn-editor btn-delete"
-                round
-              ></el-button>
+              <el-button @click.stop="addItem(index)" icon="el-icon-plus" class="btn-editor btn-add" round></el-button>
+              <el-button @click.stop="removeItem(item)" icon="el-icon-delete" class="btn-editor btn-delete" round>
+              </el-button>
             </div>
           </div>
         </template>
         <el-card class="single-card">
-          <el-form
-            :ref="'countdownForm' + index"
-            :model="resourceForm.countdown[index]"
-            :rules="resourceRules"
-            class="item-list"
-            label-width="100px"
-            label-position="left"
-          >
+          <el-form :ref="'countdownForm' + index" :model="resourceForm.countdown[index]" :rules="resourceRules"
+            class="item-list" label-width="100px" label-position="left">
             <el-form-item label="标题" prop="text">
-              <el-input
-                class="width50"
-                v-model="item.text"
-                placeholder="请输入标题"
-                @blur="checkForm(index)"
-              ></el-input>
+              <el-input class="width50" v-model="item.text" placeholder="请输入标题" @blur="checkForm(index)"></el-input>
             </el-form-item>
             <el-form-item label="描述" prop="remark">
-              <el-input
-                class="width50"
-                v-model="item.remark"
-                placeholder="请输入描述"
-                @blur="checkForm(index)"
-              ></el-input>
+              <el-input class="width50" v-model="item.remark" placeholder="请输入描述" @blur="checkForm(index)"></el-input>
             </el-form-item>
             <el-form-item label="显示时间" prop="start_time" required>
-              <el-date-picker
-                v-model="item.start_time"
-                type="datetime"
-                placeholder="选择开始显示日期时间"
-                align="center"
-                :picker-options="pickerStarTime"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                @focus="activeIndex = index"
-                @blur="checkForm(index)"
-              />
+              <el-date-picker v-model="item.start_time" type="datetime" placeholder="选择开始显示日期时间" align="center"
+                :picker-options="pickerStarTime" value-format="yyyy-MM-dd HH:mm:ss" @focus="activeIndex = index"
+                @blur="checkForm(index)" />
               -
-              <el-date-picker
-                v-model="item.over_time"
-                type="datetime"
-                placeholder="选择结束显示日期时间"
-                align="center"
-                :picker-options="pickerOverTime"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                @focus="activeIndex = index"
-                @blur="checkForm(index)"
-              />
+              <el-date-picker v-model="item.over_time" type="datetime" placeholder="选择结束显示日期时间" align="center"
+                :picker-options="pickerOverTime" value-format="yyyy-MM-dd HH:mm:ss" @focus="activeIndex = index"
+                @blur="checkForm(index)" />
             </el-form-item>
             <el-form-item label="倒计时终点" prop="time">
-              <el-date-picker
-                v-model="item.time"
-                type="datetime"
-                placeholder="选择倒计时终点时间"
-                align="center"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                @blur="checkForm(index)"
-              />
-              <el-button round @click="syncTime(index)" class="sync-btn"
-                >同步显示结束时间</el-button
-              >
+              <el-date-picker v-model="item.time" type="datetime" placeholder="选择倒计时终点时间" align="center"
+                value-format="yyyy-MM-dd HH:mm:ss" @blur="checkForm(index)" />
+              <el-button round @click="syncTime(index)" class="sync-btn">同步显示结束时间</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -143,6 +84,18 @@ export default {
     return {
       activeIndex: 0,
       activeName: 0,
+      old_resourceFrom: {
+        resources: [],
+        countdown: [
+          {
+            text: "",
+            remark: "",
+            time: "",
+            start_time: "",
+            over_time: "",
+          },
+        ],
+      },
       resourceForm: {
         resources: [],
         countdown: [
@@ -207,7 +160,7 @@ export default {
                     new Date(
                       that.activeIndex != 0
                         ? that.resourceForm.countdown[that.activeIndex - 1]
-                            .over_time
+                          .over_time
                         : ""
                     ),
                     1
@@ -296,7 +249,9 @@ export default {
             });
           }
         });
-        this.resourceForm = JSON.parse(JSON.stringify(response.data));
+        this.resourceForm.countdown = Object.assign(response.data.countdown);
+        this.resourceForm.resources = [response.data.resources.start_time, response.data.resources.over_time]
+        this.old_resourceFrom = Object.assign(this.resourceForm)
       });
     },
     // 提交表单到服务器
@@ -316,26 +271,43 @@ export default {
           allPass = false;
         }
       });
-      if(allPass) {
+      if (allPass) {
+        let resource_form_submit = {};
+        resource_form_submit.countdown = Object.assign(this.resourceForm.countdown);
+        resource_form_submit.resources = {
+          start_time: this.resourceForm.resources[0],
+          over_time: this.resourceForm.resources[1],
+        }
+
+        // 判断有没有修改，没有修改给null
+        if (this.resourceForm.resources[0] == this.old_resourceFrom.resources[0] && this.resourceForm.resources[1] == this.old_resourceFrom.resources[1]) {
+          resource_form_submit.resources = null;
+        }
+        if (JSON.stringify(this.resourceForm.countdown) == JSON.stringify(this.old_resourceFrom.countdown)) {
+          resource_form_submit.countdown = null;
+        }
         this.$store
-        .dispatch("resource/submitResourceList", this.resourceForm)
-        .then((_) => {
-          this.$message({
-            showClose: true,
-            message: "上传上去啦",
-            type: "success",
+          .dispatch("resource/submitResourceList", resource_form_submit)
+          .then((_) => {
+            this.$message({
+              showClose: true,
+              message: "上传上去啦",
+              type: "success",
+            });
+          })
+          .catch((_) => {
+            this.$message({
+              showClose: true,
+              message: "好像有哪里不太对，联系开发者看看呀",
+              type: "warning",
+            });
+          })
+          .finally((_) => {
+            this.init();
           });
-        })
-        .catch((_) => {
-          this.$message({
-            showClose: true,
-            message: "好像有哪里不太对，联系开发者看看呀",
-            type: "warning",
-          });
-        });
       }
     },
-    // 删除视频
+    // 删除倒计时
     removeItem(item) {
       let index = this.resourceForm.countdown.indexOf(item);
       if (this.resourceForm.countdown.length > 1) {
@@ -343,6 +315,19 @@ export default {
           this.resourceForm.countdown.splice(index, 1);
           this.setAll.splice(index, 1);
         }
+
+      }
+      else {
+        this.resourceForm.countdown = [{
+          text: "",
+          remark: "",
+          time: "",
+          start_time: "",
+          over_time: ""
+        }];
+        this.setAll = [{
+          set: false,
+        }];
       }
     },
     // 添加单次资源
@@ -398,6 +383,7 @@ export default {
       color: white;
       background-color: #67c23a;
     }
+
     .btn-delete {
       color: white;
       background-color: #f56c6c;
