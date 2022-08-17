@@ -249,9 +249,9 @@ export default {
             });
           }
         });
-        this.resourceForm.countdown = Object.assign(response.data.countdown);
-        this.resourceForm.resources = [response.data.resources.start_time, response.data.resources.over_time]
-        this.old_resourceFrom = Object.assign(this.resourceForm)
+        this.resourceForm.countdown = JSON.parse(JSON.stringify(response.data.countdown));
+        this.resourceForm.resources = [response.data.resources.start_time, response.data.resources.over_time];
+        this.old_resourceFrom =JSON.parse(JSON.stringify(this.resourceForm));
       });
     },
     // 提交表单到服务器
@@ -273,7 +273,7 @@ export default {
       });
       if (allPass) {
         let resource_form_submit = {};
-        resource_form_submit.countdown = Object.assign(this.resourceForm.countdown);
+        resource_form_submit.countdown = JSON.parse(JSON.stringify(this.resourceForm.countdown));
         resource_form_submit.resources = {
           start_time: this.resourceForm.resources[0],
           over_time: this.resourceForm.resources[1],
