@@ -409,7 +409,7 @@ export default {
               this.videoListForm.videos[index]["title"] =
                 response.data.data.title;
               this.videoListForm.videos[index]["cover_img"] =
-                response.data.data.pic + "@@200w_125h_1c.webp";
+                response.data.data.pic + "@200w_125h_1c.webp";
               this.videoListForm.videos[index]["author"] =
                 response.data.data.owner.name;
               this.videoListForm.videos[index]["video_link"] =
