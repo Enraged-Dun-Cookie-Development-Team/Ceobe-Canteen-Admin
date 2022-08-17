@@ -489,6 +489,10 @@ export default {
       drawer {
         color: #dd558a;
       }
+
+      setting {
+        color: #dd55c4;
+      }
     }
 
     // 模拟公告样式
