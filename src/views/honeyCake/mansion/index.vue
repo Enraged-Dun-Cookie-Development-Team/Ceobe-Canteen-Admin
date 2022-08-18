@@ -49,7 +49,8 @@
                 format="yyyy-MM-dd" value-format="yyyy-MM-dd" @blur="checkForm(index)" />
             </el-form-item>
             <el-form-item label="动态" prop="content">
-              <rich-editor class="rich-editor" :ref="'richtext' + index" v-model="item.content" :key="index" />
+              <rich-editor class="rich-editor" :ref="'richtext' + index" v-model="item.content" :key="index"
+                @blur="refreshRichText()" @focus="activeIndex = index" />
             </el-form-item>
             <el-form-item label="预测详细" prop="forecast">
               <div class="forecast-info" :key="i" v-for="(detail, i) in item.info">
@@ -92,6 +93,7 @@ import FormButton from "@/components/FormButton";
 export default {
   components: { RichEditor, FormButton },
   data() {
+    let regex = /(<([^>]+)>)/ig
     let validCV = (rule, value, callback) => {
       let pattern = /^(cv)?\d*$/i;
       if (!pattern.test(value)) {
@@ -107,6 +109,11 @@ export default {
           allSet = false;
         }
       });
+      if (!allSet) {
+        let result = this.mansionForm.daily[this.activeIndex].content.replace(regex, "");
+        console.log(result)
+        if (result.replace(/^s*|s*$/g, "") !== "") allSet = true;
+      }
       if (!allSet) {
         callback(new Error("预测内容呢内容呢"));
       }
@@ -152,15 +159,27 @@ export default {
             trigger: "blur",
           },
         ],
-        forecast: [
+        content: [
           {
             validator: forecastAllSet,
-            message: "预测内容呢内容呢",
+            message: "预测内容和动态选一个吧",
             trigger: "blur",
           },
           {
             required: true,
-            message: "预测内容呢内容呢",
+            message: "预测内容和动态选一个吧",
+            trigger: "blur",
+          },
+        ],
+        forecast: [
+          {
+            validator: forecastAllSet,
+            message: "预测内容和动态选一个吧",
+            trigger: "blur",
+          },
+          {
+            required: true,
+            message: "预测内容和动态选一个吧",
             trigger: "blur",
           },
         ],
@@ -251,6 +270,9 @@ export default {
       this.setAll = [{ set: false }];
       this.selectIdShow = "";
       this.upload = false;
+      this.updateRichtextHtml();
+    },
+    refreshRichText() {
       this.updateRichtextHtml();
     },
     // 提交表单到服务器
@@ -357,6 +379,20 @@ export default {
           this.mansionForm.daily.splice(index, 1);
           this.setAll.splice(index, 1);
         }
+      } else {
+        this.mansionForm.daily = [
+          {
+            datetime: "",
+            info: [
+              {
+                forecast: "",
+                forecast_status: "unknown",
+              },
+            ],
+            content: "",
+          },
+        ];
+        this.setAll = [{ set: false }];
       }
       this.updateRichtextHtml();
     },
@@ -370,8 +406,18 @@ export default {
       this.setAll[index]["set"] = false;
     },
     removeForecast(index, i) {
-      this.mansionForm.daily[index].info.splice(i, 1);
-      this.checkForm(index);
+      if (this.mansionForm.daily[index].info.length > 1) {
+        this.mansionForm.daily[index].info.splice(i, 1);
+        this.checkForm(index);
+      } else {
+        this.mansionForm.daily[index].info = [
+          {
+            forecast: "",
+            forecast_status: "unknown",
+          },
+        ];
+        this.checkForm(index);
+      }
     },
 
     // 增删大厦
@@ -553,7 +599,7 @@ export default {
     // 检查表单有没有填完
     checkForm(index) {
       let complete = true;
-
+      let regex = /(<([^>]+)>)/ig
       if (this.mansionForm.daily[index]["datetime"] === "") {
         complete = false;
       } else {
@@ -566,6 +612,10 @@ export default {
             break;
           }
         }
+      }
+      if (!complete) {
+        let result = this.mansionForm.daily[index].content.replace(regex, "");
+        if (result.replace(/^s*|s*$/g, "") !== "") complete = true;
       }
       if (complete) {
         this.setAll[index]["set"] = true;
