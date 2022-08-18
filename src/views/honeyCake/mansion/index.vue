@@ -50,7 +50,7 @@
             </el-form-item>
             <el-form-item label="动态" prop="content">
               <rich-editor class="rich-editor" :ref="'richtext' + index" v-model="item.content" :key="index"
-                @blur="refreshRichText()" @focus="activeIndex = index" />
+                @blur="refreshRichText(index)" @focus="activeIndex = index" />
             </el-form-item>
             <el-form-item label="预测详细" prop="forecast">
               <div class="forecast-info" :key="i" v-for="(detail, i) in item.info">
@@ -111,7 +111,6 @@ export default {
       });
       if (!allSet) {
         let result = this.mansionForm.daily[this.activeIndex].content.replace(regex, "");
-        console.log(result)
         if (result.replace(/^s*|s*$/g, "") !== "") allSet = true;
       }
       if (!allSet) {
@@ -272,11 +271,12 @@ export default {
       this.upload = false;
       this.updateRichtextHtml();
     },
-    refreshRichText() {
-      this.updateRichtextHtml();
+    refreshRichText(index) {
+      this.checkForm(index)
     },
     // 提交表单到服务器
     submitMansionList() {
+      this.updateRichtextHtml();
       let allPass = true;
       this.$refs["infoForm"].validate((valid) => {
         if (valid) {

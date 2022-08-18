@@ -31,6 +31,9 @@ export default {
           this.$emit("input", newHtml);
         }
       };
+      editor.config.onblur = () => {
+        this.$emit('blur','');
+      }
 
       // 配置工具栏
       editor.config.menus = [
