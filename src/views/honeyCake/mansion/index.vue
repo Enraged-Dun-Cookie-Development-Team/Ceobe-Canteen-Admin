@@ -305,14 +305,7 @@ export default {
           });
           return;
         }
-        let mansionList = {};
-        mansionList = JSON.parse(JSON.stringify(this.mansionForm));
-        if (
-          mansionList.cv_link.substring(0, 2) !== "cv" &&
-          mansionList.cv_link !== ""
-        ) {
-          mansionList.cv_link = "cv" + mansionList.cv_link;
-        }
+        let mansionList = this.checkBeforeSubmit();
         this.$store
           .dispatch("mansion/uploadMansion", {
             mansionList: mansionList,
@@ -339,6 +332,27 @@ export default {
             this.init();
           });
       }
+    },
+
+    // 上传前的最后检查与改变
+    checkBeforeSubmit() {
+      let mansionList = {};
+      mansionList = JSON.parse(JSON.stringify(this.mansionForm));
+      if (
+        mansionList.cv_link.substring(0, 2) !== "cv" &&
+        mansionList.cv_link !== ""
+      ) {
+        mansionList.cv_link = "cv" + mansionList.cv_link;
+      }
+      mansionList.daily.forEach((item, index) => {
+        let i = item.info.length;
+        while(i--) {
+          if(item.info[i].forecast == "") {
+            mansionList.daily[index].info.splice(i,1);  
+          }
+        }
+      });
+      return mansionList
     },
 
     // 增删单日信息
