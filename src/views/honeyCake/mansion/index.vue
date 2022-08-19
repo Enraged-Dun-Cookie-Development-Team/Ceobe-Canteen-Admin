@@ -282,6 +282,9 @@ export default {
       this.updateRichtextHtml();
     },
     refreshRichText(index) {
+      if (this.$refs['dailyForm' + index] && this.$refs['dailyForm' + index].length > 0) {
+        this.$refs['dailyForm' + index][0].validateField('content');
+      }
       this.checkForm(index)
     },
     // 提交表单到服务器
