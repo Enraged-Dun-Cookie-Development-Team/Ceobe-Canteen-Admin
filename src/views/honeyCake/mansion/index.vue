@@ -111,13 +111,14 @@ export default {
       });
       if (!allSet) {
         let result = this.mansionForm.daily[this.activeIndex].content.replace(regex, "");
-        if (result.replace(/^s*|s*$/g, "") !== "") allSet = true;
+        if (result.trim() !== "") allSet = true;
       }
       if (!allSet) {
         callback(new Error("预测内容呢内容呢"));
       }
     };
     return {
+      regex,
       upload: false, // 当次表单删除完成
       activeIndex: 0,
       activeName: 0,
@@ -345,6 +346,9 @@ export default {
         mansionList.cv_link = "cv" + mansionList.cv_link;
       }
       mansionList.daily.forEach((item, index) => {
+        let result = item.content.replace(this.regex, "");
+        if (result.trim() === "") item.content = "";
+
         let i = item.info.length;
         while (i--) {
           if (item.info[i].forecast == "") {
@@ -621,7 +625,6 @@ export default {
     // 检查表单有没有填完
     checkForm(index) {
       let complete = true;
-      let regex = /(<([^>]+)>)/ig
       if (this.mansionForm.daily[index]["datetime"] === "") {
         complete = false;
       } else {
@@ -636,8 +639,8 @@ export default {
         }
       }
       if (!complete) {
-        let result = this.mansionForm.daily[index].content.replace(regex, "");
-        if (result.replace(/^s*|s*$/g, "") !== "") complete = true;
+        let result = this.mansionForm.daily[index].content.replace(this,regex, "");
+        if (result.trim() !== "") complete = true;
       }
       if (complete) {
         this.setAll[index]["set"] = true;
