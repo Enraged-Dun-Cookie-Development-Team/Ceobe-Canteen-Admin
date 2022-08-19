@@ -346,9 +346,9 @@ export default {
       }
       mansionList.daily.forEach((item, index) => {
         let i = item.info.length;
-        while(i--) {
-          if(item.info[i].forecast == "") {
-            mansionList.daily[index].info.splice(i,1);  
+        while (i--) {
+          if (item.info[i].forecast == "") {
+            mansionList.daily[index].info.splice(i, 1);
           }
         }
       });
@@ -567,7 +567,15 @@ export default {
       });
       this.idBefore = response.data.id;
       this.OldMansionForm = JSON.parse(JSON.stringify(response.data));
-      this.mansionForm = JSON.parse(JSON.stringify(response.data));
+      this.OldMansionForm.daily.forEach((item, _) => {
+        if (item.info.length == 0) {
+          item.info.push({
+            forecast: "",
+            forecast_status: "unknown",
+          })
+        }
+      });
+      this.mansionForm = JSON.parse(JSON.stringify(this.OldMansionForm));
       this.selectIdShow = this.mansionForm.id;
       this.upload = true;
       this.updateRichtextHtml();
