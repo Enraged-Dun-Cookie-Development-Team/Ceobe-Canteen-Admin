@@ -180,6 +180,30 @@ export default {
     this.init();
   },
   methods: {
+    // 几组默认值
+    emptyForecastItem() { return { forecast: "", forecast_status: "unknown" }; },
+    emptyMansion() {
+      return {
+        id: "",
+        description: "",
+        cv_link: "",
+        fraction: 1,
+        daily: [
+          {
+            datetime: "",
+            info: [
+              {
+                forecast: "",
+                forecast_status: "unknown",
+              },
+            ],
+            content: "",
+          },
+        ],
+      }
+    },
+
+
     init() {
       // 从服务器获取ID数组
       this.$store
@@ -236,24 +260,7 @@ export default {
         });
     },
     initMansion() {
-      let mansion = {
-        id: "",
-        description: "",
-        cv_link: "",
-        fraction: 1,
-        daily: [
-          {
-            datetime: "",
-            info: [
-              {
-                forecast: "",
-                forecast_status: "unknown",
-              },
-            ],
-            content: "",
-          },
-        ],
-      };
+      let mansion = this.emptyMansion();
       this.idBefore = "";
       this.OldMansionForm = JSON.parse(JSON.stringify(mansion));
       this.mansionForm = JSON.parse(JSON.stringify(mansion));
@@ -368,10 +375,7 @@ export default {
       this.mansionForm.daily.splice(index + 1, 0, {
         datetime: newDatetime,
         info: [
-          {
-            forecast: "",
-            forecast_status: "unknown",
-          },
+          this.emptyForecastItem()
         ],
         content: "",
       });
@@ -392,10 +396,7 @@ export default {
           {
             datetime: "",
             info: [
-              {
-                forecast: "",
-                forecast_status: "unknown",
-              },
+              this.emptyForecastItem()
             ],
             content: "",
           },
@@ -419,10 +420,7 @@ export default {
         this.checkForm(index);
       } else {
         this.mansionForm.daily[index].info = [
-          {
-            forecast: "",
-            forecast_status: "unknown",
-          },
+          this.emptyForecastItem(),
         ];
         this.checkForm(index);
       }
@@ -449,24 +447,7 @@ export default {
         }
       });
       if (!empty) {
-        let mansion = {
-          id: "",
-          description: "",
-          cv_link: "",
-          fraction: 1,
-          daily: [
-            {
-              datetime: "",
-              info: [
-                {
-                  forecast: "",
-                  forecast_status: "unknown",
-                },
-              ],
-              content: "",
-            },
-          ],
-        };
+        let mansion = this.emptyMansion();
         this.idBefore = "";
         this.OldMansionForm = JSON.parse(JSON.stringify(mansion));
         this.mansionForm = JSON.parse(JSON.stringify(mansion));
@@ -563,10 +544,7 @@ export default {
       this.OldMansionForm = JSON.parse(JSON.stringify(response.data));
       this.OldMansionForm.daily.forEach((item, _) => {
         if (item.info.length == 0) {
-          item.info.push({
-            forecast: "",
-            forecast_status: "unknown",
-          })
+          item.info.push(this.emptyForecastItem());
         }
       });
       this.mansionForm = JSON.parse(JSON.stringify(this.OldMansionForm));
