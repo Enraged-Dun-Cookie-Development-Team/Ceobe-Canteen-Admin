@@ -103,19 +103,32 @@ export default {
         callback();
       }
     };
-    let forecastAllSetOrContent = (rule, value, callback) => {
-      let allSet = true;
-      this.mansionForm.daily[this.activeIndex].info.forEach((item, index) => {
-        if (item.forecast === "") {
-          allSet = false;
+    const shouldHasForecastOrContent = (peerFieldName, rule, value, callback) => {
+      let hasForecastOrContent = false;
+      const daily = this.mansionForm.daily[this.activeIndex];
+      for (const item of daily.info) {
+        if (item.forecast !== "") {
+          hasForecastOrContent = true;
+          break;
         }
-      });
-      if (!allSet) {
-        let result = this.mansionForm.daily[this.activeIndex].content.replace(regex, "");
-        if (result.trim() !== "") allSet = true;
       }
-      if (!allSet) {
-        callback(new Error("预测内容呢内容呢"));
+      if (!hasForecastOrContent) {
+        let result = daily.content.replace(regex, "");
+        if (result.trim() !== "") hasForecastOrContent = true;
+      }
+      const form = this.$refs['dailyForm' + this.activeIndex][0];
+      const peerField = form.fields.find(it => it.prop === peerFieldName);
+      const errMsg = '预测内容和动态选一个吧';
+      if (!hasForecastOrContent) {
+        callback(new Error(errMsg));
+        if (peerField.validateMessage !== errMsg) {
+          form.validateField(peerFieldName);
+        }
+      } else {
+        callback();
+        if (peerField.validateMessage === errMsg) {
+          form.validateField(peerFieldName);
+        }
       }
     };
     return {
@@ -162,15 +175,13 @@ export default {
         ],
         content: [
           {
-            validator: forecastAllSetOrContent,
-            message: "预测内容和动态选一个吧",
+            validator: shouldHasForecastOrContent.bind(this, 'forecast'),
             trigger: "blur",
           },
         ],
         forecast: [
           {
-            validator: forecastAllSetOrContent,
-            message: "预测内容和动态选一个吧",
+            validator: shouldHasForecastOrContent.bind(this, 'content'),
             trigger: "blur",
           },
         ],
