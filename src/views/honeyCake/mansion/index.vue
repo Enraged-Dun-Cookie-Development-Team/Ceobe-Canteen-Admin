@@ -165,20 +165,10 @@ export default {
             message: "预测内容和动态选一个吧",
             trigger: "blur",
           },
-          {
-            required: true,
-            message: "预测内容和动态选一个吧",
-            trigger: "blur",
-          },
         ],
         forecast: [
           {
             validator: forecastAllSet,
-            message: "预测内容和动态选一个吧",
-            trigger: "blur",
-          },
-          {
-            required: true,
             message: "预测内容和动态选一个吧",
             trigger: "blur",
           },
