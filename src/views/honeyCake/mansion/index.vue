@@ -95,14 +95,15 @@ export default {
   data() {
     let regex = /(<([^>]+)>)/ig
     let validCV = (rule, value, callback) => {
-      let pattern = /^(cv)?\d*$/i;
+      let pattern = /^(cv)?\d*$/
+      ;
       if (!pattern.test(value)) {
         callback(new Error("你这cv号好像不太对诶,说不定是cv的大小写原因？"));
       } else {
         callback();
       }
     };
-    let forecastAllSet = (rule, value, callback) => {
+    let forecastAllSetOrContent = (rule, value, callback) => {
       let allSet = true;
       this.mansionForm.daily[this.activeIndex].info.forEach((item, index) => {
         if (item.forecast === "") {
@@ -161,14 +162,14 @@ export default {
         ],
         content: [
           {
-            validator: forecastAllSet,
+            validator: forecastAllSetOrContent,
             message: "预测内容和动态选一个吧",
             trigger: "blur",
           },
         ],
         forecast: [
           {
-            validator: forecastAllSet,
+            validator: forecastAllSetOrContent,
             message: "预测内容和动态选一个吧",
             trigger: "blur",
           },
@@ -346,12 +347,7 @@ export default {
         let result = item.content.replace(this.regex, "");
         if (result.trim() === "") item.content = "";
 
-        let i = item.info.length;
-        while (i--) {
-          if (item.info[i].forecast == "") {
-            mansionList.daily[index].info.splice(i, 1);
-          }
-        }
+        item.info = item.info.filter(it=> !!it.forecast)
       });
       return mansionList
     },
@@ -607,7 +603,7 @@ export default {
         }
       }
       if (!complete) {
-        let result = this.mansionForm.daily[index].content.replace(this,regex, "");
+        let result = this.mansionForm.daily[index].content.replace(this.regex, "");
         if (result.trim() !== "") complete = true;
       }
       if (complete) {
