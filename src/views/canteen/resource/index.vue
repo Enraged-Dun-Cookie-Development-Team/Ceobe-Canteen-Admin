@@ -68,13 +68,12 @@ import FormButton from '@/components/FormButton'
 export default {
   components: { FormButton },
   data() {
-    let that = this;
     let timeValidate = (rule, value, callback) => {
       if (
-        that.resourceForm.countdown[that.activeIndex].start_time == "" ||
-        that.resourceForm.countdown[that.activeIndex].over_time == "" ||
-        that.resourceForm.countdown[that.activeIndex].start_time == null ||
-        that.resourceForm.countdown[that.activeIndex].over_time == null
+        this.resourceForm.countdown[this.activeIndex].start_time == "" ||
+        this.resourceForm.countdown[this.activeIndex].over_time == "" ||
+        this.resourceForm.countdown[this.activeIndex].start_time == null ||
+        this.resourceForm.countdown[this.activeIndex].over_time == null
       ) {
         callback(new Error("我要什么时候显示呀"));
       } else {
@@ -288,21 +287,21 @@ export default {
         }
         this.$store
           .dispatch("resource/submitResourceList", resource_form_submit)
-          .then((_) => {
+          .then(() => {
             this.$message({
               showClose: true,
               message: "上传上去啦",
               type: "success",
             });
           })
-          .catch((_) => {
+          .catch(() => {
             this.$message({
               showClose: true,
               message: "好像有哪里不太对，联系开发者看看呀",
               type: "warning",
             });
           })
-          .finally((_) => {
+          .finally(() => {
             this.init();
           });
       }

@@ -69,10 +69,10 @@ export default {
         .then((response) => {
           this.user = JSON.parse(JSON.stringify(response.data));
         })
-        .then((_) => {
+        .then(() => {
           this.copytext = `用户名：${this.user.username}\n密码：${this.user.password}`;
         })
-        .catch((_) => {
+        .catch(() => {
           this.$message({
             showClose: true,
             message: "新建用户失败",

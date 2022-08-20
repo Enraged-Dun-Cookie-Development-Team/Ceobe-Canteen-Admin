@@ -49,7 +49,8 @@
                 format="yyyy-MM-dd" value-format="yyyy-MM-dd" @blur="checkForm(index)" />
             </el-form-item>
             <el-form-item label="动态" prop="content">
-              <rich-editor class="rich-editor" :ref="'richtext' + index" v-model="item.content" :key="index" />
+              <rich-editor class="rich-editor" :ref="'richtext' + index" v-model="item.content" :key="index"
+                @blur="refreshRichText(index)" @focus="activeIndex = index" />
             </el-form-item>
             <el-form-item label="预测详细" prop="forecast">
               <div class="forecast-info" :key="i" v-for="(detail, i) in item.info">
@@ -92,26 +93,45 @@ import FormButton from "@/components/FormButton";
 export default {
   components: { RichEditor, FormButton },
   data() {
+    let regex = /(<([^>]+)>)/ig
     let validCV = (rule, value, callback) => {
-      let pattern = /^(cv)?\d*$/i;
+      let pattern = /^(cv)?\d*$/;
       if (!pattern.test(value)) {
         callback(new Error("你这cv号好像不太对诶,说不定是cv的大小写原因？"));
       } else {
         callback();
       }
     };
-    let forecastAllSet = (rule, value, callback) => {
-      let allSet = true;
-      this.mansionForm.daily[this.activeIndex].info.forEach((item, index) => {
-        if (item.forecast === "") {
-          allSet = false;
+    const shouldHasForecastOrContent = (peerFieldName, rule, value, callback) => {
+      let hasForecastOrContent = false;
+      const daily = this.mansionForm.daily[this.activeIndex];
+      for (const item of daily.info) {
+        if (item.forecast !== "") {
+          hasForecastOrContent = true;
+          break;
         }
-      });
-      if (!allSet) {
-        callback(new Error("预测内容呢内容呢"));
+      }
+      if (!hasForecastOrContent) {
+        let result = daily.content.replace(regex, "");
+        if (result.trim() !== "") hasForecastOrContent = true;
+      }
+      const form = this.$refs['dailyForm' + this.activeIndex][0];
+      const peerField = form.fields.find(it => it.prop === peerFieldName);
+      const errMsg = '预测内容和动态选一个吧';
+      if (!hasForecastOrContent) {
+        callback(new Error(errMsg));
+        if (peerField.validateMessage !== errMsg) {
+          form.validateField(peerFieldName);
+        }
+      } else {
+        callback();
+        if (peerField.validateMessage === errMsg) {
+          form.validateField(peerFieldName);
+        }
       }
     };
     return {
+      regex,
       upload: false, // 当次表单删除完成
       activeIndex: 0,
       activeName: 0,
@@ -152,15 +172,15 @@ export default {
             trigger: "blur",
           },
         ],
-        forecast: [
+        content: [
           {
-            validator: forecastAllSet,
-            message: "预测内容呢内容呢",
+            validator: shouldHasForecastOrContent.bind(this, 'forecast'),
             trigger: "blur",
           },
+        ],
+        forecast: [
           {
-            required: true,
-            message: "预测内容呢内容呢",
+            validator: shouldHasForecastOrContent.bind(this, 'content'),
             trigger: "blur",
           },
         ],
@@ -171,6 +191,30 @@ export default {
     this.init();
   },
   methods: {
+    // 几组默认值
+    emptyForecastItem() { return { forecast: "", forecast_status: "unknown" }; },
+    emptyMansion() {
+      return {
+        id: "",
+        description: "",
+        cv_link: "",
+        fraction: 1,
+        daily: [
+          {
+            datetime: "",
+            info: [
+              {
+                forecast: "",
+                forecast_status: "unknown",
+              },
+            ],
+            content: "",
+          },
+        ],
+      }
+    },
+
+
     init() {
       // 从服务器获取ID数组
       this.$store
@@ -213,7 +257,7 @@ export default {
                 type: "success",
               });
             })
-            .catch((_) => {
+            .catch(() => {
               this.$message({
                 showClose: true,
                 message: "获取大厦失败",
@@ -224,27 +268,11 @@ export default {
         })
         .catch(() => {
           this.initMansion();
+          this.updateRichtextHtml();
         });
     },
     initMansion() {
-      let mansion = {
-        id: "",
-        description: "",
-        cv_link: "",
-        fraction: 1,
-        daily: [
-          {
-            datetime: "",
-            info: [
-              {
-                forecast: "",
-                forecast_status: "unknown",
-              },
-            ],
-            content: "",
-          },
-        ],
-      };
+      let mansion = this.emptyMansion();
       this.idBefore = "";
       this.OldMansionForm = JSON.parse(JSON.stringify(mansion));
       this.mansionForm = JSON.parse(JSON.stringify(mansion));
@@ -253,8 +281,15 @@ export default {
       this.upload = false;
       this.updateRichtextHtml();
     },
+    refreshRichText(index) {
+      if (this.$refs['dailyForm' + index] && this.$refs['dailyForm' + index].length > 0) {
+        this.$refs['dailyForm' + index][0].validateField('content');
+      }
+      this.checkForm(index)
+    },
     // 提交表单到服务器
     submitMansionList() {
+      this.updateRichtextHtml();
       let allPass = true;
       this.$refs["infoForm"].validate((valid) => {
         if (valid) {
@@ -283,20 +318,13 @@ export default {
           });
           return;
         }
-        let mansionList = {};
-        mansionList = JSON.parse(JSON.stringify(this.mansionForm));
-        if (
-          mansionList.cv_link.substring(0, 2) !== "cv" &&
-          mansionList.cv_link !== ""
-        ) {
-          mansionList.cv_link = "cv" + mansionList.cv_link;
-        }
+        let mansionList = this.checkBeforeSubmit();
         this.$store
           .dispatch("mansion/uploadMansion", {
             mansionList: mansionList,
             idBefore: this.idBefore,
           })
-          .then((_) => {
+          .then(() => {
             this.upload = true;
             this.OldMansionForm = JSON.parse(JSON.stringify(this.mansionForm));
             this.idBefore = this.mansionForm.id;
@@ -313,10 +341,29 @@ export default {
               type: "error",
             });
           })
-          .finally((_) => {
+          .finally(() => {
             this.init();
           });
       }
+    },
+
+    // 上传前的最后检查与改变
+    checkBeforeSubmit() {
+      let mansionList = {};
+      mansionList = JSON.parse(JSON.stringify(this.mansionForm));
+      if (
+        mansionList.cv_link.substring(0, 2) !== "cv" &&
+        mansionList.cv_link !== ""
+      ) {
+        mansionList.cv_link = "cv" + mansionList.cv_link;
+      }
+      mansionList.daily.forEach((item, index) => {
+        let result = item.content.replace(this.regex, "");
+        if (result.trim() === "") item.content = "";
+
+        item.info = item.info.filter(it => !!it.forecast)
+      });
+      return mansionList
     },
 
     // 增删单日信息
@@ -338,10 +385,7 @@ export default {
       this.mansionForm.daily.splice(index + 1, 0, {
         datetime: newDatetime,
         info: [
-          {
-            forecast: "",
-            forecast_status: "unknown",
-          },
+          this.emptyForecastItem()
         ],
         content: "",
       });
@@ -357,6 +401,17 @@ export default {
           this.mansionForm.daily.splice(index, 1);
           this.setAll.splice(index, 1);
         }
+      } else {
+        this.mansionForm.daily = [
+          {
+            datetime: "",
+            info: [
+              this.emptyForecastItem()
+            ],
+            content: "",
+          },
+        ];
+        this.setAll = [{ set: false }];
       }
       this.updateRichtextHtml();
     },
@@ -370,8 +425,15 @@ export default {
       this.setAll[index]["set"] = false;
     },
     removeForecast(index, i) {
-      this.mansionForm.daily[index].info.splice(i, 1);
-      this.checkForm(index);
+      if (this.mansionForm.daily[index].info.length > 1) {
+        this.mansionForm.daily[index].info.splice(i, 1);
+        this.checkForm(index);
+      } else {
+        this.mansionForm.daily[index].info = [
+          this.emptyForecastItem(),
+        ];
+        this.checkForm(index);
+      }
     },
 
     // 增删大厦
@@ -395,24 +457,7 @@ export default {
         }
       });
       if (!empty) {
-        let mansion = {
-          id: "",
-          description: "",
-          cv_link: "",
-          fraction: 1,
-          daily: [
-            {
-              datetime: "",
-              info: [
-                {
-                  forecast: "",
-                  forecast_status: "unknown",
-                },
-              ],
-              content: "",
-            },
-          ],
-        };
+        let mansion = this.emptyMansion();
         this.idBefore = "";
         this.OldMansionForm = JSON.parse(JSON.stringify(mansion));
         this.mansionForm = JSON.parse(JSON.stringify(mansion));
@@ -437,7 +482,7 @@ export default {
       if (this.idBefore !== "") {
         this.$store
           .dispatch("mansion/deleteMansion", this.idBefore)
-          .then((_) => {
+          .then(() => {
             this.removeMansion();
           })
           .catch(() => {
@@ -507,7 +552,12 @@ export default {
       });
       this.idBefore = response.data.id;
       this.OldMansionForm = JSON.parse(JSON.stringify(response.data));
-      this.mansionForm = JSON.parse(JSON.stringify(response.data));
+      this.OldMansionForm.daily.forEach((item, _) => {
+        if (item.info.length == 0) {
+          item.info.push(this.emptyForecastItem());
+        }
+      });
+      this.mansionForm = JSON.parse(JSON.stringify(this.OldMansionForm));
       this.selectIdShow = this.mansionForm.id;
       this.upload = true;
       this.updateRichtextHtml();
@@ -553,7 +603,6 @@ export default {
     // 检查表单有没有填完
     checkForm(index) {
       let complete = true;
-
       if (this.mansionForm.daily[index]["datetime"] === "") {
         complete = false;
       } else {
@@ -566,6 +615,10 @@ export default {
             break;
           }
         }
+      }
+      if (!complete) {
+        let result = this.mansionForm.daily[index].content.replace(this.regex, "");
+        if (result.trim() !== "") complete = true;
       }
       if (complete) {
         this.setAll[index]["set"] = true;
@@ -588,7 +641,7 @@ export default {
             type: "success",
           });
         })
-        .catch((_) => {
+        .catch(() => {
           this.$message({
             showClose: true,
             message: "获取大厦失败",

@@ -61,7 +61,7 @@ export default {
                 });
               }
             })
-            .catch((_) => {
+            .catch(() => {
               this.$message({
                 showClose: true,
                 message: "修改用户名失败",

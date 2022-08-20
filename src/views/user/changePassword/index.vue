@@ -121,14 +121,14 @@ export default {
               old_password: this.passwordForm.old_password,
               new_password: this.passwordForm.new_password,
             })
-            .then((_) => {
+            .then(() => {
               this.$message({
                 showClose: true,
                 message: "修改密码成功",
                 type: "success",
               });
             })
-            .catch((_) => {
+            .catch(() => {
               this.$message({
                 showClose: true,
                 message: "修改密码失败",

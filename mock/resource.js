@@ -6,10 +6,10 @@ module.exports = [
             const { token } = config.headers
             console.log(token)
             let data = {
-                "resources": [
-                    "2021-11-22 16:00:00",
-                    "2021-12-06 03:59:59"
-                ],
+                "resources": {
+                    "start_time":"2021-11-22 16:00:00",
+                    "over_time":"2021-12-06 03:59:59"
+                },
                 "countdown": [
                     {
                         "text": "当前轮换池结束",

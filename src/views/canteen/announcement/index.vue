@@ -33,7 +33,8 @@
               </el-input>
             </el-form-item>
             <el-form-item label="内容" prop="content">
-              <rich-editor class="rich-editor" :ref="'richtext' + index" v-model="announcement.content" :key="index" />
+              <rich-editor class="rich-editor" :ref="'richtext' + index" v-model="announcement.content" :key="index"
+                @blur="refreshRichText(index)" @focus="activeIndex = index" />
             </el-form-item>
             <el-form-item label="显示时间" prop="start_time">
               <el-date-picker v-model="announcement.start_time" type="datetime" placeholder="选择开始显示日期时间" align="center"
@@ -75,20 +76,29 @@ import FormButton from "@/components/FormButton/index";
 export default {
   components: { RichEditor, FormButton },
   data() {
-    let that = this;
+    let regex = /(<([^>]+)>)/ig
     let timeValidate = (rule, value, callback) => {
       if (
-        that.announcementForm.announcements[that.activeIndex].start_time == "" ||
-        that.announcementForm.announcements[that.activeIndex].over_time == "" ||
-        that.announcementForm.announcements[that.activeIndex].start_time ==
+        this.announcementForm.announcements[this.activeIndex].start_time == "" ||
+        this.announcementForm.announcements[this.activeIndex].over_time == "" ||
+        this.announcementForm.announcements[this.activeIndex].start_time ==
         null ||
-        that.announcementForm.announcements[that.activeIndex].over_time == null
+        this.announcementForm.announcements[this.activeIndex].over_time == null
       ) {
         callback(new Error("我要什么时候显示呀"));
       } else {
         callback();
       }
     };
+    let contentValidate = (rule, value, callback) => {
+      let content = this.announcementForm.announcements[this.activeIndex].content;
+      let result = content.replace(regex, "");
+      if (result.trim() !== "") {
+        callback();
+      } else {
+        callback(new Error("配点文字吧"));
+      }
+    }
     return {
       announcementForm: {
         announcements: [],
@@ -233,8 +243,7 @@ export default {
         ],
         content: [
           {
-            required: true,
-            message: "配点文字吧",
+            validator: contentValidate,
             trigger: "blur",
           },
         ],
@@ -290,7 +299,7 @@ export default {
             });
           }
         })
-        .catch((_) => {
+        .catch(() => {
           this.announcementForm.announcements.splice(0, 0, {
             start_time: "",
             over_time: "",
@@ -298,10 +307,13 @@ export default {
             content: "",
             notice: false,
           });
+        }).finally(() => {
+          this.updateRichtextHtml();
         });
     },
     // 提交表单到服务器
     submitAnnouncementList() {
+      this.updateRichtextHtml();
       let allPass = true;
       let empty = false;
       if (this.announcementForm.announcements.length == 1 && JSON.stringify(this.announcementForm.announcements) == JSON.stringify([{
@@ -333,21 +345,21 @@ export default {
             "announcement/submitAnnouncementList",
             announcements
           )
-          .then((_) => {
+          .then(() => {
             this.$message({
               showClose: true,
               message: "上传上去啦",
               type: "success",
             });
           })
-          .catch((_) => {
+          .catch(() => {
             this.$message({
               showClose: true,
               message: "好像有哪里不太对，联系开发者看看呀",
               type: "warning",
             });
           })
-          .finally((_) => {
+          .finally(() => {
             this.init();
           });
       }
@@ -402,11 +414,7 @@ export default {
           set: false,
         }]
       }
-      setTimeout(() => {
-        this.announcementForm.announcements.forEach((item, index) => {
-          this.$refs["richtext" + index][0].updateHtml();
-        });
-      }, 500);
+      this.updateRichtextHtml();
     },
     // 添加新增公告
     addAnnouncement(index) {
@@ -423,11 +431,7 @@ export default {
       this.setAll.splice(index + 1, 0, {
         set: false,
       });
-      setTimeout(() => {
-        this.announcementForm.announcements.forEach((item, index) => {
-          this.$refs["richtext" + index][0].updateHtml();
-        });
-      }, 500);
+      this.updateRichtextHtml();
     },
     // 检查表单有没有填完
     checkForm(index) {
@@ -446,6 +450,22 @@ export default {
       } else {
         this.setAll[index]["set"] = false;
       }
+    },
+
+    // 刷新富文本验证
+    refreshRichText(index) {
+      if (this.$refs['announcementForm' + index] && this.$refs['announcementForm' + index].length > 0) {
+        this.$refs['announcementForm' + index][0].validateField('content');
+      }
+      this.checkForm(index)
+    },
+
+    updateRichtextHtml() {
+      setTimeout(() => {
+        this.announcementForm.announcements.forEach((item, index) => {
+          this.$refs["richtext" + index][0].updateHtml();
+        });
+      }, 500);
     },
   },
 };
