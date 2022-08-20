@@ -34,7 +34,7 @@
             </el-form-item>
             <el-form-item label="内容" prop="content">
               <rich-editor class="rich-editor" :ref="'richtext' + index" v-model="announcement.content" :key="index"
-                @blur="refreshRichText(index)" @focus="activeIndex = index"/>
+                @blur="refreshRichText(index)" @focus="activeIndex = index" />
             </el-form-item>
             <el-form-item label="显示时间" prop="start_time">
               <el-date-picker v-model="announcement.start_time" type="datetime" placeholder="选择开始显示日期时间" align="center"
@@ -92,7 +92,6 @@ export default {
       }
     };
     let contentValidate = (rule, value, callback) => {
-      console.log(this.activeIndex)
       let content = this.announcementForm.announcements[this.activeIndex].content;
       let result = content.replace(regex, "");
       if (result.trim() !== "") {

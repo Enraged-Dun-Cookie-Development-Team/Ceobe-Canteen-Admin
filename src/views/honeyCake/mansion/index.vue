@@ -95,8 +95,7 @@ export default {
   data() {
     let regex = /(<([^>]+)>)/ig
     let validCV = (rule, value, callback) => {
-      let pattern = /^(cv)?\d*$/
-      ;
+      let pattern = /^(cv)?\d*$/;
       if (!pattern.test(value)) {
         callback(new Error("你这cv号好像不太对诶,说不定是cv的大小写原因？"));
       } else {
@@ -269,6 +268,7 @@ export default {
         })
         .catch(() => {
           this.initMansion();
+          this.updateRichtextHtml();
         });
     },
     initMansion() {
@@ -361,7 +361,7 @@ export default {
         let result = item.content.replace(this.regex, "");
         if (result.trim() === "") item.content = "";
 
-        item.info = item.info.filter(it=> !!it.forecast)
+        item.info = item.info.filter(it => !!it.forecast)
       });
       return mansionList
     },
