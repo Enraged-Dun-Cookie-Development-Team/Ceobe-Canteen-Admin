@@ -33,7 +33,8 @@
               </el-input>
             </el-form-item>
             <el-form-item label="内容" prop="content">
-              <rich-editor class="rich-editor" :ref="'richtext' + index" v-model="announcement.content" :key="index" />
+              <rich-editor class="rich-editor" :ref="'richtext' + index" v-model="announcement.content" :key="index"
+                @blur="refreshRichText(index)" @focus="activeIndex = index"/>
             </el-form-item>
             <el-form-item label="显示时间" prop="start_time">
               <el-date-picker v-model="announcement.start_time" type="datetime" placeholder="选择开始显示日期时间" align="center"
@@ -76,19 +77,30 @@ export default {
   components: { RichEditor, FormButton },
   data() {
     let that = this;
+    let regex = /(<([^>]+)>)/ig
     let timeValidate = (rule, value, callback) => {
       if (
-        that.announcementForm.announcements[that.activeIndex].start_time == "" ||
-        that.announcementForm.announcements[that.activeIndex].over_time == "" ||
-        that.announcementForm.announcements[that.activeIndex].start_time ==
+        this.announcementForm.announcements[this.activeIndex].start_time == "" ||
+        this.announcementForm.announcements[this.activeIndex].over_time == "" ||
+        this.announcementForm.announcements[this.activeIndex].start_time ==
         null ||
-        that.announcementForm.announcements[that.activeIndex].over_time == null
+        this.announcementForm.announcements[this.activeIndex].over_time == null
       ) {
         callback(new Error("我要什么时候显示呀"));
       } else {
         callback();
       }
     };
+    let contentValidate = (rule, value, callback) => {
+      console.log(this.activeIndex)
+      let content = this.announcementForm.announcements[this.activeIndex].content;
+      let result = content.replace(regex, "");
+      if (result.trim() !== "") {
+        callback();
+      } else {
+        callback(new Error("配点文字吧"));
+      }
+    }
     return {
       announcementForm: {
         announcements: [],
@@ -233,8 +245,7 @@ export default {
         ],
         content: [
           {
-            required: true,
-            message: "配点文字吧",
+            validator: contentValidate,
             trigger: "blur",
           },
         ],
@@ -442,6 +453,15 @@ export default {
         this.setAll[index]["set"] = false;
       }
     },
+
+    // 刷新富文本验证
+    refreshRichText(index) {
+      if (this.$refs['announcementForm' + index] && this.$refs['announcementForm' + index].length > 0) {
+        this.$refs['announcementForm' + index][0].validateField('content');
+      }
+      this.checkForm(index)
+    },
+
     updateRichtextHtml() {
       setTimeout(() => {
         this.announcementForm.announcements.forEach((item, index) => {
