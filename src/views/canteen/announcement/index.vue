@@ -298,10 +298,13 @@ export default {
             content: "",
             notice: false,
           });
+        }).finally((_) => {
+          this.updateRichtextHtml();
         });
     },
     // 提交表单到服务器
     submitAnnouncementList() {
+      this.updateRichtextHtml();
       let allPass = true;
       let empty = false;
       if (this.announcementForm.announcements.length == 1 && JSON.stringify(this.announcementForm.announcements) == JSON.stringify([{
@@ -402,11 +405,7 @@ export default {
           set: false,
         }]
       }
-      setTimeout(() => {
-        this.announcementForm.announcements.forEach((item, index) => {
-          this.$refs["richtext" + index][0].updateHtml();
-        });
-      }, 500);
+      this.updateRichtextHtml();
     },
     // 添加新增公告
     addAnnouncement(index) {
@@ -423,11 +422,7 @@ export default {
       this.setAll.splice(index + 1, 0, {
         set: false,
       });
-      setTimeout(() => {
-        this.announcementForm.announcements.forEach((item, index) => {
-          this.$refs["richtext" + index][0].updateHtml();
-        });
-      }, 500);
+      this.updateRichtextHtml();
     },
     // 检查表单有没有填完
     checkForm(index) {
@@ -446,6 +441,13 @@ export default {
       } else {
         this.setAll[index]["set"] = false;
       }
+    },
+    updateRichtextHtml() {
+      setTimeout(() => {
+        this.announcementForm.announcements.forEach((item, index) => {
+          this.$refs["richtext" + index][0].updateHtml();
+        });
+      }, 500);
     },
   },
 };
