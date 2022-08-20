@@ -72,7 +72,6 @@ import FormButton from "@/components/FormButton";
 export default {
   components: { FormButton },
   data() {
-    let that = this;
     let validBV = (rule, value, callback) => {
       let pattern = /^(BV)?1..4(1|y)1.7..$/i;
       if (!pattern.test(value)) {
@@ -83,10 +82,10 @@ export default {
     };
     let timeValidate = (rule, value, callback) => {
       if (
-        that.videoListForm.videos[that.activeIndex].start_time == "" ||
-        that.videoListForm.videos[that.activeIndex].over_time == "" ||
-        that.videoListForm.videos[that.activeIndex].start_time == null ||
-        that.videoListForm.videos[that.activeIndex].over_time == null
+        this.videoListForm.videos[this.activeIndex].start_time == "" ||
+        this.videoListForm.videos[this.activeIndex].over_time == "" ||
+        this.videoListForm.videos[this.activeIndex].start_time == null ||
+        this.videoListForm.videos[this.activeIndex].over_time == null
       ) {
         callback(new Error("我要什么时候显示呀"));
       } else {
@@ -311,21 +310,21 @@ export default {
 
         this.$store
           .dispatch("video/submitVideoList", videoList.videos)
-          .then((_) => {
+          .then(() => {
             this.$message({
               showClose: true,
               message: "上传上去啦",
               type: "success",
             });
           })
-          .catch((_) => {
+          .catch(() => {
             this.$message({
               showClose: true,
               message: "好像有哪里不太对，联系开发者看看呀",
               type: "warning",
             });
           })
-          .finally((_) => {
+          .finally(() => {
             this.init();
           });
       }

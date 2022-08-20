@@ -268,7 +268,7 @@ export default {
             if (validDown) {
               this.$store
                 .dispatch("version/submitPluginVersion", this.pluginForm)
-                .then((_) => {
+                .then(() => {
                   this.$message({
                     showClose: true,
                     message: "上传上去啦",

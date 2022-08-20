@@ -257,7 +257,7 @@ export default {
                 type: "success",
               });
             })
-            .catch((_) => {
+            .catch(() => {
               this.$message({
                 showClose: true,
                 message: "获取大厦失败",
@@ -324,7 +324,7 @@ export default {
             mansionList: mansionList,
             idBefore: this.idBefore,
           })
-          .then((_) => {
+          .then(() => {
             this.upload = true;
             this.OldMansionForm = JSON.parse(JSON.stringify(this.mansionForm));
             this.idBefore = this.mansionForm.id;
@@ -341,7 +341,7 @@ export default {
               type: "error",
             });
           })
-          .finally((_) => {
+          .finally(() => {
             this.init();
           });
       }
@@ -482,7 +482,7 @@ export default {
       if (this.idBefore !== "") {
         this.$store
           .dispatch("mansion/deleteMansion", this.idBefore)
-          .then((_) => {
+          .then(() => {
             this.removeMansion();
           })
           .catch(() => {
@@ -641,7 +641,7 @@ export default {
             type: "success",
           });
         })
-        .catch((_) => {
+        .catch(() => {
           this.$message({
             showClose: true,
             message: "获取大厦失败",

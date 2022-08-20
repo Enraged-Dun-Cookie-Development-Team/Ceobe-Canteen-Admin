@@ -115,7 +115,7 @@ export default {
         if (valid) {
           this.$store
             .dispatch("version/submitPhoneVersion", this.phoneForm)
-            .then((_) => {
+            .then(() => {
               this.$message({
                 showClose: true,
                 message: "上传上去啦",

@@ -76,7 +76,6 @@ import FormButton from "@/components/FormButton/index";
 export default {
   components: { RichEditor, FormButton },
   data() {
-    let that = this;
     let regex = /(<([^>]+)>)/ig
     let timeValidate = (rule, value, callback) => {
       if (
@@ -300,7 +299,7 @@ export default {
             });
           }
         })
-        .catch((_) => {
+        .catch(() => {
           this.announcementForm.announcements.splice(0, 0, {
             start_time: "",
             over_time: "",
@@ -308,7 +307,7 @@ export default {
             content: "",
             notice: false,
           });
-        }).finally((_) => {
+        }).finally(() => {
           this.updateRichtextHtml();
         });
     },
@@ -346,21 +345,21 @@ export default {
             "announcement/submitAnnouncementList",
             announcements
           )
-          .then((_) => {
+          .then(() => {
             this.$message({
               showClose: true,
               message: "上传上去啦",
               type: "success",
             });
           })
-          .catch((_) => {
+          .catch(() => {
             this.$message({
               showClose: true,
               message: "好像有哪里不太对，联系开发者看看呀",
               type: "warning",
             });
           })
-          .finally((_) => {
+          .finally(() => {
             this.init();
           });
       }
