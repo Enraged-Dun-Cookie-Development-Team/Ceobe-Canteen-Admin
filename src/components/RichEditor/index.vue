@@ -34,6 +34,9 @@ export default {
       editor.config.onblur = () => {
         this.$emit('blur','');
       }
+      editor.config.onfocus = () => {
+        this.$emit('focus','');
+      }
 
       // 配置工具栏
       editor.config.menus = [
