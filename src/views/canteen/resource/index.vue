@@ -68,6 +68,7 @@ import FormButton from '@/components/FormButton'
 export default {
   components: { FormButton },
   data() {
+    let that = this;
     let timeValidate = (rule, value, callback) => {
       if (
         this.resourceForm.countdown[this.activeIndex].start_time == "" ||

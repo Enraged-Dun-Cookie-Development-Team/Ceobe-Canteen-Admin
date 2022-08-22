@@ -76,7 +76,8 @@ import FormButton from "@/components/FormButton/index";
 export default {
   components: { RichEditor, FormButton },
   data() {
-    let regex = /(<([^>]+)>)/ig
+    let regex = /(<([^>]+)>)/ig;
+    let that = this;
     let timeValidate = (rule, value, callback) => {
       if (
         this.announcementForm.announcements[this.activeIndex].start_time == "" ||

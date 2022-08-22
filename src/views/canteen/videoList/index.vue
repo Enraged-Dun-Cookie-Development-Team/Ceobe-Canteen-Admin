@@ -72,6 +72,7 @@ import FormButton from "@/components/FormButton";
 export default {
   components: { FormButton },
   data() {
+    let that = this;
     let validBV = (rule, value, callback) => {
       let pattern = /^(BV)?1..4(1|y)1.7..$/i;
       if (!pattern.test(value)) {
