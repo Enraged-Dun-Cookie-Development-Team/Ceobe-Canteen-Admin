@@ -77,7 +77,6 @@ export default {
   components: { RichEditor, FormButton },
   data() {
     let regex = /(<([^>]+)>)/ig;
-    let that = this;
     let timeValidate = (rule, value, callback) => {
       if (
         this.announcementForm.announcements[this.activeIndex].start_time == "" ||
@@ -118,15 +117,15 @@ export default {
         shortcuts: [
           {
             text: "上一个后1秒",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.format(
                   TimeUtil.passSecondTime(
                     new Date(
-                      that.activeIndex != 0
-                        ? that.announcementForm.announcements[
-                          that.activeIndex - 1
+                      this.activeIndex != 0
+                        ? this.announcementForm.announcements[
+                          this.activeIndex - 1
                         ].over_time
                         : ""
                     ),
@@ -139,7 +138,7 @@ export default {
           },
           {
             text: "今天4点",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -151,7 +150,7 @@ export default {
           },
           {
             text: "今天16点",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -163,7 +162,7 @@ export default {
           },
           {
             text: "明天4点",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -177,7 +176,7 @@ export default {
           },
           {
             text: "昨天16点",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -199,7 +198,7 @@ export default {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
-                  that.announcementForm.announcements[that.activeIndex]
+                  this.announcementForm.announcements[this.activeIndex]
                     .start_time,
                   6 * 24 + 12
                 )
@@ -208,11 +207,11 @@ export default {
           },
           {
             text: "复刻活动",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
-                  that.announcementForm.announcements[that.activeIndex]
+                  this.announcementForm.announcements[this.activeIndex]
                     .start_time,
                   9 * 24 + 12
                 )
@@ -221,11 +220,11 @@ export default {
           },
           {
             text: "SideStory",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
-                  that.announcementForm.announcements[that.activeIndex]
+                  this.announcementForm.announcements[this.activeIndex]
                     .start_time,
                   13 * 24 + 12
                 )

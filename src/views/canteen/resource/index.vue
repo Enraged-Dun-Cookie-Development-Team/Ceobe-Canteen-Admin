@@ -68,7 +68,6 @@ import FormButton from '@/components/FormButton'
 export default {
   components: { FormButton },
   data() {
-    let that = this;
     let timeValidate = (rule, value, callback) => {
       if (
         this.resourceForm.countdown[this.activeIndex].start_time == "" ||
@@ -152,14 +151,14 @@ export default {
         shortcuts: [
           {
             text: "上一个后1秒",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.format(
                   TimeUtil.passSecondTime(
                     new Date(
-                      that.activeIndex != 0
-                        ? that.resourceForm.countdown[that.activeIndex - 1]
+                      this.activeIndex != 0
+                        ? this.resourceForm.countdown[this.activeIndex - 1]
                           .over_time
                         : ""
                     ),
@@ -172,13 +171,13 @@ export default {
           },
           {
             text: "当前日期4点",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.format(
                   TimeUtil.fourTime(
                     new Date(
-                      that.resourceForm.countdown[that.activeIndex].start_time
+                      this.resourceForm.countdown[this.activeIndex].start_time
                     )
                   ),
                   "yyyy-MM-dd hh:mm:ss"
@@ -188,13 +187,13 @@ export default {
           },
           {
             text: "当前日期16点",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.format(
                   TimeUtil.sixteenTime(
                     new Date(
-                      that.resourceForm.countdown[that.activeIndex].start_time
+                      this.resourceForm.countdown[this.activeIndex].start_time
                     )
                   ),
                   "yyyy-MM-dd hh:mm:ss"
@@ -208,11 +207,11 @@ export default {
         shortcuts: [
           {
             text: "半天",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
-                  that.resourceForm.countdown[that.activeIndex].start_time,
+                  this.resourceForm.countdown[this.activeIndex].start_time,
                   12
                 )
               );
@@ -220,11 +219,11 @@ export default {
           },
           {
             text: "14天",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
-                  that.resourceForm.countdown[that.activeIndex].start_time,
+                  this.resourceForm.countdown[this.activeIndex].start_time,
                   13 * 24 + 12
                 )
               );

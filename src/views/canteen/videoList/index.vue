@@ -72,7 +72,6 @@ import FormButton from "@/components/FormButton";
 export default {
   components: { FormButton },
   data() {
-    let that = this;
     let validBV = (rule, value, callback) => {
       let pattern = /^(BV)?1..4(1|y)1.7..$/i;
       if (!pattern.test(value)) {
@@ -145,7 +144,7 @@ export default {
         shortcuts: [
           {
             text: "今天4点",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -157,7 +156,7 @@ export default {
           },
           {
             text: "今天16点",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -169,7 +168,7 @@ export default {
           },
           {
             text: "明天4点",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -183,7 +182,7 @@ export default {
           },
           {
             text: "昨天16点",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -205,7 +204,7 @@ export default {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
-                  that.videoListForm.videos[that.activeIndex].start_time,
+                  this.videoListForm.videos[this.activeIndex].start_time,
                   6 * 24 + 12
                 )
               );
@@ -213,11 +212,11 @@ export default {
           },
           {
             text: "复刻活动",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
-                  that.videoListForm.videos[that.activeIndex].start_time,
+                  this.videoListForm.videos[this.activeIndex].start_time,
                   9 * 24 + 12
                 )
               );
@@ -225,11 +224,11 @@ export default {
           },
           {
             text: "SideStory",
-            onClick(picker) {
+            onClick: (picker) => { 
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
-                  that.videoListForm.videos[that.activeIndex].start_time,
+                  this.videoListForm.videos[this.activeIndex].start_time,
                   13 * 24 + 12
                 )
               );
