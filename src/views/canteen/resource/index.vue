@@ -9,7 +9,10 @@
         </el-date-picker>
       </el-form-item>
     </el-form>
-    <h3>倒计时管理</h3>
+    <div class="countdown_title">
+      <h3>倒计时管理</h3>
+      <el-button @click.stop="addItem(-1)" icon="el-icon-plus" class="btn-editor btn-add" round></el-button>
+    </div>
     <el-collapse v-for="(item, index) in resourceForm.countdown" :key="index" v-model="activeName" accordion>
       <el-collapse-item :name="index" class="btn">
         <template slot="title">
@@ -151,7 +154,7 @@ export default {
         shortcuts: [
           {
             text: "上一个后1秒",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -171,7 +174,7 @@ export default {
           },
           {
             text: "当前日期4点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -187,7 +190,7 @@ export default {
           },
           {
             text: "当前日期16点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -207,7 +210,7 @@ export default {
         shortcuts: [
           {
             text: "半天",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
@@ -219,7 +222,7 @@ export default {
           },
           {
             text: "14天",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
@@ -250,7 +253,7 @@ export default {
         });
         this.resourceForm.countdown = JSON.parse(JSON.stringify(response.data.countdown));
         this.resourceForm.resources = [response.data.resources.start_time, response.data.resources.over_time];
-        this.old_resourceFrom =JSON.parse(JSON.stringify(this.resourceForm));
+        this.old_resourceFrom = JSON.parse(JSON.stringify(this.resourceForm));
       });
     },
     // 提交表单到服务器
@@ -372,21 +375,31 @@ export default {
 </script>
 <style lang="less" scoped>
 #mainWindow {
+  .countdown_title {
+    display: flex;
+    justify-content: space-between;
+
+    .btn-add {
+      height: 40px;
+      margin-top: 10px;
+    }
+  }
+
+  .btn-add {
+    color: white;
+    background-color: #67c23a;
+  }
+
+  .btn-delete {
+    color: white;
+    background-color: #f56c6c;
+  }
+
   .collapse-header {
     display: flex;
     justify-content: space-between;
     width: 100%;
     margin-right: 10px;
-
-    .btn-add {
-      color: white;
-      background-color: #67c23a;
-    }
-
-    .btn-delete {
-      color: white;
-      background-color: #f56c6c;
-    }
   }
 
   .single-card {

@@ -1,6 +1,9 @@
 <template>
   <div id="mainWindow">
-    <h3>视频链接</h3>
+    <div class="video_title">
+      <h3>视频链接</h3>
+      <el-button @click.stop="addVideo(-1)" icon="el-icon-plus" class="btn-editor btn-add" round></el-button>
+    </div>
     <el-collapse v-for="(video, index) in videoListForm.videos" :key="index" v-model="activeName" accordion>
       <el-collapse-item :name="index" class="btn">
         <template slot="title">
@@ -144,7 +147,7 @@ export default {
         shortcuts: [
           {
             text: "今天4点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -156,7 +159,7 @@ export default {
           },
           {
             text: "今天16点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -168,7 +171,7 @@ export default {
           },
           {
             text: "明天4点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -182,7 +185,7 @@ export default {
           },
           {
             text: "昨天16点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -212,7 +215,7 @@ export default {
           },
           {
             text: "复刻活动",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
@@ -224,7 +227,7 @@ export default {
           },
           {
             text: "SideStory",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
@@ -426,21 +429,31 @@ export default {
 </script>
 <style lang="less" scoped>
 #mainWindow {
+  .video_title {
+    display: flex;
+    justify-content: space-between;
+
+    .btn-add {
+      height: 40px;
+      margin-top: 10px;
+    }
+  }
+
+  .btn-add {
+    color: white;
+    background-color: #67c23a;
+  }
+
+  .btn-delete {
+    color: white;
+    background-color: #f56c6c;
+  }
+
   .collapse-header {
     display: flex;
     justify-content: space-between;
     width: 100%;
     margin-right: 10px;
-
-    .btn-add {
-      color: white;
-      background-color: #67c23a;
-    }
-
-    .btn-delete {
-      color: white;
-      background-color: #f56c6c;
-    }
   }
 
   .single-card {

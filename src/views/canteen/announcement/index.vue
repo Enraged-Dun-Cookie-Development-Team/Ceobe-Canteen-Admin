@@ -1,6 +1,9 @@
 <template>
   <div id="mainWindow">
-    <h3>公告内容</h3>
+    <div class="announcement_title">
+      <h3>公告内容</h3>
+      <el-button @click.stop="addAnnouncement(-1)" icon="el-icon-plus" class="btn-editor btn-add" round></el-button>
+    </div>
     <el-collapse v-for="(announcement, index) in announcementForm.announcements" :key="index" v-model="activeName"
       accordion>
       <el-collapse-item :name="index" class="btn">
@@ -473,13 +476,17 @@ export default {
 
 <style lang="less" scoped>
 #mainWindow {
-  .collapse-header {
+  .announcement_title {
     display: flex;
     justify-content: space-between;
-    width: 100%;
-    margin-right: 10px;
 
     .btn-add {
+      height: 40px;
+      margin-top: 10px;
+    }
+  }
+
+  .btn-add {
       color: white;
       background-color: #67c23a;
     }
@@ -488,6 +495,14 @@ export default {
       color: white;
       background-color: #f56c6c;
     }
+
+  .collapse-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-right: 10px;
+
+    
   }
 
   .single-card {
