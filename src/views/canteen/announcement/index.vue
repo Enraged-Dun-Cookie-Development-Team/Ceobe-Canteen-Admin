@@ -606,7 +606,6 @@ export default {
       /deep/ .online-area {
         display: flex;
         align-items: center;
-        margin-right: 30px;
         line-height: 19.2px;
 
         p {
