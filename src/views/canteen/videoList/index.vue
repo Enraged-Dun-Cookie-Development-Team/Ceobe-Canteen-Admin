@@ -184,6 +184,20 @@ export default {
             },
           },
           {
+            text: "明天16点",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.format(
+                  TimeUtil.sixteenTime(
+                    TimeUtil.tomorrowTime(TimeUtil.changeToCCT(new Date()))
+                  ),
+                  "yyyy-MM-dd hh:mm:ss"
+                )
+              );
+            },
+          },
+          {
             text: "昨天16点",
             onClick: (picker) => {
               picker.$emit(
@@ -202,7 +216,39 @@ export default {
       pickerOverTime: {
         shortcuts: [
           {
-            text: "微型故事集",
+            text: "当前日期4点",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.format(
+                  TimeUtil.beforeFourTime(
+                    new Date(
+                      this.videoListForm.videos[this.activeIndex].over_time
+                    )
+                  ),
+                  "yyyy-MM-dd hh:mm:ss"
+                )
+              );
+            },
+          },
+          {
+            text: "当前日期16点",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.format(
+                  TimeUtil.beforeSixteenTime(
+                    new Date(
+                      this.videoListForm.videos[this.activeIndex].over_time
+                    )
+                  ),
+                  "yyyy-MM-dd hh:mm:ss"
+                )
+              );
+            },
+          },
+          {
+            text: "7天",
             onClick: (picker) => {
               picker.$emit(
                 "pick",
@@ -214,7 +260,7 @@ export default {
             },
           },
           {
-            text: "复刻活动",
+            text: "10天",
             onClick: (picker) => {
               picker.$emit(
                 "pick",
@@ -226,7 +272,19 @@ export default {
             },
           },
           {
-            text: "SideStory",
+            text: "14天",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.passHourTime(
+                  this.videoListForm.videos[this.activeIndex].start_time,
+                  13 * 24 + 12
+                )
+              );
+            },
+          },
+          {
+            text: "21天",
             onClick: (picker) => {
               picker.$emit(
                 "pick",

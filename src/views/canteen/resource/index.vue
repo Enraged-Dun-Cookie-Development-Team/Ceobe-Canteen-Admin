@@ -220,6 +220,30 @@ export default {
               );
             },
           },
+           {
+            text: "7天",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.passHourTime(
+                  this.resourceForm.countdown[this.activeIndex].start_time,
+                  6 * 24 + 12
+                )
+              );
+            },
+          },
+          {
+            text: "10天",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.passHourTime(
+                  this.resourceForm.countdown[this.activeIndex].start_time,
+                  9 * 24 + 12
+                )
+              );
+            },
+          },
           {
             text: "14天",
             onClick: (picker) => {
@@ -228,6 +252,18 @@ export default {
                 TimeUtil.passHourTime(
                   this.resourceForm.countdown[this.activeIndex].start_time,
                   13 * 24 + 12
+                )
+              );
+            },
+          },
+          {
+            text: "21天",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.passHourTime(
+                  this.resourceForm.countdown[this.activeIndex].start_time,
+                  20 * 24 + 12
                 )
               );
             },

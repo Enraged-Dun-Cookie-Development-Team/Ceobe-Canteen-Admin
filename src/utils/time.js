@@ -70,12 +70,30 @@ class TimeUtil {
     return datetime;
   }
 
+  // 返回当日3点59分
+  static beforeFourTime(date) {
+    if (isNaN(date.getTime())) {
+      date = new Date();
+    }
+    const datetime = new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 03:59:59`);
+    return datetime;
+  }
+
   // 返回当日16点
   static sixteenTime(date) {
     if (isNaN(date.getTime())) {
       date = new Date();
     }
     const datetime = new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 16:00:00`);
+    return datetime;
+  }
+
+  // 返回当日15点59分
+  static beforeSixteenTime(date) {
+    if (isNaN(date.getTime())) {
+      date = new Date();
+    }
+    const datetime = new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 15:59:59`);
     return datetime;
   }
 
