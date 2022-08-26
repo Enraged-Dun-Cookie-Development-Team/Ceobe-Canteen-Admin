@@ -1,12 +1,10 @@
 <template>
   <div id="mainWindow">
-    <div class="announcement_title">
-      <h3>公告内容</h3>
-      <el-button @click.stop="addAnnouncement(-1)" icon="el-icon-plus" class="btn-editor btn-add" round></el-button>
-    </div>
-    <el-collapse v-for="(announcement, index) in announcementForm.announcements" :key="index" v-model="activeName"
-      accordion>
-      <el-collapse-item :name="index" class="btn">
+    <h3>公告内容</h3>
+    <draggable tag="el-collapse" handle=".collapse-header" accordion :list="announcementForm.announcements"
+      :component-data="collapseComponentData" @end="draggEnd">
+      <el-collapse-item v-for="(announcement, index) in announcementForm.announcements" :key="index" :name="index"
+        class="btn">
         <template slot="title">
           <div class="collapse-header">
             <div>
@@ -66,7 +64,7 @@
           </div>
         </el-card>
       </el-collapse-item>
-    </el-collapse>
+    </draggable>
     <form-button @submit="submitAnnouncementList"></form-button>
   </div>
 </template>
@@ -75,9 +73,10 @@
 import TimeUtil from "@/utils/time";
 import RichEditor from "@/components/RichEditor";
 import FormButton from "@/components/FormButton/index";
+import draggable from "vuedraggable";
 
 export default {
-  components: { RichEditor, FormButton },
+  components: { RichEditor, FormButton, draggable },
   data() {
     let regex = /(<([^>]+)>)/ig;
     let timeValidate = (rule, value, callback) => {
@@ -103,6 +102,14 @@ export default {
       }
     }
     return {
+      collapseComponentData: {
+        on: {
+          input: this.inputChanged
+        },
+        props: {
+          value: this.activeName
+        }
+      },
       announcementForm: {
         announcements: [],
       },
@@ -120,7 +127,7 @@ export default {
         shortcuts: [
           {
             text: "上一个后1秒",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -141,7 +148,7 @@ export default {
           },
           {
             text: "今天4点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -153,7 +160,7 @@ export default {
           },
           {
             text: "今天16点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -165,7 +172,7 @@ export default {
           },
           {
             text: "明天4点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -179,7 +186,7 @@ export default {
           },
           {
             text: "明天16点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -193,7 +200,7 @@ export default {
           },
           {
             text: "昨天16点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -217,8 +224,8 @@ export default {
                 TimeUtil.format(
                   TimeUtil.beforeFourTime(
                     new Date(
-                    this.announcementForm.announcements[this.activeIndex]
-                    .over_time,
+                      this.announcementForm.announcements[this.activeIndex]
+                        .over_time,
                     )
                   ),
                   "yyyy-MM-dd hh:mm:ss"
@@ -234,8 +241,8 @@ export default {
                 TimeUtil.format(
                   TimeUtil.beforeSixteenTime(
                     new Date(
-                     this.announcementForm.announcements[this.activeIndex]
-                    .over_time
+                      this.announcementForm.announcements[this.activeIndex]
+                        .over_time
                     )
                   ),
                   "yyyy-MM-dd hh:mm:ss"
@@ -258,7 +265,7 @@ export default {
           },
           {
             text: "10天",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
@@ -271,7 +278,7 @@ export default {
           },
           {
             text: "14天",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
@@ -284,7 +291,7 @@ export default {
           },
           {
             text: "21天",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
@@ -325,7 +332,7 @@ export default {
         ],
       },
       activeIndex: 0,
-      activeName: 0,
+      activeName: [0],
     };
   },
   mounted() {
@@ -531,31 +538,33 @@ export default {
         });
       }, 500);
     },
+
+    // 拖拽表单
+    inputChanged(val) {
+      this.activeName = [val[0]];
+    },
+    draggEnd() {
+      this.updateRichtextHtml();
+      this.announcementForm.announcements.forEach((_, index) => {
+        this.getImg(index);
+        this.checkForm(index);
+      })
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
 #mainWindow {
-  .announcement_title {
-    display: flex;
-    justify-content: space-between;
-
-    .btn-add {
-      height: 40px;
-      margin-top: 10px;
-    }
+  .btn-add {
+    color: white;
+    background-color: #67c23a;
   }
 
-  .btn-add {
-      color: white;
-      background-color: #67c23a;
-    }
-
-    .btn-delete {
-      color: white;
-      background-color: #f56c6c;
-    }
+  .btn-delete {
+    color: white;
+    background-color: #f56c6c;
+  }
 
   .collapse-header {
     display: flex;
@@ -563,7 +572,7 @@ export default {
     width: 100%;
     margin-right: 10px;
 
-    
+
   }
 
   .single-card {
