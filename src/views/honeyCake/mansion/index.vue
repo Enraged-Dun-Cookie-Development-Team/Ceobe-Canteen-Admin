@@ -290,6 +290,14 @@ export default {
     // 提交表单到服务器
     submitMansionList() {
       this.updateRichtextHtml();
+      if (!this.checkTime()) {
+        this.$message({
+          showClose: true,
+          message: "注意一下时间要顺序噢",
+          type: "warning",
+        });
+        return;
+      }
       let allPass = true;
       this.$refs["infoForm"].validate((valid) => {
         if (valid) {
@@ -649,6 +657,18 @@ export default {
           });
         });
     },
+
+    checkTime() {
+      let beforeTime;
+      for (let i = 0; i < this.mansionForm.daily.length; i++) {
+        if (beforeTime && new Date(Date.parse(beforeTime))  >= new Date(Date.parse(this.mansionForm.daily[i].datetime))) {
+          return false;
+        }
+        beforeTime = this.mansionForm.daily[i].datetime;
+      }
+      return true;
+    },
+
   },
 };
 </script>
