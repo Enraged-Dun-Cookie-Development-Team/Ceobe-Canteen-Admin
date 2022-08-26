@@ -9,12 +9,10 @@
         </el-date-picker>
       </el-form-item>
     </el-form>
-    <div class="countdown_title">
       <h3>倒计时管理</h3>
-      <el-button @click.stop="addItem(-1)" icon="el-icon-plus" class="btn-editor btn-add" round></el-button>
-    </div>
-    <el-collapse v-for="(item, index) in resourceForm.countdown" :key="index" v-model="activeName" accordion>
-      <el-collapse-item :name="index" class="btn">
+    <draggable tag="el-collapse" handle=".collapse-header" accordion :list="resourceForm.countdown"
+      :component-data="collapseComponentData" @end="draggEnd">
+      <el-collapse-item v-for="(item, index) in resourceForm.countdown" :key="index" :name="index" class="btn">
         <template slot="title">
           <div class="collapse-header">
             <div>
@@ -60,16 +58,17 @@
           </el-form>
         </el-card>
       </el-collapse-item>
-    </el-collapse>
+    </draggable>
     <form-button @submit="submitResourceList('videoListForm')"></form-button>
   </div>
 </template>
 <script>
 import TimeUtil from "@/utils/time";
 import FormButton from '@/components/FormButton'
+import draggable from "vuedraggable";
 
 export default {
-  components: { FormButton },
+  components: { FormButton, draggable },
   data() {
     let timeValidate = (rule, value, callback) => {
       if (
@@ -84,8 +83,16 @@ export default {
       }
     };
     return {
+      collapseComponentData: {
+        on: {
+          input: this.inputChanged
+        },
+        props: {
+          value: this.activeName
+        }
+      },
       activeIndex: 0,
-      activeName: 0,
+      activeName: [0],
       old_resourceFrom: {
         resources: [],
         countdown: [
@@ -406,21 +413,21 @@ export default {
           this.resourceForm.countdown[index]["over_time"];
       }
     },
+
+    // 拖拽表单
+    inputChanged(val) {
+      this.activeName = [val[0]];
+    },
+    draggEnd() {
+      this.resourceForm.countdown.forEach((_, index) => {
+        this.checkForm(index);
+      })
+    },
   },
 };
 </script>
 <style lang="less" scoped>
 #mainWindow {
-  .countdown_title {
-    display: flex;
-    justify-content: space-between;
-
-    .btn-add {
-      height: 40px;
-      margin-top: 10px;
-    }
-  }
-
   .btn-add {
     color: white;
     background-color: #67c23a;
