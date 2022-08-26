@@ -1,11 +1,9 @@
 <template>
   <div id="mainWindow">
-    <div class="video_title">
       <h3>视频链接</h3>
-      <el-button @click.stop="addVideo(-1)" icon="el-icon-plus" class="btn-editor btn-add" round></el-button>
-    </div>
-    <el-collapse v-for="(video, index) in videoListForm.videos" :key="index" v-model="activeName" accordion>
-      <el-collapse-item :name="index" class="btn">
+    <draggable tag="el-collapse" handle=".collapse-header" accordion :list="videoListForm.videos"
+      :component-data="collapseComponentData" @end="draggEnd">
+      <el-collapse-item v-for="(video, index) in videoListForm.videos" :key="index" :name="index" class="btn">
         <template slot="title">
           <div class="collapse-header">
             <div>
@@ -64,16 +62,17 @@
           </el-form>
         </el-card>
       </el-collapse-item>
-    </el-collapse>
+    </draggable>
     <form-button @submit="submitVideoList('videoListForm')"></form-button>
   </div>
 </template>
 <script>
 import TimeUtil from "@/utils/time";
 import FormButton from "@/components/FormButton";
+import draggable from "vuedraggable";
 
 export default {
-  components: { FormButton },
+  components: { FormButton, draggable },
   data() {
     let validBV = (rule, value, callback) => {
       let pattern = /^(BV)?1..4(1|y)1.7..$/i;
@@ -96,6 +95,14 @@ export default {
       }
     };
     return {
+      collapseComponentData: {
+        on: {
+          input: this.inputChanged
+        },
+        props: {
+          value: this.activeName
+        }
+      },
       activeIndex: 0,
       videoListForm: {
         videos: [
@@ -297,7 +304,7 @@ export default {
           },
         ],
       },
-      activeName: "0",
+      activeName: [0],
     };
   },
   mounted() {
@@ -481,6 +488,16 @@ export default {
             });
         }
       });
+    },
+
+    // 拖拽表单
+    inputChanged(val) {
+      this.activeName = [val[0]];
+    },
+    draggEnd() {
+      this.videoListForm.videos.forEach((_, index) => {
+        this.checkForm(index);
+      })
     },
   },
 };
