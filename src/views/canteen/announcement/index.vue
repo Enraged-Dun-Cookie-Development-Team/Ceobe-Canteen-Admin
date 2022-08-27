@@ -1,8 +1,8 @@
 <template>
   <div id="mainWindow">
     <h3>公告内容</h3>
-    <draggable tag="el-collapse" handle=".collapse-header" accordion :list="announcementForm.announcements"
-      :component-data="collapseComponentData" @end="draggEnd">
+    <draggable tag="el-collapse" handle=".collapse-header" :list="announcementForm.announcements"
+      :component-data="collapseComponentData" @start="draggStart" @end="draggEnd">
       <el-collapse-item v-for="(announcement, index) in announcementForm.announcements" :key="index" :name="index"
         class="btn">
         <template slot="title">
@@ -101,15 +101,11 @@ export default {
         callback(new Error("配点文字吧"));
       }
     }
+    const collapseProps = {
+      accordion: true,
+      value: '',
+    };
     return {
-      collapseComponentData: {
-        on: {
-          input: this.inputChanged
-        },
-        props: {
-          value: this.activeName
-        }
-      },
       announcementForm: {
         announcements: [],
       },
@@ -332,7 +328,13 @@ export default {
         ],
       },
       activeIndex: 0,
-      activeName: [0],
+      collapseProps: collapseProps,
+      collapseComponentData: {
+        on: {
+          input: this.inputChanged
+        },
+        props: collapseProps
+      },
     };
   },
   mounted() {
@@ -394,8 +396,8 @@ export default {
         content: "",
         notice: false,
       }])) {
-        empty = true
-      };
+        empty = true;
+      }
       if (!empty) {
         this.announcementForm.announcements.forEach((item, index) => {
           this.$refs["announcementForm" + index][0].validate((valid) => {
@@ -541,14 +543,17 @@ export default {
 
     // 拖拽表单
     inputChanged(val) {
-      this.activeName = [val[0]];
+      this.collapseProps.value = val;
     },
-    draggEnd() {
+    draggStart(event) {
+      this.collapseProps.value = ""; 
+    },
+    draggEnd(event) {
       this.updateRichtextHtml();
       this.announcementForm.announcements.forEach((_, index) => {
         this.getImg(index);
         this.checkForm(index);
-      })
+      });
     },
   },
 };

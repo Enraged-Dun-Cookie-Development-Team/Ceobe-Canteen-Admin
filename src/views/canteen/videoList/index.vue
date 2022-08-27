@@ -1,8 +1,8 @@
 <template>
   <div id="mainWindow">
       <h3>视频链接</h3>
-    <draggable tag="el-collapse" handle=".collapse-header" accordion :list="videoListForm.videos"
-      :component-data="collapseComponentData" @end="draggEnd">
+    <draggable tag="el-collapse" handle=".collapse-header" :list="videoListForm.videos"
+      :component-data="collapseComponentData" @start="draggStart" @end="draggEnd">
       <el-collapse-item v-for="(video, index) in videoListForm.videos" :key="index" :name="index" class="btn">
         <template slot="title">
           <div class="collapse-header">
@@ -94,14 +94,17 @@ export default {
         callback();
       }
     };
+    const collapseProps = {
+      accordion: true,
+      value: '',
+    };
     return {
+      collapseProps: collapseProps,
       collapseComponentData: {
         on: {
           input: this.inputChanged
         },
-        props: {
-          value: this.activeName
-        }
+        props: collapseProps
       },
       activeIndex: 0,
       videoListForm: {
@@ -304,7 +307,6 @@ export default {
           },
         ],
       },
-      activeName: [0],
     };
   },
   mounted() {
@@ -492,7 +494,10 @@ export default {
 
     // 拖拽表单
     inputChanged(val) {
-      this.activeName = [val[0]];
+      this.collapseProps.value = val;
+    },
+    draggStart(event) {
+      this.collapseProps.value = ""; 
     },
     draggEnd() {
       this.videoListForm.videos.forEach((_, index) => {

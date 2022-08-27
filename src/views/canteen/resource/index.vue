@@ -9,9 +9,9 @@
         </el-date-picker>
       </el-form-item>
     </el-form>
-      <h3>倒计时管理</h3>
-    <draggable tag="el-collapse" handle=".collapse-header" accordion :list="resourceForm.countdown"
-      :component-data="collapseComponentData" @end="draggEnd">
+    <h3>倒计时管理</h3>
+    <draggable tag="el-collapse" handle=".collapse-header" :list="resourceForm.countdown"
+      :component-data="collapseComponentData" @start="draggStart" @end="draggEnd">
       <el-collapse-item v-for="(item, index) in resourceForm.countdown" :key="index" :name="index" class="btn">
         <template slot="title">
           <div class="collapse-header">
@@ -82,17 +82,19 @@ export default {
         callback();
       }
     };
+    const collapseProps = {
+      accordion: true,
+      value: '',
+    };
     return {
+      collapseProps: collapseProps,
       collapseComponentData: {
         on: {
           input: this.inputChanged
         },
-        props: {
-          value: this.activeName
-        }
+        props: collapseProps
       },
       activeIndex: 0,
-      activeName: [0],
       old_resourceFrom: {
         resources: [],
         countdown: [
@@ -227,7 +229,7 @@ export default {
               );
             },
           },
-           {
+          {
             text: "7天",
             onClick: (picker) => {
               picker.$emit(
@@ -416,7 +418,10 @@ export default {
 
     // 拖拽表单
     inputChanged(val) {
-      this.activeName = [val[0]];
+      this.collapseProps.value = val;
+    },
+    draggStart(event) {
+      this.collapseProps.value = "";
     },
     draggEnd() {
       this.resourceForm.countdown.forEach((_, index) => {

@@ -21,8 +21,8 @@
       </el-form-item>
     </el-form>
     <h3>每日信息</h3>
-    <draggable tag="el-collapse" handle=".collapse-header" accordion :list="mansionForm.daily"
-      :component-data="collapseComponentData" @end="draggEnd">
+    <draggable tag="el-collapse" handle=".collapse-header" :list="mansionForm.daily"
+      :component-data="collapseComponentData" @start="draggStart" @end="draggEnd">
       <el-collapse-item v-for="(item, index) in mansionForm.daily" :key="index" :name="index" class="btn">
         <template slot="title">
           <div class="collapse-header">
@@ -129,19 +129,21 @@ export default {
         }
       }
     };
+    const collapseProps = {
+      accordion: true,
+      value: '',
+    };
     return {
+      collapseProps: collapseProps,
       collapseComponentData: {
         on: {
           input: this.inputChanged
         },
-        props: {
-          value: this.activeName
-        }
+        props: collapseProps
       },
       regex,
       upload: false, // 当次表单删除完成
       activeIndex: 0,
-      activeName: [0],
       idOptions: [
         {
           value: "",
@@ -678,7 +680,10 @@ export default {
 
     // 拖拽表单
     inputChanged(val) {
-      this.activeName = [val[0]];
+      this.collapseProps.value = val;
+    },
+    draggStart(event) {
+      this.collapseProps.value = ""; 
     },
     draggEnd() {
       this.updateRichtextHtml();
