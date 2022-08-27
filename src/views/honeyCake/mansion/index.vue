@@ -20,12 +20,10 @@
         </el-slider>
       </el-form-item>
     </el-form>
-    <div class="info_title">
-      <h3>每日信息</h3>
-      <el-button @click.stop="addItem(-1)" icon="el-icon-plus" class="btn-editor btn-add" round></el-button>
-    </div>
-    <el-collapse v-for="(item, index) in mansionForm.daily" :key="index" v-model="activeName" accordion>
-      <el-collapse-item :name="index" class="btn">
+    <h3>每日信息</h3>
+    <draggable tag="el-collapse" handle=".collapse-header" :list="mansionForm.daily"
+      :component-data="collapseComponentData" @start="draggStart" @end="draggEnd">
+      <el-collapse-item v-for="(item, index) in mansionForm.daily" :key="index" :name="index" class="btn">
         <template slot="title">
           <div class="collapse-header">
             <div>
@@ -72,7 +70,7 @@
           </el-form>
         </el-card>
       </el-collapse-item>
-    </el-collapse>
+    </draggable>
     <div class="id-option">
       <el-select label="大厦号" v-model="selectIdShow" placeholder="请选择大厦号" @change="changeId">
         <el-option v-for="item in idOptions" :key="item.value" :label="item.label" :value="item.value">
@@ -89,9 +87,10 @@
 import TimeUtil from "@/utils/time";
 import RichEditor from "@/components/RichEditor";
 import FormButton from "@/components/FormButton";
+import draggable from "vuedraggable";
 
 export default {
-  components: { RichEditor, FormButton },
+  components: { RichEditor, FormButton, draggable },
   data() {
     let regex = /(<([^>]+)>)/ig
     let validCV = (rule, value, callback) => {
@@ -130,11 +129,21 @@ export default {
         }
       }
     };
+    const collapseProps = {
+      accordion: true,
+      value: '',
+    };
     return {
+      collapseProps: collapseProps,
+      collapseComponentData: {
+        on: {
+          input: this.inputChanged
+        },
+        props: collapseProps
+      },
       regex,
       upload: false, // 当次表单删除完成
       activeIndex: 0,
-      activeName: 0,
       idOptions: [
         {
           value: "",
@@ -290,6 +299,14 @@ export default {
     // 提交表单到服务器
     submitMansionList() {
       this.updateRichtextHtml();
+      if (!this.checkTime()) {
+        this.$message({
+          showClose: true,
+          message: "注意一下时间要顺序噢",
+          type: "warning",
+        });
+        return;
+      }
       let allPass = true;
       this.$refs["infoForm"].validate((valid) => {
         if (valid) {
@@ -649,6 +666,31 @@ export default {
           });
         });
     },
+
+    checkTime() {
+      let beforeTime;
+      for (let i = 0; i < this.mansionForm.daily.length; i++) {
+        if (beforeTime && new Date(Date.parse(beforeTime))  >= new Date(Date.parse(this.mansionForm.daily[i].datetime))) {
+          return false;
+        }
+        beforeTime = this.mansionForm.daily[i].datetime;
+      }
+      return true;
+    },
+
+    // 拖拽表单
+    inputChanged(val) {
+      this.collapseProps.value = val;
+    },
+    draggStart(event) {
+      this.collapseProps.value = ""; 
+    },
+    draggEnd() {
+      this.updateRichtextHtml();
+      this.mansionForm.daily.forEach((_, index) => {
+        this.checkForm(index);
+      })
+    },
   },
 };
 </script>
@@ -660,16 +702,6 @@ export default {
 
   .fraction-slider {
     width: 20%;
-  }
-
-  .info_title {
-    display: flex;
-    justify-content: space-between;
-
-    .btn-add {
-      height: 40px;
-      margin-top: 10px;
-    }
   }
 
   .collapse-header {
