@@ -9,12 +9,10 @@
         </el-date-picker>
       </el-form-item>
     </el-form>
-    <div class="countdown_title">
-      <h3>倒计时管理</h3>
-      <el-button @click.stop="addItem(-1)" icon="el-icon-plus" class="btn-editor btn-add" round></el-button>
-    </div>
-    <el-collapse v-for="(item, index) in resourceForm.countdown" :key="index" v-model="activeName" accordion>
-      <el-collapse-item :name="index" class="btn">
+    <h3>倒计时管理</h3>
+    <draggable tag="el-collapse" handle=".collapse-header" :list="resourceForm.countdown"
+      :component-data="collapseComponentData" @start="draggStart" @end="draggEnd">
+      <el-collapse-item v-for="(item, index) in resourceForm.countdown" :key="index" :name="index" class="btn">
         <template slot="title">
           <div class="collapse-header">
             <div>
@@ -60,16 +58,17 @@
           </el-form>
         </el-card>
       </el-collapse-item>
-    </el-collapse>
+    </draggable>
     <form-button @submit="submitResourceList('videoListForm')"></form-button>
   </div>
 </template>
 <script>
 import TimeUtil from "@/utils/time";
 import FormButton from '@/components/FormButton'
+import draggable from "vuedraggable";
 
 export default {
-  components: { FormButton },
+  components: { FormButton, draggable },
   data() {
     let timeValidate = (rule, value, callback) => {
       if (
@@ -83,9 +82,19 @@ export default {
         callback();
       }
     };
+    const collapseProps = {
+      accordion: true,
+      value: '',
+    };
     return {
+      collapseProps: collapseProps,
+      collapseComponentData: {
+        on: {
+          input: this.inputChanged
+        },
+        props: collapseProps
+      },
       activeIndex: 0,
-      activeName: 0,
       old_resourceFrom: {
         resources: [],
         countdown: [
@@ -221,6 +230,30 @@ export default {
             },
           },
           {
+            text: "7天",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.passHourTime(
+                  this.resourceForm.countdown[this.activeIndex].start_time,
+                  6 * 24 + 12
+                )
+              );
+            },
+          },
+          {
+            text: "10天",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.passHourTime(
+                  this.resourceForm.countdown[this.activeIndex].start_time,
+                  9 * 24 + 12
+                )
+              );
+            },
+          },
+          {
             text: "14天",
             onClick: (picker) => {
               picker.$emit(
@@ -228,6 +261,18 @@ export default {
                 TimeUtil.passHourTime(
                   this.resourceForm.countdown[this.activeIndex].start_time,
                   13 * 24 + 12
+                )
+              );
+            },
+          },
+          {
+            text: "21天",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.passHourTime(
+                  this.resourceForm.countdown[this.activeIndex].start_time,
+                  20 * 24 + 12
                 )
               );
             },
@@ -370,21 +415,24 @@ export default {
           this.resourceForm.countdown[index]["over_time"];
       }
     },
+
+    // 拖拽表单
+    inputChanged(val) {
+      this.collapseProps.value = val;
+    },
+    draggStart(event) {
+      this.collapseProps.value = "";
+    },
+    draggEnd() {
+      this.resourceForm.countdown.forEach((_, index) => {
+        this.checkForm(index);
+      })
+    },
   },
 };
 </script>
 <style lang="less" scoped>
 #mainWindow {
-  .countdown_title {
-    display: flex;
-    justify-content: space-between;
-
-    .btn-add {
-      height: 40px;
-      margin-top: 10px;
-    }
-  }
-
   .btn-add {
     color: white;
     background-color: #67c23a;

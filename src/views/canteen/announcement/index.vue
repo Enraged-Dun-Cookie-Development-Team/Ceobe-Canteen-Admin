@@ -1,12 +1,10 @@
 <template>
   <div id="mainWindow">
-    <div class="announcement_title">
-      <h3>公告内容</h3>
-      <el-button @click.stop="addAnnouncement(-1)" icon="el-icon-plus" class="btn-editor btn-add" round></el-button>
-    </div>
-    <el-collapse v-for="(announcement, index) in announcementForm.announcements" :key="index" v-model="activeName"
-      accordion>
-      <el-collapse-item :name="index" class="btn">
+    <h3>公告内容</h3>
+    <draggable tag="el-collapse" handle=".collapse-header" :list="announcementForm.announcements"
+      :component-data="collapseComponentData" @start="draggStart" @end="draggEnd">
+      <el-collapse-item v-for="(announcement, index) in announcementForm.announcements" :key="index" :name="index"
+        class="btn">
         <template slot="title">
           <div class="collapse-header">
             <div>
@@ -66,7 +64,7 @@
           </div>
         </el-card>
       </el-collapse-item>
-    </el-collapse>
+    </draggable>
     <form-button @submit="submitAnnouncementList"></form-button>
   </div>
 </template>
@@ -75,9 +73,10 @@
 import TimeUtil from "@/utils/time";
 import RichEditor from "@/components/RichEditor";
 import FormButton from "@/components/FormButton/index";
+import draggable from "vuedraggable";
 
 export default {
-  components: { RichEditor, FormButton },
+  components: { RichEditor, FormButton, draggable },
   data() {
     let regex = /(<([^>]+)>)/ig;
     let timeValidate = (rule, value, callback) => {
@@ -102,6 +101,10 @@ export default {
         callback(new Error("配点文字吧"));
       }
     }
+    const collapseProps = {
+      accordion: true,
+      value: '',
+    };
     return {
       announcementForm: {
         announcements: [],
@@ -120,7 +123,7 @@ export default {
         shortcuts: [
           {
             text: "上一个后1秒",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -141,7 +144,7 @@ export default {
           },
           {
             text: "今天4点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -153,7 +156,7 @@ export default {
           },
           {
             text: "今天16点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -165,7 +168,7 @@ export default {
           },
           {
             text: "明天4点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -178,8 +181,22 @@ export default {
             },
           },
           {
+            text: "明天16点",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.format(
+                  TimeUtil.sixteenTime(
+                    TimeUtil.tomorrowTime(TimeUtil.changeToCCT(new Date()))
+                  ),
+                  "yyyy-MM-dd hh:mm:ss"
+                )
+              );
+            },
+          },
+          {
             text: "昨天16点",
-            onClick: (picker) => { 
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.format(
@@ -196,7 +213,41 @@ export default {
       pickerOverTime: {
         shortcuts: [
           {
-            text: "微型故事集",
+            text: "当前日期4点",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.format(
+                  TimeUtil.beforeFourTime(
+                    new Date(
+                      this.announcementForm.announcements[this.activeIndex]
+                        .over_time,
+                    )
+                  ),
+                  "yyyy-MM-dd hh:mm:ss"
+                )
+              );
+            },
+          },
+          {
+            text: "当前日期16点",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.format(
+                  TimeUtil.beforeSixteenTime(
+                    new Date(
+                      this.announcementForm.announcements[this.activeIndex]
+                        .over_time
+                    )
+                  ),
+                  "yyyy-MM-dd hh:mm:ss"
+                )
+              );
+            },
+          },
+          {
+            text: "7天",
             onClick: (picker) => {
               picker.$emit(
                 "pick",
@@ -209,8 +260,8 @@ export default {
             },
           },
           {
-            text: "复刻活动",
-            onClick: (picker) => { 
+            text: "10天",
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
@@ -222,14 +273,27 @@ export default {
             },
           },
           {
-            text: "SideStory",
-            onClick: (picker) => { 
+            text: "14天",
+            onClick: (picker) => {
               picker.$emit(
                 "pick",
                 TimeUtil.passHourTime(
                   this.announcementForm.announcements[this.activeIndex]
                     .start_time,
                   13 * 24 + 12
+                )
+              );
+            },
+          },
+          {
+            text: "21天",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.passHourTime(
+                  this.announcementForm.announcements[this.activeIndex]
+                    .start_time,
+                  20 * 24 + 12
                 )
               );
             },
@@ -264,7 +328,13 @@ export default {
         ],
       },
       activeIndex: 0,
-      activeName: 0,
+      collapseProps: collapseProps,
+      collapseComponentData: {
+        on: {
+          input: this.inputChanged
+        },
+        props: collapseProps
+      },
     };
   },
   mounted() {
@@ -326,8 +396,8 @@ export default {
         content: "",
         notice: false,
       }])) {
-        empty = true
-      };
+        empty = true;
+      }
       if (!empty) {
         this.announcementForm.announcements.forEach((item, index) => {
           this.$refs["announcementForm" + index][0].validate((valid) => {
@@ -470,31 +540,36 @@ export default {
         });
       }, 500);
     },
+
+    // 拖拽表单
+    inputChanged(val) {
+      this.collapseProps.value = val;
+    },
+    draggStart(event) {
+      this.collapseProps.value = ""; 
+    },
+    draggEnd(event) {
+      this.updateRichtextHtml();
+      this.announcementForm.announcements.forEach((_, index) => {
+        this.getImg(index);
+        this.checkForm(index);
+      });
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
 #mainWindow {
-  .announcement_title {
-    display: flex;
-    justify-content: space-between;
-
-    .btn-add {
-      height: 40px;
-      margin-top: 10px;
-    }
+  .btn-add {
+    color: white;
+    background-color: #67c23a;
   }
 
-  .btn-add {
-      color: white;
-      background-color: #67c23a;
-    }
-
-    .btn-delete {
-      color: white;
-      background-color: #f56c6c;
-    }
+  .btn-delete {
+    color: white;
+    background-color: #f56c6c;
+  }
 
   .collapse-header {
     display: flex;
@@ -502,7 +577,7 @@ export default {
     width: 100%;
     margin-right: 10px;
 
-    
+
   }
 
   .single-card {
@@ -545,7 +620,6 @@ export default {
       /deep/ .online-area {
         display: flex;
         align-items: center;
-        margin-right: 30px;
         line-height: 19.2px;
 
         p {

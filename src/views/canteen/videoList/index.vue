@@ -1,11 +1,9 @@
 <template>
   <div id="mainWindow">
-    <div class="video_title">
       <h3>视频链接</h3>
-      <el-button @click.stop="addVideo(-1)" icon="el-icon-plus" class="btn-editor btn-add" round></el-button>
-    </div>
-    <el-collapse v-for="(video, index) in videoListForm.videos" :key="index" v-model="activeName" accordion>
-      <el-collapse-item :name="index" class="btn">
+    <draggable tag="el-collapse" handle=".collapse-header" :list="videoListForm.videos"
+      :component-data="collapseComponentData" @start="draggStart" @end="draggEnd">
+      <el-collapse-item v-for="(video, index) in videoListForm.videos" :key="index" :name="index" class="btn">
         <template slot="title">
           <div class="collapse-header">
             <div>
@@ -64,16 +62,17 @@
           </el-form>
         </el-card>
       </el-collapse-item>
-    </el-collapse>
+    </draggable>
     <form-button @submit="submitVideoList('videoListForm')"></form-button>
   </div>
 </template>
 <script>
 import TimeUtil from "@/utils/time";
 import FormButton from "@/components/FormButton";
+import draggable from "vuedraggable";
 
 export default {
-  components: { FormButton },
+  components: { FormButton, draggable },
   data() {
     let validBV = (rule, value, callback) => {
       let pattern = /^(BV)?1..4(1|y)1.7..$/i;
@@ -95,7 +94,18 @@ export default {
         callback();
       }
     };
+    const collapseProps = {
+      accordion: true,
+      value: '',
+    };
     return {
+      collapseProps: collapseProps,
+      collapseComponentData: {
+        on: {
+          input: this.inputChanged
+        },
+        props: collapseProps
+      },
       activeIndex: 0,
       videoListForm: {
         videos: [
@@ -184,6 +194,20 @@ export default {
             },
           },
           {
+            text: "明天16点",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.format(
+                  TimeUtil.sixteenTime(
+                    TimeUtil.tomorrowTime(TimeUtil.changeToCCT(new Date()))
+                  ),
+                  "yyyy-MM-dd hh:mm:ss"
+                )
+              );
+            },
+          },
+          {
             text: "昨天16点",
             onClick: (picker) => {
               picker.$emit(
@@ -202,7 +226,39 @@ export default {
       pickerOverTime: {
         shortcuts: [
           {
-            text: "微型故事集",
+            text: "当前日期4点",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.format(
+                  TimeUtil.beforeFourTime(
+                    new Date(
+                      this.videoListForm.videos[this.activeIndex].over_time
+                    )
+                  ),
+                  "yyyy-MM-dd hh:mm:ss"
+                )
+              );
+            },
+          },
+          {
+            text: "当前日期16点",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.format(
+                  TimeUtil.beforeSixteenTime(
+                    new Date(
+                      this.videoListForm.videos[this.activeIndex].over_time
+                    )
+                  ),
+                  "yyyy-MM-dd hh:mm:ss"
+                )
+              );
+            },
+          },
+          {
+            text: "7天",
             onClick: (picker) => {
               picker.$emit(
                 "pick",
@@ -214,7 +270,7 @@ export default {
             },
           },
           {
-            text: "复刻活动",
+            text: "10天",
             onClick: (picker) => {
               picker.$emit(
                 "pick",
@@ -226,7 +282,19 @@ export default {
             },
           },
           {
-            text: "SideStory",
+            text: "14天",
+            onClick: (picker) => {
+              picker.$emit(
+                "pick",
+                TimeUtil.passHourTime(
+                  this.videoListForm.videos[this.activeIndex].start_time,
+                  13 * 24 + 12
+                )
+              );
+            },
+          },
+          {
+            text: "21天",
             onClick: (picker) => {
               picker.$emit(
                 "pick",
@@ -239,7 +307,6 @@ export default {
           },
         ],
       },
-      activeName: "0",
     };
   },
   mounted() {
@@ -423,6 +490,19 @@ export default {
             });
         }
       });
+    },
+
+    // 拖拽表单
+    inputChanged(val) {
+      this.collapseProps.value = val;
+    },
+    draggStart(event) {
+      this.collapseProps.value = ""; 
+    },
+    draggEnd() {
+      this.videoListForm.videos.forEach((_, index) => {
+        this.checkForm(index);
+      })
     },
   },
 };
