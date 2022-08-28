@@ -66,5 +66,16 @@
     "node": ">=8.9",
     "npm": ">= 3.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "**/src/**/*.{js,vue}": [
+      "vue-cli-service lint"
+    ],
+    "**/src/**/*.{vue,css,sass,scss,less}": [
+      "stylelint --fix"
+    ]
+  }
 }
