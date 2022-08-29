@@ -15,6 +15,8 @@ const name = defaultSettings.title || 'vue Admin Template'; // page title
 // port = 9528 npm run dev OR npm run dev --port = 9528
 const port = process.env.port || process.env.npm_config_port || 9528; // dev port
 
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
+
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
     /**
@@ -32,12 +34,14 @@ module.exports = {
     productionSourceMap: false,
     devServer: {
         port: port,
-        open: true,
-        overlay: {
+        open: [`http://localhost:${port}`],
+        client: {
+          overlay: {
             warnings: false,
             errors: true
+          },
         },
-        before: require('./mock/mock-server.js'),
+        setupMiddlewares: require('./mock/mock-server.js'),
     // proxy: {
     //   // change xxx-api/login => mock/login
     //   // detail: https://cli.vuejs.org/config/#devserver-proxy
@@ -48,8 +52,9 @@ module.exports = {
     // }
     },
     configureWebpack: {
-    // provide the app's title in webpack's name field, so that
-    // it can be accessed in index.html to inject the correct title.
+        plugins: [new NodePolyfillPlugin()],
+        // provide the app's title in webpack's name field, so that
+        // it can be accessed in index.html to inject the correct title.
         name: name,
         resolve: {
             alias: {
@@ -58,20 +63,6 @@ module.exports = {
         }
     },
     chainWebpack(config) {
-    // // it can improve the speed of the first screen, it is recommended to turn on preload
-    //     config.plugin('preload').use().tap(() => [
-    //         {
-    //             rel: 'preload',
-    //             // to ignore runtime.js
-    //             // https://github.com/vuejs/vue-cli/blob/dev/packages/@vue/cli-service/lib/config/app.js#L171
-    //             fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
-    //             include: 'initial'
-    //         }
-    //     ]);
-
-        // when there are many pages, it will cause too many meaningless requests
-        config.plugins.delete('prefetch');
-
         // set svg-sprite-loader
         config.module
             .rule('svg')
@@ -92,14 +83,6 @@ module.exports = {
         config
             .when(process.env.NODE_ENV !== 'development',
                 config => {
-                    config
-                        .plugin('ScriptExtHtmlWebpackPlugin')
-                        .after('html')
-                        .use('script-ext-html-webpack-plugin', [{
-                            // `runtime` must same as runtimeChunk name. default is `runtime`
-                            inline: /runtime\..*\.js$/
-                        }])
-                        .end();
                     config
                         .optimization.splitChunks({
                             chunks: 'all',
