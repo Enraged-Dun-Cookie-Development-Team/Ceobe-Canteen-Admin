@@ -137,7 +137,7 @@ export default {
   .btn-confirm:focus,
   .btn-confirm:hover,
   .btn-copy:focus,
-  .btn-copy:hover {
+    .btn-copy:hover {
     background-color: #ffc76e;
     border-color: #ffc76e;
   }

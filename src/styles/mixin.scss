@@ -1,6 +1,6 @@
 @mixin clearfix {
-  &:after {
-    content: "";
+  &::after {
+    content: '';
     display: table;
     clear: both;
   }
@@ -10,14 +10,12 @@
   &::-webkit-scrollbar-track-piece {
     background: #d3dce6;
   }
-
   &::-webkit-scrollbar {
     width: 6px;
   }
-
   &::-webkit-scrollbar-thumb {
-    background: #99a9bf;
     border-radius: 20px;
+    background: #99a9bf;
   }
 }
 
