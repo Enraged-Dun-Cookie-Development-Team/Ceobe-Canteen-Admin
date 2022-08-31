@@ -32,6 +32,25 @@ module.exports = {
         "no-trailing-spaces": ERROR,//一行结束后面不要有空格
         "no-spaced-func": ERROR,//函数调用时 函数名与()之间不能有空格
         "no-var": OFF,//禁用var，用let和const代替
+        "indent": [ERROR, 4], //js代码缩进
+        'new-cap': [ERROR, { //首字母大小写
+            'newIsCap': true,
+            'capIsNew': false
+        }],
+        "object-curly-spacing": [ERROR, "always"],  // js对象之间需要空格隔开
+        "space-in-parens": [ERROR, "never"], // js方法中不允许多空格
+
+        "vue/component-definition-name-casing": [ERROR, "PascalCase"],  // 组件名字必须
+        'vue/multi-word-component-names': OFF, // 不监测组件名字是否是多个单词
+        "vue/no-multi-spaces": [ERROR, { // vue中不允许多空格
+            "ignoreProperties": false
+        }],
+        "vue/no-v-html": OFF, //不检测是否有v-html
+        "vue/require-prop-types": OFF, //不检测prop是否给类型
+        "vue/first-attribute-linebreak": [ERROR, {
+            "singleline": "beside",
+            "multiline": "below"
+        }],
         "vue/html-self-closing": [ERROR, { // 自闭合设置
             "html": {
                 "void": "always",
@@ -42,21 +61,8 @@ module.exports = {
             "math": "always"
         }],
         "vue/max-attributes-per-line": [ERROR, { //单行最大限制
-            "singleline": 3,
-            "multiline": {
-                "max": 4,
-            }
+            "singleline": 2,
+            "multiline": 3
         }],
-        "indent": [ERROR, 4], //js代码缩进
-        'new-cap': [ERROR, { //首字母大小写
-            'newIsCap': true,
-            'capIsNew': false
-        }],
-        "vue/no-v-html": OFF, //不检测是否有v-html
-        "vue/require-prop-types": OFF, //不检测prop是否给类型
-        // "vue/first-attribute-linebreak": [ERROR, {
-        //   "singleline": "beside",
-        //   "multiline": "below"
-        // }]
     }
 };
