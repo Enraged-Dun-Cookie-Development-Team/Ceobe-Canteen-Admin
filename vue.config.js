@@ -36,20 +36,20 @@ module.exports = {
         port: port,
         open: [`http://localhost:${port}`],
         client: {
-          overlay: {
-            warnings: false,
-            errors: true
-          },
+            overlay: {
+                warnings: false,
+                errors: true
+            },
         },
         setupMiddlewares: require('./mock/mock-server.js'),
-    // proxy: {
-    //   // change xxx-api/login => mock/login
-    //   // detail: https://cli.vuejs.org/config/#devserver-proxy
-    //   '/api/v1/admin': {
-    //     target: process.env.TARGET_API,
-    //     changeOrigin: true
-    //   }
-    // }
+        // proxy: {
+        //   // change xxx-api/login => mock/login
+        //   // detail: https://cli.vuejs.org/config/#devserver-proxy
+        //   '/api/v1/admin': {
+        //     target: process.env.TARGET_API,
+        //     changeOrigin: true
+        //   }
+        // }
     },
     configureWebpack: {
         plugins: [new NodePolyfillPlugin()],

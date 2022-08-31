@@ -1,20 +1,21 @@
 <template>
   <el-button
-    @click="submit"
     class="btn-submit"
-  >提交</el-button
+    @click="submit"
   >
+    提交
+  </el-button>
 </template>
 
 <script>
 export default {
-  name: 'FormButton',
-  methods:{
-    submit(){
-      this.$emit("submit");
+    name: 'FormButton',
+    methods:{
+        submit(){
+            this.$emit("submit");
+        }
     }
-  }
-}
+};
 </script>
 
 

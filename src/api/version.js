@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '@/utils/request';
 
 export async function submitPluginVersion(token, data) {
     return request({
@@ -6,7 +6,7 @@ export async function submitPluginVersion(token, data) {
         method: 'post',
         headers: token,
         data: data
-    })
+    });
 }
 
 export async function submitPhoneVersion(token, data) {
@@ -15,5 +15,5 @@ export async function submitPhoneVersion(token, data) {
         method: 'post',
         headers: token,
         data: data
-    })
+    });
 }

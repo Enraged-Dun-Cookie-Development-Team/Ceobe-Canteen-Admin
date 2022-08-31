@@ -5,16 +5,16 @@
  */
 import E from "wangeditor";
 
-const { $ } = E
+const { $ } = E;
 
 export function createPanelConf(editor, text) {
     function getRandom(prefix = '') {
-        return prefix + Math.random().toString().slice(2)
+        return prefix + Math.random().toString().slice(2);
     }
 
     // panel 中需要用到的id
-    const inputTextId = getRandom('input-text')
-    const btnOkId = getRandom('btn-ok')
+    const inputTextId = getRandom('input-text');
+    const btnOkId = getRandom('btn-ok');
 
     /**
      * 插入标签
@@ -22,7 +22,7 @@ export function createPanelConf(editor, text) {
      */
     function insertTag(text) {
         // 选区未处于链接中，直接插入即可
-        editor.cmd.do('insertHTML', `<drawer style="color: #dd558a;">${text}</drawer>`)
+        editor.cmd.do('insertHTML', `<drawer style="color: #dd558a;">${text}</drawer>`);
     }
 
     const conf = {
@@ -57,21 +57,21 @@ export function createPanelConf(editor, text) {
                         type: 'click',
                         fn: () => {
                             // 获得填写的文字
-                            const $text = $('#' + inputTextId)
-                            let text = $text.val().trim()
+                            const $text = $('#' + inputTextId);
+                            let text = $text.val().trim();
 
                             // 文本为空，则不插入
-                            if (!text) return
-                            insertTag(text)
+                            if (!text) return;
+                            insertTag(text);
 
                             // 返回 true，表示该事件执行完之后，panel 要关闭。否则 panel 不会关闭
-                            return true
+                            return true;
                         },
                     },
                 ],
             }, // tab end
         ], // tabs end
-    }
+    };
 
-    return conf
+    return conf;
 }

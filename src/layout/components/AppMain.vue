@@ -6,19 +6,19 @@
       mode="out-in">
       <router-view :key="key" />
     </transition> -->
-     <router-view :key="key" />
+    <router-view :key="key" />
   </section>
 </template>
 
 <script>
-import 'animate.css'
+import 'animate.css';
 export default {
-  name: "AppMain",
-  computed: {
-    key() {
-      return this.$route.path;
+    name: "AppMain",
+    computed: {
+        key() {
+            return this.$route.path;
+        },
     },
-  },
 };
 </script>
 

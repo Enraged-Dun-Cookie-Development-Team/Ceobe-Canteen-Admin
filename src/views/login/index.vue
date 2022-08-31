@@ -1,9 +1,13 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
+    <el-form
+      ref="loginForm" :model="loginForm" :rules="loginRules"
+      class="login-form" auto-complete="on" label-position="left"
+    >
       <div class="title-container">
-        <h3 class="title">小刻食堂后厨</h3>
+        <h3 class="title">
+          小刻食堂后厨
+        </h3>
       </div>
 
       <el-form-item prop="username">
@@ -41,7 +45,12 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">进入厨房</el-button>
+      <el-button
+        :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
+        @click.native.prevent="handleLogin"
+      >
+        进入厨房
+      </el-button>
     </el-form>
   </div>
 </template>
@@ -49,66 +58,66 @@
 <script>
 
 export default {
-  name: 'Login',
-  data() {
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('密码不小于六位'))
-      } else {
-        callback()
-      }
-    }
-    return {
-      loginForm: {
-        username: '',
-        password: ''
-      },
-      loginRules: {
-        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
-      },
-      loading: false,
-      passwordType: 'password',
-      redirect: undefined
-    }
-  },
-  watch: {
-    $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect
-      },
-      immediate: true
-    }
-  },
-  methods: {
-    showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
-      }
-      this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
+    name: 'LogIn',
+    data() {
+        const validatePassword = (rule, value, callback) => {
+            if (value.length < 6) {
+                callback(new Error('密码不小于六位'));
+            } else {
+                callback();
+            }
+        };
+        return {
+            loginForm: {
+                username: '',
+                password: ''
+            },
+            loginRules: {
+                username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+                password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+            },
+            loading: false,
+            passwordType: 'password',
+            redirect: undefined
+        };
     },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
+    watch: {
+        $route: {
+            handler: function(route) {
+                this.redirect = route.query && route.query.redirect;
+            },
+            immediate: true
         }
-      })
+    },
+    methods: {
+        showPwd() {
+            if (this.passwordType === 'password') {
+                this.passwordType = '';
+            } else {
+                this.passwordType = 'password';
+            }
+            this.$nextTick(() => {
+                this.$refs.password.focus();
+            });
+        },
+        handleLogin() {
+            this.$refs.loginForm.validate(valid => {
+                if (valid) {
+                    this.loading = true;
+                    this.$store.dispatch('user/login', this.loginForm).then(() => {
+                        this.$router.push({ path: this.redirect || '/' });
+                        this.loading = false;
+                    }).catch(() => {
+                        this.loading = false;
+                    });
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        }
     }
-  }
-}
+};
 </script>
 
 <style lang="scss">
