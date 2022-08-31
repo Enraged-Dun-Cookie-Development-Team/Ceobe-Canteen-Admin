@@ -538,15 +538,16 @@ export default {
     },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 #mainWindow {
+
   .video_title {
     display: flex;
     justify-content: space-between;
 
     .btn-add {
-      height: 40px;
       margin-top: 10px;
+      height: 40px;
     }
   }
 
@@ -563,14 +564,14 @@ export default {
   .collapse-header {
     display: flex;
     justify-content: space-between;
-    width: 100%;
     margin-right: 10px;
+    width: 100%;
   }
 
   .single-card {
     margin: 10px;
 
-    /deep/ label {
+    ::v-deep label {
       font-weight: 500;
     }
   }

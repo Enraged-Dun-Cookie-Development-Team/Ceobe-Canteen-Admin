@@ -46,7 +46,7 @@
       </el-form-item>
 
       <el-button
-        :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
+        :loading="loading" type="primary" style="margin-bottom:30px;width:100%;"
         @click.native.prevent="handleLogin"
       >
         进入厨房
@@ -125,30 +125,33 @@ export default {
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg:#283443;
-$light_gray:#fff;
-$cursor: #fff;
+$light_gray:#ffffff;
+$cursor: #ffffff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
+
   .login-container .el-input input {
     color: $cursor;
   }
 }
 
 /* reset element-ui css */
+
 .login-container {
+
   .el-input {
     display: inline-block;
-    height: 47px;
     width: 85%;
+    height: 47px;
 
     input {
-      background: transparent;
-      border: 0px;
-      -webkit-appearance: none;
-      border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
       height: 47px;
+      border: 0px;
+      border-radius: 0px;
+      color: $light_gray;
+      background: transparent;
+      -webkit-appearance: none;
       caret-color: $cursor;
 
       &:-webkit-autofill {
@@ -160,9 +163,9 @@ $cursor: #fff;
 
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     color: #454545;
+    background: rgba(0, 0, 0, 0.1);
   }
 }
 </style>
@@ -170,29 +173,30 @@ $cursor: #fff;
 <style lang="scss" scoped>
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
-$light_gray:#eee;
+$light_gray:#eeeeee;
 
 .login-container {
-  min-height: 100%;
-  width: 100%;
-  background-color: $bg;
   overflow: hidden;
+  width: 100%;
+  min-height: 100%;
+  background-color: $bg;
 
   .login-form {
     position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+    padding: 160px 35px 0;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
-    overflow: hidden;
   }
 
   .tips {
-    font-size: 14px;
-    color: #fff;
     margin-bottom: 10px;
+    font-size: 14px;
+    color: #ffffff;
 
     span {
+
       &:first-of-type {
         margin-right: 16px;
       }
@@ -200,29 +204,30 @@ $light_gray:#eee;
   }
 
   .svg-container {
+    display: inline-block;
     padding: 6px 5px 6px 15px;
+    width: 30px;
     color: $dark_gray;
     vertical-align: middle;
-    width: 30px;
-    display: inline-block;
   }
 
   .title-container {
     position: relative;
 
     .title {
-      font-size: 26px;
-      color: $light_gray;
       margin: 0px auto 40px auto;
-      text-align: center;
+      font-size: 26px;
       font-weight: bold;
+      text-align: center;
+      color: $light_gray;
     }
   }
 
   .show-pwd {
     position: absolute;
-    right: 10px;
+
     top: 7px;
+    right: 10px;
     font-size: 16px;
     color: $dark_gray;
     cursor: pointer;

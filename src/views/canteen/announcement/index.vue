@@ -582,8 +582,9 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 #mainWindow {
+
   .btn-add {
     color: white;
     background-color: #67c23a;
@@ -597,8 +598,8 @@ export default {
   .collapse-header {
     display: flex;
     justify-content: space-between;
-    width: 100%;
     margin-right: 10px;
+    width: 100%;
 
 
   }
@@ -606,19 +607,20 @@ export default {
   .single-card {
     margin: 10px;
 
-    /deep/ label {
+    ::v-deep label {
       font-weight: 500;
     }
 
     .preview-label {
-      width: 87px;
-      text-align: left;
       margin-right: 10px;
-      color: #606266;
+      width: 87px;
       font-size: 14px;
+      text-align: left;
+      color: #606266;
     }
 
-    /deep/ .rich-editor {
+    ::v-deep .rich-editor {
+
       drawer {
         color: #dd558a;
       }
@@ -629,18 +631,19 @@ export default {
     }
 
     // 模拟公告样式
+
     .list-html {
       padding: 3px;
       width: 634px;
       height: 108px;
-      background-color: #fff;
-      border: 1px solid #e4e7ed;
-      color: #848488;
       font-size: 14px;
+      font-family: 'Segoe UI', Arial, 'Microsoft Yahei', sans-serif;
+      border: 1px solid #e4e7ed;
       border-radius: 4px;
-      font-family: "Segoe UI", Arial, "Microsoft Yahei", sans-serif;
+      color: #848488;
+      background-color: #ffffff;
 
-      /deep/ .online-area {
+      ::v-deep .online-area {
         display: flex;
         align-items: center;
         line-height: 19.2px;
@@ -650,17 +653,17 @@ export default {
         }
       }
 
-      /deep/ .online-area .online-title-img {
-        height: 100px;
+      ::v-deep .online-area .online-title-img {
         margin-right: 10px;
+        height: 100px;
         min-height: 100px;
       }
 
-      /deep/ .online-area .online-title-img.radius {
+      ::v-deep .online-area .online-title-img.radius {
         border-radius: 4px;
       }
 
-      /deep/ .online-pointer {
+      ::v-deep .online-pointer {
         cursor: pointer;
       }
     }

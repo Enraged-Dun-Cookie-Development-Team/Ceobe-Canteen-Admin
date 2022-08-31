@@ -151,34 +151,36 @@ export default {
     },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 #mainWindow {
+
   .width50 {
     width: 50%;
   }
 
   .show-pwd {
     position: absolute;
-    right: 10px;
     top: 2px;
+    right: 10px;
     font-size: 16px;
     color: #889aa4;
     cursor: pointer;
     user-select: none;
   }
 
-  /deep/ label {
+  ::v-deep label {
     font-weight: 500;
   }
 
   .btn-password {
-    background-color: #ffba4b;
     border-color: #ffba4b;
+    background-color: #ffba4b;
   }
+
   .btn-password:focus,
   .btn-password:hover {
-    background-color: #ffc76e;
     border-color: #ffc76e;
+    background-color: #ffc76e;
   }
 }
 </style>

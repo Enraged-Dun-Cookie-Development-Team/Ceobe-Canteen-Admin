@@ -79,19 +79,22 @@ export default {
     },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 #mainWindow {
-  /deep/ label {
+
+  ::v-deep label {
     font-weight: 500;
   }
+
   .btn-username {
-    background-color: #ffba4b;
     border-color: #ffba4b;
+    background-color: #ffba4b;
   }
+
   .btn-username:focus,
   .btn-username:hover {
-    background-color: #ffc76e;
     border-color: #ffc76e;
+    background-color: #ffc76e;
   }
 }
 </style>

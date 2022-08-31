@@ -757,9 +757,10 @@ export default {
     },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 #mainWindow {
-  /deep/ label {
+
+  ::v-deep label {
     font-weight: 500;
   }
 
@@ -770,8 +771,8 @@ export default {
   .collapse-header {
     display: flex;
     justify-content: space-between;
-    width: 100%;
     margin-right: 10px;
+    width: 100%;
   }
 
   .btn-add {
@@ -790,12 +791,12 @@ export default {
     .forecast-info {
       margin-bottom: 10px;
 
-      /deep/.radio-group {
+      ::v-deep.radio-group {
         margin-left: 15px;
 
         .el-radio-button__orig-radio:checked+.el-radio-button__inner {
-          background-color: #ffba4b;
           border-color: #ffba4b;
+          background-color: #ffba4b;
           box-shadow: -1px 0 0 0 #ffba4b;
         }
 
@@ -804,6 +805,7 @@ export default {
         }
 
         .is-active {
+
           .el-radio-button__inner:hover {
             color: #ffffff !important;
           }

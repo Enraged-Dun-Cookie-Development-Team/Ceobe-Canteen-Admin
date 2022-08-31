@@ -128,17 +128,20 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 #mainWindow {
-  /deep/ label {
+
+  ::v-deep label {
     font-weight: 500;
   }
+
   .img-area {
     position: absolute;
     height: 40px;
+
     img {
-      height: 40px;
       margin-left: 20px;
+      height: 40px;
     }
   }
 }

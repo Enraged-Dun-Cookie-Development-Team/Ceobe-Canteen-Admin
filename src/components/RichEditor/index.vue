@@ -86,10 +86,12 @@ export default {
     },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 #richtext {
-  /deep/ .w-e-text {
+
+  ::v-deep .w-e-text {
     margin-top: 8px;
+
     p {
       margin: 0;
     }

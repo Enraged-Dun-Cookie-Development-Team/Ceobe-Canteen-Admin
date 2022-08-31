@@ -471,8 +471,9 @@ export default {
     },
 };
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 #mainWindow {
+
   .btn-add {
     color: white;
     background-color: #67c23a;
@@ -486,14 +487,14 @@ export default {
   .collapse-header {
     display: flex;
     justify-content: space-between;
-    width: 100%;
     margin-right: 10px;
+    width: 100%;
   }
 
   .single-card {
     margin: 10px;
 
-    /deep/ label {
+    ::v-deep label {
       font-weight: 500;
     }
 

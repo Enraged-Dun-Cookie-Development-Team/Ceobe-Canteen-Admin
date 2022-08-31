@@ -19,19 +19,20 @@ export default {
 </script>
 
 
-<style lang="less">
+<style lang="scss">
 .btn-submit {
   position: fixed;
-  bottom: 20px;
   right: 80px;
+  bottom: 20px;
+  border-color: #ffba4b;
   color: #f4f4f5;
   background-color: #ffba4b;
-  border-color: #ffba4b;
+
   &:focus,
   &:hover {
+    border-color: #ffc76e;
     color: #f4f4f5;
     background-color: #ffc76e;
-    border-color: #ffc76e;
   }
 }
 </style>

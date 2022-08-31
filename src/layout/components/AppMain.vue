@@ -25,13 +25,14 @@ export default {
 
 <style scoped>
 .app-main {
-  /*50 = navbar  */
-  height: calc(100vh - 130px);
-  width: 100%;
-  padding: 3vh 4vw 0vh;
   position: relative;
   overflow: scroll;
+  padding: 3vh 4vw 0vh;
+  width: 100%;
+  /*50 = navbar  */
+  height: calc(100vh - 130px);
 }
+
 .fixed-header + .app-main {
   padding-top: 50px;
 }
@@ -48,7 +49,9 @@ export default {
 
 <style lang="scss">
 // fix css style bug in open el-dialog
+
 .el-popup-parent--hidden {
+
   .fixed-header {
     padding-right: 15px;
   }
