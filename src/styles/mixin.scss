@@ -10,7 +10,7 @@
 @mixin scrollBar {
 
   &::-webkit-scrollbar-track-piece {
-    background: #d3dce6;
+    background: #D3DCE6;
   }
 
   &::-webkit-scrollbar {
@@ -19,7 +19,7 @@
 
   &::-webkit-scrollbar-thumb {
     border-radius: 20px;
-    background: #99a9bf;
+    background: #99A9BF;
   }
 }
 

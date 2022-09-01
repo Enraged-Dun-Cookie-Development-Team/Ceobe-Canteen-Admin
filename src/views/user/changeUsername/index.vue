@@ -87,14 +87,14 @@ export default {
   }
 
   .btn-username {
-    border-color: #ffba4b;
-    background-color: #ffba4b;
+    border-color: #FFBA4B;
+    background-color: #FFBA4B;
   }
 
   .btn-username:focus,
   .btn-username:hover {
-    border-color: #ffc76e;
-    background-color: #ffc76e;
+    border-color: #FFC76E;
+    background-color: #FFC76E;
   }
 }
 </style>
