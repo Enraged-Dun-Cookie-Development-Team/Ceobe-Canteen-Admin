@@ -16,33 +16,30 @@ module.exports = {
   ],
   ignoreFiles: ["**/*.js", "**/*.jsx", "**/*.tsx", "**/*.ts", "**/*.json"],
   rules: {
-    indentation: 2,
-    "selector-pseudo-element-no-unknown": [
+    indentation: 2, //缩进
+    "selector-pseudo-element-no-unknown": [ //禁止使用未知的伪元素
       true,
       {
         ignorePseudoElements: ["v-deep", ":deep"],
       },
     ],
-    "number-leading-zero": "always",
+    "number-leading-zero": "always", //必须始终有前导零
     "no-descending-specificity": null,
     "function-url-quotes": "always",
-    "string-quotes": "single",
-    "unit-case": null,
-    "color-hex-case": "lower",
-    "color-hex-length": "long",
-    "rule-empty-line-before": "always",
-    "font-family-no-missing-generic-family-keyword": null,
-    "selector-type-no-unknown": null,
-    "block-opening-brace-space-before": "always",
-    "at-rule-no-unknown": null,
-    "no-duplicate-selectors": null,
-    "property-no-unknown": null,
-    "no-empty-source": null,
+    "string-quotes": "single",  //单引号
+    "unit-case": "lower", //小写单位
+    "color-hex-case": "upper", //大写颜色
+    "color-hex-length": "short", //允许缩写颜色
+    "rule-empty-line-before": "always", //样式前空行
+    "font-family-no-missing-generic-family-keyword": null, //允许在字体系列名称列表中缺少通用系列
+    "block-opening-brace-space-before": "always", //在块的左大括号之前需要一个空格
+    "property-no-unknown": true,
     "selector-class-pattern": null,
     "keyframes-name-pattern": null,
+    "length-zero-no-unit": true, //0不需要单位
     "selector-pseudo-class-no-unknown": [
       true,
-      { ignorePseudoClasses: ["global", "deep"] },
+      { ignorePseudoClasses: ["global", "deep", "export"] },
     ],
     "function-no-unknown": null,
     "order/properties-order": [
