@@ -10,7 +10,12 @@ import Setting from "./Tags/SettingBtn/index";
 // import Link from "./link/index";
 export default {
     name: "RichEditor",
-    props: ["value"], // 通过props绑定父组件的value
+    props: {
+        value: {
+            type: String,
+            required: true,
+        }
+    }, // 通过props绑定父组件的value
     data() {
         return {
             editor: "",
