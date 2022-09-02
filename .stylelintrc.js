@@ -17,7 +17,8 @@ module.exports = {
   ignoreFiles: ["**/*.js", "**/*.jsx", "**/*.tsx", "**/*.ts", "**/*.json"],
   rules: {
     indentation: 2, //缩进
-    "selector-pseudo-element-no-unknown": [ //禁止使用未知的伪元素
+    "selector-pseudo-element-no-unknown": [
+      //禁止使用未知的伪元素
       true,
       {
         ignorePseudoElements: ["v-deep", ":deep"],
@@ -26,7 +27,7 @@ module.exports = {
     "number-leading-zero": "always", //必须始终有前导零
     "no-descending-specificity": null,
     "function-url-quotes": "always",
-    "string-quotes": "single",  //单引号
+    "string-quotes": "single", //单引号
     "unit-case": "lower", //小写单位
     "color-hex-case": "upper", //大写颜色
     "color-hex-length": "short", //允许缩写颜色
@@ -37,6 +38,10 @@ module.exports = {
     "selector-class-pattern": null,
     "keyframes-name-pattern": null,
     "length-zero-no-unit": true, //0不需要单位
+    "selector-type-no-unknown": [
+      true,
+      { ignoreTypes: ["drawer", "setting"] },
+    ],
     "selector-pseudo-class-no-unknown": [
       true,
       { ignorePseudoClasses: ["global", "deep", "export"] },
