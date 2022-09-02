@@ -553,12 +553,12 @@ export default {
 
   .btn-add {
     color: white;
-    background-color: #67c23a;
+    background-color: #67C23A;
   }
 
   .btn-delete {
     color: white;
-    background-color: #f56c6c;
+    background-color: #F56C6C;
   }
 
   .collapse-header {
@@ -571,7 +571,7 @@ export default {
   .single-card {
     margin: 10px;
 
-    ::v-deep label {
+    :deep(label) {
       font-weight: 500;
     }
   }

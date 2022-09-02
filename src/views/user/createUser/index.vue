@@ -116,37 +116,37 @@ export default {
 <style lang="scss" scoped>
 #mainWindow {
 
-  ::v-deep label {
+  :deep(label) {
     font-weight: 500;
   }
 
-  ::v-deep .radio {
+  :deep(.radio) {
 
     .is-checked {
 
       .el-radio__inner {
-        border-color: #ffba4b;
-        background: #ffba4b;
+        border-color: #FFBA4B;
+        background: #FFBA4B;
       }
     }
 
     .is-checked + .el-radio__label {
-      color: #ffba4b;
+      color: #FFBA4B;
     }
   }
 
   .btn-confirm,
   .btn-copy {
-    border-color: #ffba4b;
-    background-color: #ffba4b;
+    border-color: #FFBA4B;
+    background-color: #FFBA4B;
   }
 
   .btn-confirm:focus,
   .btn-confirm:hover,
   .btn-copy:focus,
   .btn-copy:hover {
-    border-color: #ffc76e;
-    background-color: #ffc76e;
+    border-color: #FFC76E;
+    background-color: #FFC76E;
   }
 }
 </style>

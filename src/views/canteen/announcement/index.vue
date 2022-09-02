@@ -587,12 +587,12 @@ export default {
 
   .btn-add {
     color: white;
-    background-color: #67c23a;
+    background-color: #67C23A;
   }
 
   .btn-delete {
     color: white;
-    background-color: #f56c6c;
+    background-color: #F56C6C;
   }
 
   .collapse-header {
@@ -607,7 +607,7 @@ export default {
   .single-card {
     margin: 10px;
 
-    ::v-deep label {
+    :deep(label) {
       font-weight: 500;
     }
 
@@ -619,14 +619,14 @@ export default {
       color: #606266;
     }
 
-    ::v-deep .rich-editor {
+    :deep(.rich-editor) {
 
       drawer {
-        color: #dd558a;
+        color: #DD558A;
       }
 
       setting {
-        color: #dd55c4;
+        color: #DD55C4;
       }
     }
 
@@ -638,32 +638,32 @@ export default {
       height: 108px;
       font-size: 14px;
       font-family: 'Segoe UI', Arial, 'Microsoft Yahei', sans-serif;
-      border: 1px solid #e4e7ed;
+      border: 1px solid #E4E7ED;
       border-radius: 4px;
       color: #848488;
-      background-color: #ffffff;
+      background-color: #FFF;
 
-      ::v-deep .online-area {
+      :deep(.online-area) {
         display: flex;
         align-items: center;
         line-height: 19.2px;
 
         p {
-          margin: 0px;
+          margin: 0;
         }
       }
 
-      ::v-deep .online-area .online-title-img {
+      :deep(.online-area .online-title-img) {
         margin-right: 10px;
         height: 100px;
         min-height: 100px;
       }
 
-      ::v-deep .online-area .online-title-img.radius {
+      :deep(.online-area .online-title-img.radius) {
         border-radius: 4px;
       }
 
-      ::v-deep .online-pointer {
+      :deep(.online-pointer) {
         cursor: pointer;
       }
     }

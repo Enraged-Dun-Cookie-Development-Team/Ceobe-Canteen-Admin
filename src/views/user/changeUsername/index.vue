@@ -82,7 +82,7 @@ export default {
 <style lang="scss" scoped>
 #mainWindow {
 
-  ::v-deep label {
+  :deep(label) {
     font-weight: 500;
   }
 

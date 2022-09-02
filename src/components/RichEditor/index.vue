@@ -89,7 +89,7 @@ export default {
 <style lang="scss" scoped>
 #richtext {
 
-  ::v-deep .w-e-text {
+  :deep(.w-e-text) {
     margin-top: 8px;
 
     p {

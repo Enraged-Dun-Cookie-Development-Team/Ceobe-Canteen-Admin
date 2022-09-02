@@ -760,7 +760,7 @@ export default {
 <style lang="scss" scoped>
 #mainWindow {
 
-  ::v-deep label {
+  :deep(label) {
     font-weight: 500;
   }
 
@@ -777,12 +777,12 @@ export default {
 
   .btn-add {
     color: white;
-    background-color: #67c23a;
+    background-color: #67C23A;
   }
 
   .btn-delete {
     color: white;
-    background-color: #f56c6c;
+    background-color: #F56C6C;
   }
 
   .single-card {
@@ -791,23 +791,23 @@ export default {
     .forecast-info {
       margin-bottom: 10px;
 
-      ::v-deep.radio-group {
+      :deep(.radio-group) {
         margin-left: 15px;
 
         .el-radio-button__orig-radio:checked+.el-radio-button__inner {
-          border-color: #ffba4b;
-          background-color: #ffba4b;
-          box-shadow: -1px 0 0 0 #ffba4b;
+          border-color: #FFBA4B;
+          background-color: #FFBA4B;
+          box-shadow: -1px 0 0 0 #FFBA4B;
         }
 
         .el-radio-button__inner:hover {
-          color: #ffba4b !important;
+          color: #FFBA4B !important;
         }
 
         .is-active {
 
           .el-radio-button__inner:hover {
-            color: #ffffff !important;
+            color: #FFF !important;
           }
         }
       }
@@ -817,12 +817,12 @@ export default {
   .btn-addForecast {
     margin-left: 20px;
     color: white;
-    background-color: #67c23a;
+    background-color: #67C23A;
   }
 
   .btn-deleteForecast {
     color: white;
-    background-color: #f56c6c;
+    background-color: #F56C6C;
   }
 
   .width30 {

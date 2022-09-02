@@ -163,24 +163,24 @@ export default {
     top: 2px;
     right: 10px;
     font-size: 16px;
-    color: #889aa4;
+    color: #889AA4;
     cursor: pointer;
     user-select: none;
   }
 
-  ::v-deep label {
+  :deep(label) {
     font-weight: 500;
   }
 
   .btn-password {
-    border-color: #ffba4b;
-    background-color: #ffba4b;
+    border-color: #FFBA4B;
+    background-color: #FFBA4B;
   }
 
   .btn-password:focus,
   .btn-password:hover {
-    border-color: #ffc76e;
-    background-color: #ffc76e;
+    border-color: #FFC76E;
+    background-color: #FFC76E;
   }
 }
 </style>
