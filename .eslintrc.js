@@ -46,7 +46,7 @@ module.exports = {
             "ignoreProperties": false
         }],
         "vue/no-v-html": OFF, //不检测是否有v-html
-        "vue/require-prop-types": OFF, //不检测prop是否给类型
+        "vue/require-prop-types": ERROR, //不检测prop是否给类型
         "vue/first-attribute-linebreak": [ERROR, {
             "singleline": "beside",
             "multiline": "below"
