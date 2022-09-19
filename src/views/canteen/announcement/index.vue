@@ -403,13 +403,10 @@ export default {
                         content: "",
                         notice: false,
                     });
-                }).finally(() => {
-                    this.updateRichtextHtml();
                 });
         },
         // 提交表单到服务器
         submitAnnouncementList() {
-            this.updateRichtextHtml();
             let allPass = true;
             let empty = false;
             if (this.announcementForm.announcements.length == 1 && JSON.stringify(this.announcementForm.announcements) == JSON.stringify([{
@@ -464,10 +461,8 @@ export default {
         getImg(index, img_url = "") {
             if (img_url === "") {
                 if (
-                    this.announcementForm.announcements[index].img_url.indexOf("icon") !=
-          -1 &&
-          this.announcementForm.announcements[index].img_url.indexOf("http") ==
-          -1
+                    this.announcementForm.announcements[index].img_url.indexOf("icon") != -1 &&
+                    this.announcementForm.announcements[index].img_url.indexOf("http") == -1
                 ) {
                     this.imgList[index].img = require("../../../assets/image/logo/" +
             this.announcementForm.announcements[index].img_url +
@@ -510,7 +505,6 @@ export default {
                     set: false,
                 }];
             }
-            this.updateRichtextHtml();
         },
         // 添加新增公告
         addAnnouncement(index) {
@@ -527,15 +521,15 @@ export default {
             this.setAll.splice(index + 1, 0, {
                 set: false,
             });
-            this.updateRichtextHtml();
         },
         // 检查表单有没有填完
         checkForm(index) {
             let complete = true;
+            complete = !this.isRichtextEmpty(index);
             for (let detail in this.announcementForm.announcements[index]) {
                 if (
                     this.announcementForm.announcements[index][detail] == null ||
-          this.announcementForm.announcements[index][detail] === ""
+                    this.announcementForm.announcements[index][detail] === ""
                 ) {
                     complete = false;
                     break;
@@ -556,12 +550,8 @@ export default {
             this.checkForm(index);
         },
 
-        updateRichtextHtml() {
-            setTimeout(() => {
-                this.announcementForm.announcements.forEach((item, index) => {
-                    this.$refs["richtext" + index][0].updateHtml();
-                });
-            }, 500);
+        isRichtextEmpty(index) {
+            return this.$refs["richtext" + index][0].isEmpty();
         },
 
         // 拖拽表单
@@ -572,7 +562,6 @@ export default {
             this.collapseProps.value = "";
         },
         draggEnd(event) {
-            this.updateRichtextHtml();
             this.announcementForm.announcements.forEach((_, index) => {
                 this.getImg(index);
                 this.checkForm(index);

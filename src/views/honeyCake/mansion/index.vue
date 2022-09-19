@@ -340,7 +340,6 @@ export default {
                 })
                 .catch(() => {
                     this.initMansion();
-                    this.updateRichtextHtml();
                 });
         },
         initMansion() {
@@ -351,7 +350,6 @@ export default {
             this.setAll = [{ set: false }];
             this.selectIdShow = "";
             this.upload = false;
-            this.updateRichtextHtml();
         },
         refreshRichText(index) {
             if (this.$refs['dailyForm' + index] && this.$refs['dailyForm' + index].length > 0) {
@@ -361,7 +359,6 @@ export default {
         },
         // 提交表单到服务器
         submitMansionList() {
-            this.updateRichtextHtml();
             if (!this.checkTime()) {
                 this.$message({
                     showClose: true,
@@ -472,7 +469,6 @@ export default {
             this.setAll.splice(index + 1, 0, {
                 set: false,
             });
-            this.updateRichtextHtml();
         },
         removeItem(item) {
             let index = this.mansionForm.daily.indexOf(item);
@@ -493,7 +489,6 @@ export default {
                 ];
                 this.setAll = [{ set: false }];
             }
-            this.updateRichtextHtml();
         },
 
         // 预测信息增加和删除
@@ -548,7 +543,6 @@ export default {
                 });
                 this.selectIdShow = "";
                 this.upload = false;
-                this.updateRichtextHtml();
             } else {
                 this.$message({
                     showClose: true,
@@ -640,15 +634,10 @@ export default {
             this.mansionForm = JSON.parse(JSON.stringify(this.OldMansionForm));
             this.selectIdShow = this.mansionForm.id;
             this.upload = true;
-            this.updateRichtextHtml();
         },
 
-        updateRichtextHtml() {
-            setTimeout(() => {
-                this.mansionForm.daily.forEach((item, index) => {
-                    this.$refs["richtext" + index][0].updateHtml();
-                });
-            }, 500);
+        isRichtextEmpty(index) {
+            return this.$refs["richtext" + index][0].isEmpty();
         },
 
         // 更新id值
@@ -689,7 +678,7 @@ export default {
                 for (let i in this.mansionForm.daily[index]["info"]) {
                     if (
                         this.mansionForm.daily[index].info[i].forecast == "" ||
-            this.mansionForm.daily[index].info[i].forecast == null
+                        this.mansionForm.daily[index].info[i].forecast == null
                     ) {
                         complete = false;
                         break;
@@ -697,8 +686,7 @@ export default {
                 }
             }
             if (!complete) {
-                let result = this.mansionForm.daily[index].content.replace(this.regex, "");
-                if (result.trim() !== "") complete = true;
+                complete = !this.isRichtextEmpty(index);
             }
             if (complete) {
                 this.setAll[index]["set"] = true;
@@ -749,7 +737,6 @@ export default {
             this.collapseProps.value = "";
         },
         draggEnd() {
-            this.updateRichtextHtml();
             this.mansionForm.daily.forEach((_, index) => {
                 this.checkForm(index);
             });
