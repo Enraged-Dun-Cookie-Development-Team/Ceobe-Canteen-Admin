@@ -8,7 +8,7 @@
     />
     <Editor
       v-model="html"
-      style=" overflow-y: hidden;height: 140px;"
+      style="overflow-y: hidden; height: 140px;"
       :default-config="editorConfig"
       :mode="mode"
       @onCreated="onCreated"
@@ -39,14 +39,50 @@ export default {
                 "through",
                 "color",
                 "bgColor",
-                "insertLink",
                 "clearStyle",
+                "insertLink",
                 "emotion",
                 "undo",
                 "redo"
             ] },
             html: "",
-            editorConfig: { placeholder: '请输入内容...' },
+            editorConfig: {
+                placeholder: '请输入内容...',
+                MENU_CONF: {
+                    color: {
+                        colors: [
+                            "#e4d64a",
+                            "#ffba4b",
+                            "#fdbf22",
+                            "#e03b3b",
+                            "#ffffff",
+                            "#000000",
+                            "#353535",
+                            "#795548",
+                            "#8C3313",
+                            "#D99559",
+                            "#EAB58D",
+                            "#DEBB95"
+                        ]
+                    },
+                    bgColor: {
+                        colors: [
+                            "#e4d64a",
+                            "#ffba4b",
+                            "#fdbf22",
+                            "#e03b3b",
+                            "#ffffff",
+                            "#000000",
+                            "#353535",
+                            "#795548",
+                            "#8C3313",
+                            "#D99559",
+                            "#EAB58D",
+                            "#DEBB95"
+                        ]
+                    }
+                }
+            },
             mode: 'simple', // or 'default'
         };
     },
@@ -95,6 +131,16 @@ export default {
 
     .w-e-text-placeholder {
       top: -9px
+    }
+
+    .w-e-modal {
+
+      .babel-container {
+
+        span {
+          line-height: 24px;
+        }
+      }
     }
   }
 }

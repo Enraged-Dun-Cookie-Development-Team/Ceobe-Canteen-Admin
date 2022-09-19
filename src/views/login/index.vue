@@ -125,8 +125,8 @@ export default {
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg:#283443;
-$light_gray:#ffffff;
-$cursor: #ffffff;
+$light_gray:#FFF;
+$cursor: #FFF;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
 
@@ -147,15 +147,15 @@ $cursor: #ffffff;
     input {
       padding: 12px 5px 12px 15px;
       height: 47px;
-      border: 0px;
-      border-radius: 0px;
+      border: 0;
+      border-radius: 0;
       color: $light_gray;
       background: transparent;
       -webkit-appearance: none;
       caret-color: $cursor;
 
       &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
+        box-shadow: 0 0 0 1000px $bg inset !important;
         -webkit-text-fill-color: $cursor !important;
       }
     }
@@ -171,9 +171,9 @@ $cursor: #ffffff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eeeeee;
+$bg:#2D3A4B;
+$dark_gray:#889AA4;
+$light_gray:#EEE;
 
 .login-container {
   overflow: hidden;
@@ -193,7 +193,7 @@ $light_gray:#eeeeee;
   .tips {
     margin-bottom: 10px;
     font-size: 14px;
-    color: #ffffff;
+    color: #FFF;
 
     span {
 
@@ -215,7 +215,7 @@ $light_gray:#eeeeee;
     position: relative;
 
     .title {
-      margin: 0px auto 40px auto;
+      margin: 0 auto 40px auto;
       font-size: 26px;
       font-weight: bold;
       text-align: center;
