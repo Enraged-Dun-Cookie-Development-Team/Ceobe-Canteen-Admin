@@ -1,4 +1,4 @@
-import Tags from "../index";
+import Tags from "../DrawerBtn/renderDrawer";
 import E from "wangeditor";
 
 const { $ } = E;

@@ -72,7 +72,7 @@ export default {
   line-height: 50px;
 
   .no-redirect {
-    color: #97a8be;
+    color: #97A8BE;
     cursor: text;
   }
 }

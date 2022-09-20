@@ -19,6 +19,12 @@
 </template>
 <script>
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
+import { Boot } from '@wangeditor/editor';
+import { DrawerBtn } from './Tags/DrawerBtn';
+import { withDrawerTag } from './Tags/DrawerBtn/tag';
+import { renderDrawerConf } from './Tags/DrawerBtn/renderDrawer';
+import { elemDrawerToHtmlConf } from './Tags/DrawerBtn/elemDrawerToHtmlConf';
+import { parseDrawerHtmlConf } from './Tags/DrawerBtn/parseDrawerHtml';
 
 export default {
     name: "RichEditor",
@@ -107,8 +113,28 @@ export default {
     },
     methods: {
         onCreated(editor) {
+            let a = Math.random().toString(36).slice(-8);
             this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
-            console.log(editor.getAllMenuKeys());
+            const drawerConf = {
+                key: a, // 定义 menu key ：要保证唯一、不重复（重要）
+                factory() {
+                    return new DrawerBtn(); // 把 `YourMenuClass` 替换为你菜单的 class
+                },
+            };
+            const module = {
+                menus: [drawerConf], // 菜单
+                editorPlugin: withDrawerTag, // 插件
+                renderElems: [renderDrawerConf], // renderElem
+                elemsToHtml: [elemDrawerToHtmlConf], // elemToHtml
+                parseElemsHtml: [parseDrawerHtmlConf] // parseElemHtml
+            };
+
+            Boot.registerModule(module);
+            this.toolbarConfig.insertKeys = {
+                index: 9, // 插入的位置，基于当前的 toolbarKeys
+                keys: [a]
+            };
+
         },
         onFocus() { this.$emit('focus',''); },
         onBlur() { this.$emit('blur',''); },
