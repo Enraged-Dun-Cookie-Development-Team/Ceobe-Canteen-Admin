@@ -8,7 +8,7 @@
     />
     <Editor
       v-model="html"
-      style="overflow-y: hidden; height: 140px;"
+      style=" height: 140px;"
       :default-config="editorConfig"
       :mode="mode"
       @onCreated="onCreated"
@@ -113,10 +113,11 @@ export default {
     },
     methods: {
         onCreated(editor) {
-            let a = Math.random().toString(36).slice(-8);
+            let drawer = Math.random().toString(36).slice(-8);
+            // let setting = Math.random().toString(36).slice(-8);
             this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
             const drawerConf = {
-                key: a, // 定义 menu key ：要保证唯一、不重复（重要）
+                key: drawer, // 定义 menu key ：要保证唯一、不重复（重要）
                 factory() {
                     return new DrawerBtn(); // 把 `YourMenuClass` 替换为你菜单的 class
                 },
@@ -132,7 +133,7 @@ export default {
             Boot.registerModule(module);
             this.toolbarConfig.insertKeys = {
                 index: 9, // 插入的位置，基于当前的 toolbarKeys
-                keys: [a]
+                keys: [drawer]
             };
 
         },
@@ -160,6 +161,8 @@ export default {
     }
 
     .w-e-modal {
+      top: 0 !important;
+      bottom: auto !important;
 
       .babel-container {
 
