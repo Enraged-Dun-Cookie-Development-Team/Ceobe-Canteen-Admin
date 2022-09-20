@@ -100,7 +100,30 @@ export default {
             this.$emit('input',val);
         }
     },
+    created() {
+        let drawer = Math.random().toString(36).slice(-8);
+        const drawerConf = {
+            key: drawer, // 定义 menu key ：要保证唯一、不重复（重要）
+            factory() {
+                return new DrawerBtn(); // 把 `YourMenuClass` 替换为你菜单的 class
+            },
+        };
+        const module = {
+            menus: [drawerConf], // 菜单
+            editorPlugin: withDrawerTag, // 插件
+            renderElems: [renderDrawerConf], // renderElem
+            elemsToHtml: [elemDrawerToHtmlConf], // elemToHtml
+            parseElemsHtml: [parseDrawerHtmlConf] // parseElemHtml
+        };
+
+        Boot.registerModule(module);
+        this.toolbarConfig.insertKeys = {
+            index: 9, // 插入的位置，基于当前的 toolbarKeys
+            keys: [drawer]
+        };
+    },
     mounted() {
+
         // 模拟 ajax 请求，异步渲染编辑器
         setTimeout(() => {
             this.html = this.value;
@@ -113,28 +136,12 @@ export default {
     },
     methods: {
         onCreated(editor) {
-            let drawer = Math.random().toString(36).slice(-8);
+
+
             // let setting = Math.random().toString(36).slice(-8);
             this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
-            const drawerConf = {
-                key: drawer, // 定义 menu key ：要保证唯一、不重复（重要）
-                factory() {
-                    return new DrawerBtn(); // 把 `YourMenuClass` 替换为你菜单的 class
-                },
-            };
-            const module = {
-                menus: [drawerConf], // 菜单
-                editorPlugin: withDrawerTag, // 插件
-                renderElems: [renderDrawerConf], // renderElem
-                elemsToHtml: [elemDrawerToHtmlConf], // elemToHtml
-                parseElemsHtml: [parseDrawerHtmlConf] // parseElemHtml
-            };
 
-            Boot.registerModule(module);
-            this.toolbarConfig.insertKeys = {
-                index: 9, // 插入的位置，基于当前的 toolbarKeys
-                keys: [drawer]
-            };
+
 
         },
         onFocus() { this.$emit('focus',''); },

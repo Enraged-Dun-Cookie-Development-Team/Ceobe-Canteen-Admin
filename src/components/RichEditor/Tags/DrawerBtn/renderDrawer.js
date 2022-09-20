@@ -1,7 +1,6 @@
 import { h } from 'snabbdom';
 
-function renderDrawer(elem) {
-    const { value = '' } = elem;
+function renderDrawer(_, children) {
     const drawerVnode = h(
         // HTML tag
         'drawer',
@@ -9,7 +8,7 @@ function renderDrawer(elem) {
         {
             style: { color: '#dd558a' }
         },
-        [value]
+        children
     );
 
     return drawerVnode;

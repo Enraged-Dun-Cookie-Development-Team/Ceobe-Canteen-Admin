@@ -1,12 +1,10 @@
 
-function parseDrawerHtml(domElem) {
-    // 从 DOM element 中获取“附件”的信息
+function parseDrawerHtml(domElem, children) {
     const value = domElem.innerHTML || '';
-
-    // 生成“附件”元素（按照此前约定的数据结构）
     const myResume = {
         type:"drawer",
-        value
+        value,
+        children,
     };
 
     return myResume;
