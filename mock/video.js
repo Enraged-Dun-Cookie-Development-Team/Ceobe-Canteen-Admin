@@ -3,9 +3,9 @@ module.exports = [
         url: '/admin/video/detail',
         type: 'get',
         response: config => {
-            const { token } = config.headers
-            console.log(token)
-            console.log(config.query)
+            const { token } = config.headers;
+            console.log(token);
+            console.log(config.query);
             let data = {
                 "code": 0,
                 "message": "0",
@@ -5076,29 +5076,29 @@ module.exports = [
                         ]
                     }
                 }
-            }
+            };
 
             // mock error
             if (!data) {
                 return {
                     code: 40004,
                     message: 'BV号不正确'
-                }
+                };
             }
 
             return {
                 code: null,
                 data: data
-            }
+            };
         }
     },
     {
         url: '/admin/video/list',
         type: 'get',
         response: config => {
-            const { token } = config.headers
-            console.log(token)
-        let data = [
+            const { token } = config.headers;
+            console.log(token);
+            let data = [
                 {
                     'bv': "BV19b4y1v7Wa",
                     'start_time': "2021-12-24 04:00:00",
@@ -5111,26 +5111,26 @@ module.exports = [
                 {
                     'bv': "BV1r3411a7Kg",
                     'start_time': "2022-01-20 04:00:00",
-                    'over_time': "2022-01-24 15:59:59", 
+                    'over_time': "2022-01-24 15:59:59",
                     'title': "【手书/四木攰】 旅途",
                     'author': "四木攰",
                     'video_link': "https://www.bilibili.com/video/BV1r3411a7Kg",
                     'cover_img': "https://i1.hdslb.com/bfs/archive/44d3ab354c59f9549f20925e99ddeb55793e8eef.jpg@200w_125h.webp"
                 }
-            ]
-            
+            ];
+
 
             if (!data) {
                 return {
                     code: 30001,
                     message: '服务器没有数据'
-                }
+                };
             }
 
             return {
                 code: null,
                 data: data
-            }
+            };
         }
     }
     ,
@@ -5138,14 +5138,14 @@ module.exports = [
         url: '/admin/video/submitList',
         type: 'post',
         response: config => {
-            const { token } = config.headers
-            console.log(token)
-            console.log(config.body)
+            const { token } = config.headers;
+            console.log(token);
+            console.log(config.body);
 
             return {
                 code: null,
                 message: "成功上传"
-            }
+            };
         }
     }
-]
+];

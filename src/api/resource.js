@@ -1,11 +1,11 @@
-import request from '@/utils/request'
+import request from '@/utils/request';
 
 export async function getResourceList(token) {
     return request({
         url: `/admin/resource/list`,
         method: 'get',
         headers: token,
-    })
+    });
 }
 
 export async function submitResourceList(token, data) {
@@ -14,5 +14,5 @@ export async function submitResourceList(token, data) {
         method: 'post',
         headers: token,
         data: data
-    })
+    });
 }

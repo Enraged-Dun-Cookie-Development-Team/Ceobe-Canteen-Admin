@@ -1,40 +1,10 @@
-import Tags from "../index"
-import E from "wangeditor";
+import { tagButton } from '../tagButton';
 
-const { $ } = E
-
-class SettingBtn extends Tags {
-    constructor(editor) {
-        super(editor, "setting")
-    }
-
-    /**
-    * 插入行内代码
-    * @param text
-    * @return null
-    */
-     insertLineTag(text) {
-        let editor = this.editor
-        // 行内代码处理
-        let $code = $(`<setting>${text}</setting>`)
-        editor.cmd.do('insertElem', $code)
-        editor.selection.createRangeByElem($code, false)
-        editor.selection.restoreSelection()
-    }
-
-    /**
-     * @description 检查选区是否在链接中，即菜单是否应该 active
-     */
-    isActive(editor) {
-        const $selectionELem = editor.selection.getSelectionContainerElem()
-        if (!$selectionELem?.length) {
-            return false
-        }
-        if ($selectionELem.getNodeName() === "SETTING") {
-            return true
-        } else {
-            return false
-        }
+export class SettingBtn extends tagButton {
+    constructor() {
+        let title = '跳转设置';
+        let icon = '<svg t="1663734241362" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3150" width="128" height="128"><path d="M940 596l-76-57.6c0.8-8 1.6-16.8 1.6-26.4s-0.8-18.4-1.6-26.4l76-57.6c20.8-16 26.4-44 12.8-68l-84.8-143.2c-9.6-16.8-28-27.2-47.2-27.2-6.4 0-12 0.8-18.4 3.2L712 228c-15.2-10.4-31.2-19.2-47.2-26.4l-13.6-92c-4-26.4-26.4-45.6-53.6-45.6H426.4c-27.2 0-49.6 19.2-53.6 44.8L360 201.6c-16 7.2-31.2 16-47.2 26.4l-90.4-35.2c-6.4-2.4-12.8-3.2-19.2-3.2-19.2 0-37.6 9.6-46.4 26.4L71.2 360c-13.6 22.4-8 52 12.8 68l76 57.6c-0.8 9.6-1.6 18.4-1.6 26.4s0 16.8 1.6 26.4l-76 57.6c-20.8 16-26.4 44-12.8 68l84.8 143.2c9.6 16.8 28 27.2 47.2 27.2 6.4 0 12-0.8 18.4-3.2L312 796c15.2 10.4 31.2 19.2 47.2 26.4l13.6 92c3.2 25.6 26.4 45.6 53.6 45.6h171.2c27.2 0 49.6-19.2 53.6-44.8l13.6-92.8c16-7.2 31.2-16 47.2-26.4l90.4 35.2c6.4 2.4 12.8 3.2 19.2 3.2 19.2 0 37.6-9.6 46.4-26.4l85.6-144.8c12.8-23.2 7.2-51.2-13.6-67.2zM704 512c0 105.6-86.4 192-192 192S320 617.6 320 512s86.4-192 192-192 192 86.4 192 192z" p-id="3151"></path></svg>';
+        let tagType = 'setting';
+        super(title, icon, tagType);
     }
 }
-export default SettingBtn;

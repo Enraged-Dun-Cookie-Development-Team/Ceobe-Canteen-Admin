@@ -3,8 +3,8 @@ module.exports = [
         url: '/admin/resource/list',
         type: 'get',
         response: config => {
-            const { token } = config.headers
-            console.log(token)
+            const { token } = config.headers;
+            console.log(token);
             let data = {
                 "resources": {
                     "start_time":"2021-11-22 16:00:00",
@@ -25,7 +25,7 @@ module.exports = [
                         "start_time": "2022-01-20 04:00:00",
                         "over_time": "2022-02-03 03:59:59"
                     },
-                    
+
                     {
                         "text": "下个活动池开启",
                         "remark": "令[限定]，老鲤，夜半",
@@ -47,7 +47,7 @@ module.exports = [
                         "start_time": "2022-01-25 16:00:00",
                         "over_time": "2022-02-08 03:59:59"
                     },
-        
+
                     {
                         "text": "SideStory「将进酒」，活动开启",
                         "remark": "解锁条件：通关主线1-10",
@@ -70,19 +70,19 @@ module.exports = [
                         "over_time": "2022-02-08 03:59:59"
                     }
                 ]
-            }
+            };
 
             if (!data) {
                 return {
                     code: 30001,
                     message: '服务器没有数据'
-                }
+                };
             }
 
             return {
                 code: null,
                 data: data
-            }
+            };
         }
     }
     ,
@@ -90,14 +90,14 @@ module.exports = [
         url: '/admin/resource/submitList',
         type: 'post',
         response: config => {
-            const { token } = config.headers
-            console.log(token)
-            console.log(config.body)
+            const { token } = config.headers;
+            console.log(token);
+            console.log(config.body);
 
             return {
                 code: null,
                 message: "成功上传"
-            }
+            };
         }
     }
-]
+];

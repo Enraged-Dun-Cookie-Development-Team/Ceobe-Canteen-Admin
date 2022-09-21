@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '@/utils/request';
 
 export async function getVideoInfo(token, bvNumber) {
     return request({
@@ -6,7 +6,7 @@ export async function getVideoInfo(token, bvNumber) {
         method: 'get',
         headers: token,
         params: bvNumber
-    })
+    });
 }
 
 export async function getVideoList(token) {
@@ -14,7 +14,7 @@ export async function getVideoList(token) {
         url: `/admin/video/list`,
         method: 'get',
         headers: token
-    })
+    });
 }
 
 export async function submitVideoList(token, data) {
@@ -23,5 +23,5 @@ export async function submitVideoList(token, data) {
         method: 'post',
         headers: token,
         data: data
-    })
+    });
 }
