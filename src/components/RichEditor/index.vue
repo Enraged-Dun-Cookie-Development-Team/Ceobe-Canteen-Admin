@@ -21,8 +21,10 @@
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import { Boot } from '@wangeditor/editor';
 import { DrawerBtn } from './Tags/DrawerBtn';
+import { SettingBtn } from './Tags/SettingBtn';
 import { withTag } from './Tags/tagInline';
 import { ToDrawerHtmlConf, parseDrawerHtmlConf, renderDrawerConf } from './Tags/DrawerBtn/drawerConf';
+import { ToSettingHtmlConf, parseSettingHtmlConf, renderSettingConf } from './Tags/SettingBtn/settingConf';
 
 export default {
     name: "RichEditor",
@@ -100,26 +102,32 @@ export default {
     },
     created() {
         let drawer = Math.random().toString(36).slice(-8);
-        // let setting = Math.random().toString(36).slice(-8);
+        let setting = Math.random().toString(36).slice(-8);
         const drawerConf = {
             key: drawer, // 定义 menu key ：要保证唯一、不重复（重要）
             factory() {
                 return new DrawerBtn();
             },
         };
+        const settingConf = {
+            key: setting, // 定义 menu key ：要保证唯一、不重复（重要）
+            factory() {
+                return new SettingBtn();
+            },
+        };
 
         const module = {
-            menus: [drawerConf], // 菜单
+            menus: [drawerConf, settingConf], // 菜单
             editorPlugin: withTag, // 插件
-            renderElems: [renderDrawerConf], // renderElem
-            elemsToHtml: [ToDrawerHtmlConf], // elemToHtml
-            parseElemsHtml: [parseDrawerHtmlConf] // parseElemHtml
+            renderElems: [renderDrawerConf, renderSettingConf], // renderElem
+            elemsToHtml: [ToDrawerHtmlConf, ToSettingHtmlConf], // elemToHtml
+            parseElemsHtml: [parseDrawerHtmlConf, parseSettingHtmlConf] // parseElemHtml
         };
 
         Boot.registerModule(module);
         this.toolbarConfig.insertKeys = {
             index: 9, // 插入的位置，基于当前的 toolbarKeys
-            keys: [drawer]
+            keys: [drawer, setting]
         };
     },
     mounted() {
