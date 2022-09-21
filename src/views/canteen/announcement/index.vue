@@ -626,7 +626,6 @@ export default {
       width: 634px;
       height: 108px;
       font-size: 14px;
-      font-family: 'Segoe UI', Arial, 'Microsoft Yahei', sans-serif;
       border: 1px solid #E4E7ED;
       border-radius: 4px;
       color: #848488;
@@ -639,6 +638,14 @@ export default {
 
         p {
           margin: 0;
+        }
+
+        drawer {
+          color:#DD558A
+        }
+
+        setting {
+          color: #C055DD
         }
       }
 
