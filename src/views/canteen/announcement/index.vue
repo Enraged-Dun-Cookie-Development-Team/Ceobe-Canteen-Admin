@@ -77,8 +77,15 @@
           </el-form>
 
           <div style="display: flex; align-items: center">
-            <span class="preview-label">快速预览</span>
-            <div class="list-html margintb">
+            <div class="announcement-label">
+              <span class="preview-label">快速预览</span>
+              <el-switch
+                v-model="modeList[index].day"
+                active-color="#e6aa60"
+                inactive-color="#3f3932"
+              />
+            </div>
+            <div class="list-html margintb" :class="modeList[index].day == true ? 'day' : 'night'">
               <div class="online-area">
                 <img class="online-title-img radius" :src="imgList[index].img" />
                 <div v-html="announcement.content"></div>
@@ -140,6 +147,11 @@ export default {
             imgList: [
                 {
                     img: "",
+                },
+            ],
+            modeList: [
+                {
+                    day: true,
                 },
             ],
             pickerStarTime: {
@@ -372,12 +384,16 @@ export default {
                     response.data.map((announcement, index) => {
                         if (index == 0) {
                             this.setAll[index]["set"] = true;
+                            this.modeList[index]["day"] = true;
                         } else {
                             this.setAll.splice(index, 0, {
                                 set: true,
                             });
                             this.imgList.splice(index, 0, {
                                 img: "",
+                            });
+                            this.modeList.splice(index, 0, {
+                                day: true,
                             });
                         }
                         this.getImg(index, announcement.img_url);
@@ -489,6 +505,7 @@ export default {
                     this.announcementForm.announcements.splice(index, 1);
                     this.imgList.splice(index, 1);
                     this.setAll.splice(index, 1);
+                    this.modeList.splice(index, 1);
                 }
             } else if (this.announcementForm.announcements.length == 1) {
                 this.announcementForm.announcements = [{
@@ -503,6 +520,9 @@ export default {
                 }];
                 this.setAll = [{
                     set: false,
+                }];
+                this.modeList = [{
+                    day: true,
                 }];
             }
         },
@@ -520,6 +540,9 @@ export default {
             });
             this.setAll.splice(index + 1, 0, {
                 set: false,
+            });
+            this.modeList.splice(index + 1, 0, {
+                day: true,
             });
         },
         // 检查表单有没有填完
@@ -600,13 +623,22 @@ export default {
       font-weight: 500;
     }
 
-    .preview-label {
-      margin-right: 10px;
-      width: 87px;
-      font-size: 14px;
-      text-align: left;
-      color: #606266;
+    .announcement-label {
+      display: flex;
+      justify-content: space-around;
+      height: 100px;
+      flex-direction: column;
+
+      .preview-label {
+        margin-right: 10px;
+        width: 87px;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: left;
+        color: #606266;
+      }
     }
+
 
     :deep(.rich-editor) {
 
@@ -628,8 +660,16 @@ export default {
       font-size: 14px;
       border: 1px solid #E4E7ED;
       border-radius: 4px;
-      color: #848488;
-      background-color: #FFF;
+
+      &.day {
+        color: #848488;
+        background-color: #FFF;
+      }
+
+      &.night {
+        color:#ADBAC7;
+        background-color: #22272E;
+      }
 
       :deep(.online-area) {
         display: flex;
