@@ -21,10 +21,8 @@
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import { Boot } from '@wangeditor/editor';
 import { DrawerBtn } from './Tags/DrawerBtn';
-import { withDrawerTag } from './Tags/DrawerBtn/tag';
-import { renderDrawerConf } from './Tags/DrawerBtn/renderDrawer';
-import { elemDrawerToHtmlConf } from './Tags/DrawerBtn/elemDrawerToHtmlConf';
-import { parseDrawerHtmlConf } from './Tags/DrawerBtn/parseDrawerHtml';
+import { withTag } from './Tags/tagInline';
+import { ToDrawerHtmlConf, parseDrawerHtmlConf, renderDrawerConf } from './Tags/DrawerBtn/drawerConf';
 
 export default {
     name: "RichEditor",
@@ -102,17 +100,19 @@ export default {
     },
     created() {
         let drawer = Math.random().toString(36).slice(-8);
+        // let setting = Math.random().toString(36).slice(-8);
         const drawerConf = {
             key: drawer, // 定义 menu key ：要保证唯一、不重复（重要）
             factory() {
-                return new DrawerBtn(); // 把 `YourMenuClass` 替换为你菜单的 class
+                return new DrawerBtn();
             },
         };
+
         const module = {
             menus: [drawerConf], // 菜单
-            editorPlugin: withDrawerTag, // 插件
+            editorPlugin: withTag, // 插件
             renderElems: [renderDrawerConf], // renderElem
-            elemsToHtml: [elemDrawerToHtmlConf], // elemToHtml
+            elemsToHtml: [ToDrawerHtmlConf], // elemToHtml
             parseElemsHtml: [parseDrawerHtmlConf] // parseElemHtml
         };
 
@@ -123,7 +123,6 @@ export default {
         };
     },
     mounted() {
-
         // 模拟 ajax 请求，异步渲染编辑器
         setTimeout(() => {
             this.html = this.value;
@@ -136,13 +135,7 @@ export default {
     },
     methods: {
         onCreated(editor) {
-
-
-            // let setting = Math.random().toString(36).slice(-8);
             this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
-
-
-
         },
         onFocus() { this.$emit('focus',''); },
         onBlur() { this.$emit('blur',''); },
