@@ -1,40 +1,10 @@
-import Tags from "../index";
-import E from "wangeditor";
+import { tagButton } from '../tagButton';
 
-const { $ } = E;
-
-class DrawerBtN extends Tags {
-    constructor(editor) {
-        super(editor, "drawer");
-    }
-
-    /**
-    * 插入行内代码
-    * @param text
-    * @return null
-    */
-    insertLineTag(text) {
-        let editor = this.editor;
-        // 行内代码处理
-        let $code = $(`<drawer>${text}</drawer>`);
-        editor.cmd.do('insertElem', $code);
-        editor.selection.createRangeByElem($code, false);
-        editor.selection.restoreSelection();
-    }
-
-    /**
-     * @description 检查选区是否在链接中，即菜单是否应该 active
-     */
-    isActive(editor) {
-        const $selectionELem = editor.selection.getSelectionContainerElem();
-        if (!$selectionELem?.length) {
-            return false;
-        }
-        if ($selectionELem.getNodeName() === "DRAWER") {
-            return true;
-        } else {
-            return false;
-        }
+export class DrawerBtn extends tagButton {
+    constructor() {
+        let title = '二级菜单';
+        let icon = '<svg t="1663734737515" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3378" width="128" height="128"><path d="M768 256H403.2c-19.2 0-32 12.8-32 32s12.8 32 32 32H768c19.2 0 32-12.8 32-32S787.2 256 768 256zM307.2 256H256c-12.8 0-32 12.8-32 32s12.8 32 32 32h51.2c19.2 0 32-12.8 32-32 0-12.8-12.8-32-32-32zM768 480H403.2c-19.2 0-32 12.8-32 32s12.8 32 32 32H768c19.2 0 32-12.8 32-32s-12.8-32-32-32zM307.2 480H256c-12.8 0-32 12.8-32 32s12.8 32 32 32h51.2c19.2 0 32-12.8 32-32s-12.8-32-32-32zM768 704H403.2c-19.2 0-32 12.8-32 32s12.8 32 32 32H768c19.2 0 32-12.8 32-32s-12.8-32-32-32zM307.2 704H256c-19.2 0-32 12.8-32 32 0 12.8 12.8 32 32 32h51.2c19.2 0 32-12.8 32-32s-12.8-32-32-32z" fill="" p-id="3379"></path><path d="M800 64h-576C134.4 64 64 134.4 64 224v576C64 889.6 134.4 960 224 960h576c89.6 0 160-70.4 160-160v-576C960 134.4 889.6 64 800 64zM896 800c0 51.2-44.8 96-96 96h-576c-51.2 0-96-44.8-96-96v-576C128 172.8 172.8 128 224 128h576c51.2 0 96 44.8 96 96v576z" fill="" p-id="3380"></path></svg>';
+        let tagType = 'drawer';
+        super(title, icon, tagType);
     }
 }
-export default DrawerBtN;
