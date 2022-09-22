@@ -26,14 +26,12 @@
         <template slot="title">
           <div class="collapse-header">
             <div>
-              {{
-                (item.text ? item.text : "未填写") +
-                  "从" +
-                  (item.start_time ? item.start_time : " ") +
-                  "显示到" +
-                  item.over_time +
-                  (setAll[index].set ? " (已完成) " : " (未完成) ")
-              }}
+              <span style="color:brown">{{ `${(item.text ? item.text : "未填写")}` }}</span>
+              <span>{{ `从` }}</span>
+              <span style="color:#4C69AD">{{ `${(item.start_time ? item.start_time : " ")}` }}</span>
+              <span>{{ `显示到` }}</span>
+              <span style="color:#4C69AD">{{ `${item.over_time ? item.over_time : " "}` }}</span>
+              <span>{{ `${(setAll[index].set ? " (已完成) " : " (未完成) ")}` }}</span>
             </div>
             <div>
               <el-button

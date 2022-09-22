@@ -13,7 +13,7 @@
           <div class="collapse-header">
             <div>
               <span>{{ `第${(index + 1)}个，` }}</span>
-              <span style="color:brown">{{ `${announcement.content.match(/<\p(([\s\S])*?)<\/p>/)[0].replace(/(<([^>]+)>)/ig, "")}` }}</span>
+              <span style="color:brown">{{ `${announcement.content.match(/&lt;\p(([\s\S])*?)&lt;\/p>/)[0].replace(/(&lt;([^>]+)>)/ig, "")}` }}</span>
               <span>{{ `, 从` }}</span>
               <span style="color:#4C69AD">{{ `${announcement.start_time}` }}</span>
               <span>{{ `显示到` }}</span>
