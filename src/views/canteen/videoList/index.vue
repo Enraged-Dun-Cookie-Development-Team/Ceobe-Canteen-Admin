@@ -12,17 +12,13 @@
         <template slot="title">
           <div class="collapse-header">
             <div>
-              {{
-                "第" +
-                  (index + 1) +
-                  "个，标题：" +
-                  video.title.substring(0, 40) +
-                  "， 从" +
-                  video.start_time +
-                  "显示到" +
-                  video.over_time +
-                  (setAll[index].set ? " (已完成) " : " (未完成) ")
-              }}
+              <span>{{ `第${index + 1}个，标题：` }}</span>
+              <span style="color:brown;">{{ `${video.title.substring(0,39)}` }}</span>
+              <span>{{ `， 从` }}</span>
+              <span style="color:#4C69AD">{{ `${video.start_time}` }}</span>
+              <span>{{ `显示到` }}</span>
+              <span style="color:#4C69AD">{{ `${video.over_time}` }}</span>
+              <span>{{ `${setAll[index].set ? " (已完成) " : " (未完成) "}` }}</span>
             </div>
             <div>
               <el-button

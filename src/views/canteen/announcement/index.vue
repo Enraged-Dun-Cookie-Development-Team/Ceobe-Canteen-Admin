@@ -12,15 +12,13 @@
         <template slot="title">
           <div class="collapse-header">
             <div>
-              {{
-                "第" +
-                  (index + 1) +
-                  "个， 从" +
-                  announcement.start_time +
-                  "显示到" +
-                  announcement.over_time +
-                  (setAll[index].set ? " (已完成) " : " (未完成) ")
-              }}
+              <span>{{ `第${(index + 1)}个，` }}</span>
+              <span style="color:brown">{{ `${announcement.content.match(/&lt;\p(([\s\S])*?)&lt;\/p>/)[0].replace(/(&lt;([^>]+)>)/ig, "")}` }}</span>
+              <span>{{ `, 从` }}</span>
+              <span style="color:#4C69AD">{{ `${announcement.start_time}` }}</span>
+              <span>{{ `显示到` }}</span>
+              <span style="color:#4C69AD">{{ `${announcement.over_time}` }}</span>
+              <span>{{ `${(setAll[index].set ? " (已完成) " : " (未完成) ")}` }}</span>
             </div>
             <div>
               <el-button
