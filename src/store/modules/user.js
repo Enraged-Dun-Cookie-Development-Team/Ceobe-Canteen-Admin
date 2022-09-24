@@ -1,4 +1,4 @@
-import { login, getInfo, createUser, changeUsername, changePassword } from '@/api/user';
+import { login, getInfo, createUser, changeUsername, changePassword, userList, changeAuth, deleteUser } from '@/api/user';
 import { getToken, setToken, removeToken } from '@/utils/auth';
 import { resetRouter } from '@/router';
 import md5 from 'js-md5';
@@ -114,6 +114,40 @@ const actions = {
                 commit('SET_TOKEN', data.token);
                 setToken(data.token);
 
+                resolve();
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+
+    // 获取用户列表
+    userList({ state }, pageSize) {
+        return new Promise((resolve, reject) => {
+            userList({ token: state.token }, { page: pageSize.page, size: pageSize.size }).then(_ => {
+                resolve();
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+    // 修改用户权限
+    changeAuth({ state }, changeContent) {
+        return new Promise((resolve, reject) => {
+            changeAuth({ token: state.token }, changeContent).then(_ => {
+                resolve();
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+    // 修改用户权限
+    deleteUser({ state }, id) {
+        return new Promise((resolve, reject) => {
+            deleteUser({ token: state.token }, { id: id }).then(_ => {
                 resolve();
             }).catch(error => {
                 reject(error);

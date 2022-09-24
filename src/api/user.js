@@ -50,3 +50,33 @@ export function changePassword(token, data) {
     });
 }
 
+export function userList(token, data) {
+    return request({
+        url: '/admin/user/changePassword',
+        method: 'get',
+        headers: token,
+        params: data
+    });
+}
+
+export function changeAuth(token, data) {
+    return request({
+        url: '/admin/user/changePassword',
+        method: 'post',
+        headers: token,
+        data: data
+    });
+}
+
+
+export function deleteUser(token, data) {
+    return request({
+        url: '/admin/user/changePassword',
+        method: 'delete',
+        headers: token,
+        data: data
+    });
+}
+
+
+

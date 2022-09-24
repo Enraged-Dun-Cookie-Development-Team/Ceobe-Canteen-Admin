@@ -37,7 +37,7 @@
         :page-sizes="[10, 20]"
         :page-size="pageSize.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="pageSize.total"
+        :total="pageSize.total_count"
         @current-change="handleCurrentChange"
       />
     </div>
@@ -48,8 +48,10 @@ export default {
     name: "UserList",
     data() {
         return {
+            loading: false,
             userTable: [
                 {
+                    id: 1,
                     username:"dfsas",
                     auth: "chef"
                 }
@@ -57,8 +59,8 @@ export default {
             pageSize: {
                 page: 1,
                 size: 10,
-                count: 0,
-                totalCount: 0
+                total_count: 0,
+                total_page: 0
             },
             authOptions: [
                 {
@@ -81,16 +83,62 @@ export default {
     },
     methods: {
         init() {
-
+            this.getUserList();
         },
         getUserList() {
-
+            this.loading = false;
+            this.$store
+                .dispatch("user/userList", this.pageSize)
+                .then((response) => {
+                    this.userTable = response.data.user_table;
+                    this.pageSize = response.data.page_size;
+                }).catch(() =>{
+                    this.$message({
+                        showClose: true,
+                        message: "获取用户列表失败",
+                        type: "error",
+                    });
+                }).finally(() =>{
+                    this.loading = true;
+                });
         },
-        changeAuth(_) {
-
+        changeAuth(index) {
+            this.$store
+                .dispatch("user/changeAuth", { id:this.userTable[index].id, auth:this.userTable[index].auth })
+                .then(() => {
+                    this.$message({
+                        showClose: true,
+                        message: "更新用户权限成功",
+                        type: "success",
+                    });
+                }).catch(() =>{
+                    this.$message({
+                        showClose: true,
+                        message: "更新用户权限失败",
+                        type: "error",
+                    });
+                }).finally(() => {
+                    this.getUserList();
+                });
         },
-        deleteUser(_) {
-
+        deleteUser(index) {
+            this.$store
+                .dispatch("user/deleteUser", this.userTable[index].id)
+                .then(() => {
+                    this.$message({
+                        showClose: true,
+                        message: "删除用户成功",
+                        type: "success",
+                    });
+                }).catch(() =>{
+                    this.$message({
+                        showClose: true,
+                        message: "删除用户失败",
+                        type: "error",
+                    });
+                }).finally(() => {
+                    this.getUserList();
+                });
         },
     },
 };
