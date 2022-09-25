@@ -8,13 +8,15 @@
       <el-table-column prop="username" label="用户名" />
       <el-table-column label="权限">
         <template slot-scope="scope">
-          <el-select v-model="userTable[scope.$index].auth" placeholder="请选择">
+          <el-select
+            v-model="userTable[scope.$index].auth" placeholder="请选择"
+            @change="changeAuth(scope.$index)"
+          >
             <el-option
               v-for="item in authOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
-              @change="authChange(scope.$index)"
             />
           </el-select>
         </template>
@@ -24,7 +26,7 @@
           <el-button
             type="text"
             size="small"
-            @click.native.prevent="deleteRow(scope.$index)"
+            @click.native.prevent="deleteUser(scope.$index)"
           >
             删除
           </el-button>
@@ -33,12 +35,13 @@
     </el-table>
     <div class="block">
       <el-pagination
-        :current-page="pageSize.page"
+        :current-page.sync="pageSize.page"
         :page-sizes="[10, 20]"
-        :page-size="pageSize.size"
+        :page-size.sync="pageSize.size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageSize.total_count"
-        @current-change="handleCurrentChange"
+        @size-change="getUserList"
+        @current-change="getUserList"
       />
     </div>
   </div>
@@ -49,13 +52,7 @@ export default {
     data() {
         return {
             loading: false,
-            userTable: [
-                {
-                    id: 1,
-                    username:"dfsas",
-                    auth: "chef"
-                }
-            ],
+            userTable: [],
             pageSize: {
                 page: 1,
                 size: 10,
@@ -78,8 +75,8 @@ export default {
             ]
         };
     },
-    mounted: {
-
+    mounted() {
+        this.init();
     },
     methods: {
         init() {

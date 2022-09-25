@@ -52,7 +52,7 @@ export function changePassword(token, data) {
 
 export function userList(token, data) {
     return request({
-        url: '/admin/user/changePassword',
+        url: '/admin/user/userList',
         method: 'get',
         headers: token,
         params: data
@@ -61,7 +61,7 @@ export function userList(token, data) {
 
 export function changeAuth(token, data) {
     return request({
-        url: '/admin/user/changePassword',
+        url: '/admin/user/changeAuth',
         method: 'post',
         headers: token,
         data: data
@@ -71,7 +71,7 @@ export function changeAuth(token, data) {
 
 export function deleteUser(token, data) {
     return request({
-        url: '/admin/user/changePassword',
+        url: '/admin/user/deleteUser',
         method: 'delete',
         headers: token,
         data: data

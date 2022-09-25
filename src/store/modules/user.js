@@ -125,8 +125,8 @@ const actions = {
     // 获取用户列表
     userList({ state }, pageSize) {
         return new Promise((resolve, reject) => {
-            userList({ token: state.token }, { page: pageSize.page, size: pageSize.size }).then(_ => {
-                resolve();
+            userList({ token: state.token }, { page: pageSize.page, size: pageSize.size }).then(response => {
+                resolve(response);
             }).catch(error => {
                 reject(error);
             });
