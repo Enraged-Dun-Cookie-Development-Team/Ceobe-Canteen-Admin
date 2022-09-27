@@ -93,13 +93,13 @@ export default {
             ]
         };
     },
-    mounted() {
-        this.init();
-    },
     computed: {
         ...mapGetters([
             'name'
         ])
+    },
+    mounted() {
+        this.init();
     },
     methods: {
         init() {
