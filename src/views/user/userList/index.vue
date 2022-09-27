@@ -9,7 +9,22 @@
       <el-table-column label="权限">
         <template slot-scope="scope">
           <el-select
-            v-model="userTable[scope.$index].auth" placeholder="请选择"
+            v-if="userTable[scope.$index].username == name"
+            v-model="userTable[scope.$index].auth"
+            disabled placeholder="请选择"
+            @change="changeAuth(scope.$index)"
+          >
+            <el-option
+              v-for="item in authOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+          <el-select
+            v-else
+            v-model="userTable[scope.$index].auth"
+            placeholder="请选择"
             @change="changeAuth(scope.$index)"
           >
             <el-option
@@ -24,6 +39,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
+            v-if="userTable[scope.$index].username != name"
             type="text"
             size="small"
             @click.native.prevent="deleteUser(scope.$index)"
@@ -47,6 +63,8 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
     name: "UserList",
     data() {
@@ -77,6 +95,11 @@ export default {
     },
     mounted() {
         this.init();
+    },
+    computed: {
+        ...mapGetters([
+            'name'
+        ])
     },
     methods: {
         init() {
