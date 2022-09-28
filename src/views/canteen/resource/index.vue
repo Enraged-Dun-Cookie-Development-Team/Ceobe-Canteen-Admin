@@ -256,6 +256,38 @@ export default {
             pickerOverTime: {
                 shortcuts: [
                     {
+                        text: "当前日期4点",
+                        onClick: (picker) => {
+                            picker.$emit(
+                                "pick",
+                                TimeUtil.format(
+                                    TimeUtil.fourTime(
+                                        new Date(
+                                            this.resourceForm.countdown[this.activeIndex].over_time
+                                        )
+                                    ),
+                                    "yyyy-MM-dd hh:mm:ss"
+                                )
+                            );
+                        },
+                    },
+                    {
+                        text: "当前日期16点",
+                        onClick: (picker) => {
+                            picker.$emit(
+                                "pick",
+                                TimeUtil.format(
+                                    TimeUtil.sixteenTime(
+                                        new Date(
+                                            this.resourceForm.countdown[this.activeIndex].over_time
+                                        )
+                                    ),
+                                    "yyyy-MM-dd hh:mm:ss"
+                                )
+                            );
+                        },
+                    },
+                    {
                         text: "半天",
                         onClick: (picker) => {
                             picker.$emit(
@@ -299,6 +331,18 @@ export default {
                                 TimeUtil.passHourTime(
                                     this.resourceForm.countdown[this.activeIndex].start_time,
                                     13 * 24 + 12
+                                )
+                            );
+                        },
+                    },
+                    {
+                        text: "14天整",
+                        onClick: (picker) => {
+                            picker.$emit(
+                                "pick",
+                                TimeUtil.passHourTime(
+                                    this.resourceForm.countdown[this.activeIndex].start_time,
+                                    14 * 24
                                 )
                             );
                         },
