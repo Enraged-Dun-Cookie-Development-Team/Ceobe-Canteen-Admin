@@ -261,7 +261,7 @@ export default {
                             picker.$emit(
                                 "pick",
                                 TimeUtil.format(
-                                    TimeUtil.fourTime(
+                                    TimeUtil.beforeFourTime(
                                         new Date(
                                             this.resourceForm.countdown[this.activeIndex].over_time
                                         )
@@ -277,7 +277,7 @@ export default {
                             picker.$emit(
                                 "pick",
                                 TimeUtil.format(
-                                    TimeUtil.sixteenTime(
+                                    TimeUtil.beforeSixteenTime(
                                         new Date(
                                             this.resourceForm.countdown[this.activeIndex].over_time
                                         )
