@@ -110,7 +110,7 @@ export default {
             this.$store
                 .dispatch("user/userList", this.pageSize)
                 .then((response) => {
-                    this.userTable = response.data.user_table;
+                    this.userTable = response.data.list;
                     this.pageSize = response.data.page_size;
                 }).catch(() =>{
                     this.$message({
