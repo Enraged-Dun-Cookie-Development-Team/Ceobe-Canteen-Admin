@@ -82,6 +82,12 @@ export const asyncRoutes = [
                 component: () => import('@/views/user/changePassword/index'),
                 meta: { title: '修改密码', icon: 'lock', roles: ['chef', 'cooker', 'architect'] }
             },
+            {
+                path: 'userList',
+                name: '用户列表',
+                component: () => import('@/views/user/userList/index'),
+                meta: { title: '用户列表', icon: 'peoples', roles: ['chef'] }
+            },
         ]
     },
     {
