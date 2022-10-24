@@ -33,7 +33,15 @@ export default {
         value: {
             type: String,
             required: true,
-        }
+        },
+        bgColor: {
+            type: Boolean,
+            default: true,
+        },
+        announcement:{
+            type: Boolean,
+            default: true,
+        },
     }, // 通过props绑定父组件的value
     data() {
         return {
@@ -101,34 +109,50 @@ export default {
         }
     },
     created() {
-        let drawer = Math.random().toString(36).slice(-8);
-        let setting = Math.random().toString(36).slice(-8);
-        const drawerConf = {
-            key: drawer, // 定义 menu key ：要保证唯一、不重复（重要）
-            factory() {
-                return new DrawerBtn();
-            },
-        };
-        const settingConf = {
-            key: setting, // 定义 menu key ：要保证唯一、不重复（重要）
-            factory() {
-                return new SettingBtn();
-            },
-        };
+        if (!this.bgColor) {
+            this.toolbarConfig.toolbarKeys = [
+                "bold",
+                "italic",
+                "underline",
+                "through",
+                "color",
+                "clearStyle",
+                "insertLink",
+                "emotion",
+                "undo",
+                "redo"
+            ];
+        }
+        if (this.announcement) {
+            let drawer = Math.random().toString(36).slice(-8);
+            let setting = Math.random().toString(36).slice(-8);
+            const drawerConf = {
+                key: drawer, // 定义 menu key ：要保证唯一、不重复（重要）
+                factory() {
+                    return new DrawerBtn();
+                },
+            };
+            const settingConf = {
+                key: setting, // 定义 menu key ：要保证唯一、不重复（重要）
+                factory() {
+                    return new SettingBtn();
+                },
+            };
 
-        const module = {
-            menus: [drawerConf, settingConf], // 菜单
-            editorPlugin: withTag, // 插件
-            renderElems: [renderDrawerConf, renderSettingConf], // renderElem
-            elemsToHtml: [ToDrawerHtmlConf, ToSettingHtmlConf], // elemToHtml
-            parseElemsHtml: [parseDrawerHtmlConf, parseSettingHtmlConf] // parseElemHtml
-        };
+            const module = {
+                menus: [drawerConf, settingConf], // 菜单
+                editorPlugin: withTag, // 插件
+                renderElems: [renderDrawerConf, renderSettingConf], // renderElem
+                elemsToHtml: [ToDrawerHtmlConf, ToSettingHtmlConf], // elemToHtml
+                parseElemsHtml: [parseDrawerHtmlConf, parseSettingHtmlConf] // parseElemHtml
+            };
 
-        Boot.registerModule(module);
-        this.toolbarConfig.insertKeys = {
-            index: 9, // 插入的位置，基于当前的 toolbarKeys
-            keys: [drawer, setting]
-        };
+            Boot.registerModule(module);
+            this.toolbarConfig.insertKeys = {
+                index: 9, // 插入的位置，基于当前的 toolbarKeys
+                keys: [drawer, setting]
+            };
+        }
     },
     mounted() {
         // 模拟 ajax 请求，异步渲染编辑器
