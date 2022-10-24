@@ -47,7 +47,7 @@
             <el-form-item label="内容" prop="content">
               <rich-editor
                 :ref="'richtext' + index" :key="index" v-model="announcement.content"
-                class="rich-editor"
+                class="rich-editor" :bg-color="false"
                 @blur="refreshRichText(index)" @focus="activeIndex = index"
               />
             </el-form-item>

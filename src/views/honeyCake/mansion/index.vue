@@ -80,7 +80,7 @@
             <el-form-item label="动态" prop="content">
               <rich-editor
                 :ref="'richtext' + index" :key="index" v-model="item.content"
-                class="rich-editor"
+                class="rich-editor" :announcement="false"
                 @blur="refreshRichText(index)" @focus="activeIndex = index"
               />
             </el-form-item>
