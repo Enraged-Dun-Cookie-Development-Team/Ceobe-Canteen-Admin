@@ -153,13 +153,19 @@ export const asyncRoutes = [
     {
         path: '/statistics',
         component: Layout,
-        meta: { roles: ['chef', 'cooker', 'architect'] },
+        meta: { title: '程序信息',  icon: 'el-icon-document-checked',roles: ['chef', 'cooker', 'architect'] },
         children: [
             {
                 path: 'index',
                 name: '统计信息',
                 component: () => import('@/views/statistics/index'),
                 meta: { title: '统计信息', icon: 'el-icon-s-data' }
+            },
+            {
+                path: 'serverSourceImportJson',
+                name: '配置蹲饼器',
+                component: () => import('@/views/statistics/serverSourceImportJson/index'),
+                meta: { title: '配置蹲饼器', icon: 'el-icon-s-operation' }
             }
         ]
     },
