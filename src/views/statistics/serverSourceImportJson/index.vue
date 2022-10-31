@@ -42,9 +42,11 @@
                     sourceTypeName.name
                   }}
                 </el-tag>
-                <el-button icon="el-icon-add" @click="serverAddGroup(servers.number)" />
-                <el-card v-for="server in servers.server" :key="server">
-                  <el-card v-for="groups in server.groups" :key="groups">
+                <el-button icon="el-icon-add" @click="serversAddServer(servers.number)" />
+
+                <el-card v-for="(server,serverIndex) in servers.server" :key="serverIndex">
+                  <el-button icon="el-icon-add" @click="serverAddGroup(servers.number,serverIndex)" />
+                  <el-card v-for="(groups,groupsIndex) in server.groups" :key="groupsIndex">
                     {{ groups }}
                   </el-card>
                 </el-card>
@@ -123,10 +125,19 @@ export default {
             }, 300);
         },
         // 每种存活条件下添加组
-        serverAddGroup(number) {
+        serversAddServer(number) {
             let findData = this.jsonData.servers.find(x => x.number == number);
             findData.server.push({
                 groups: [],
+            });
+            this.serverAddGroup(number, 0);
+        },
+        serverAddGroup(serverNumber, groupsNumber) {
+            debugger;
+            let findData = this.jsonData.servers.find(x => x.number == serverNumber);
+            findData.server[groupsNumber].groups.push({
+                name: 'B站-明日方舟',
+                datasource: [{ type: 'bilibili', arg: { uid: '161775300' } }]
             });
         },
         checkSourceType(name) {
