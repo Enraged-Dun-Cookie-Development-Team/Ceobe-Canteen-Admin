@@ -112,7 +112,7 @@
 
 <script>
 export default {
-    name: "ServerSourceImportJson",
+    name: "FetcherDetailConfig",
     data() {
         return {
             stepIndex: 1, // 当前步骤

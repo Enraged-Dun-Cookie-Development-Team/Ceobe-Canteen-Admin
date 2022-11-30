@@ -151,24 +151,32 @@ export const asyncRoutes = [
         ]
     },
     {
-        path: '/statistics',
+        path: '/fetcherConfig',
         component: Layout,
         meta: { title: '程序信息',  icon: 'el-icon-document-checked',roles: ['chef', 'cooker', 'architect'] },
+        children: [
+            {
+                path: 'serverSourceImportJson',
+                name: '配置蹲饼器',
+                component: () => import('@/views/fetcherConfig/fetcherDetailConfig/index'),
+                meta: { title: '配置蹲饼器', icon: 'el-icon-s-operation' }
+            }
+        ]
+    },
+    {
+        path: '/statistics',
+        component: Layout,
+        meta: { roles: ['chef', 'cooker', 'architect'] },
         children: [
             {
                 path: 'index',
                 name: '统计信息',
                 component: () => import('@/views/statistics/index'),
                 meta: { title: '统计信息', icon: 'el-icon-s-data' }
-            },
-            {
-                path: 'serverSourceImportJson',
-                name: '配置蹲饼器',
-                component: () => import('@/views/statistics/serverSourceImportJson/index'),
-                meta: { title: '配置蹲饼器', icon: 'el-icon-s-operation' }
             }
         ]
     },
+
 
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/404', hidden: true }
