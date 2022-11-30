@@ -37,14 +37,17 @@
                 :key="sourceTypeName.name"
                 draggable="true"
                 class="mv-5"
-                @dragstart.native="setDragItem(sourceTypeName)"
+                @dragstart.native="setDragItem(sourceTypeName,sourceTypeNameList)"
               >
                 {{
                   sourceTypeName.name
                 }}
               </el-tag>
             </div>
-            <el-card v-for="(group,groupIndex) in servers.server" :key="'group'+groupIndex">
+            <el-card
+              v-for="(group,groupIndex) in servers.server" :key="'group'+groupIndex"
+              class="mh-5"
+            >
               <div class="flex-start">
                 <el-button
                   size="mini"
@@ -54,16 +57,14 @@
                 >
                   添加来源组(datasource)
                 </el-button>
-                <div class="flex-center">
+                <div class="flex-center flex-direction-column">
                   <el-card
                     v-for="(datasource,datasourceIndex) in group.groups"
                     :key="'datasource'+datasourceIndex"
-                    class="mv-5"
-                    style="width: 150px"
+                    class="mh-5 mv-5"
                     :data-serversIndex="servers.number"
                     :data-groupIndex="groupIndex"
                     :data-datasourceIndex="datasourceIndex"
-                    @dragstart.native="removeSourceInDatasource(servers.number,groupIndex,datasourceIndex)"
                     @dragover.native="e=>e.preventDefault()"
                     @drop.native="addSourceInDatasource"
                   >
@@ -75,9 +76,9 @@
                         <el-tag
                           v-for="sourceTypeName in datasource.datasource"
                           :key="sourceTypeName.name"
-                          draggable="true"
                           class="mv-5"
-                          @dragstart.native="setDragItem(sourceTypeName)"
+                          closable
+                          @close="removeSource(sourceTypeName.name,servers.number,groupIndex,datasourceIndex)"
                         >
                           {{ sourceTypeName.name }}
                         </el-tag>
@@ -111,7 +112,8 @@ export default {
             serverLiveList: [], // 生成数数组
             sourceTypeList: [], // 类别
             sourceTypeNameList: [], // 类别下的账号
-            dragItem: {}
+            dragItem: {},
+            removeItem: {},
         };
     },
     computed: {
@@ -168,7 +170,7 @@ export default {
         },
         // 每种server下添加groups
         serverAddGroups() {
-            this.serverLiveList.forEach(item=>{
+            this.serverLiveList.forEach(item => {
                 for (let i = 0; i < item.number; i++) {
                     item.server.push({
                         groups: [],
@@ -223,12 +225,16 @@ export default {
                 let datasourceIndex = event.currentTarget.dataset.datasourceindex;
                 let serverLive = this.serverLiveList.find(x => x.number == serversIndex);
                 let datasource = serverLive.server[groupIndex].groups[datasourceIndex];
-                datasource.datasource.push(this.dragItem);
+                if (datasource.datasource.findIndex(x => x.name == this.dragItem.name) < 0) {
+                    datasource.datasource.push(this.dragItem);
+                }
             }
             this.dragItem = null;
         },
-        removeSourceInDatasource(event) {
-            console.log('remove', event);
+        removeSource(sourceTypeName, serversIndex, groupIndex, datasourceIndex) {
+            let datasource = this.serverLiveList.find(x => x.number == serversIndex).server[groupIndex].groups[datasourceIndex];
+            let index = datasource.datasource.findIndex(x => x.name == sourceTypeName);
+            datasource.datasource.splice(index, 1);
         }
     }
 };
@@ -246,14 +252,21 @@ export default {
   }
 
   .mv-5 {
-    margin-right: 5px;
-    margin-left: 5px;
+    margin: 0 5px 0 5px;
+  }
+
+  .mh-5 {
+    margin: 5px 0 5px 0;
   }
 
   .flex-center {
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .flex-direction-column {
+    flex-direction: column;
   }
 
   .flex-between {
