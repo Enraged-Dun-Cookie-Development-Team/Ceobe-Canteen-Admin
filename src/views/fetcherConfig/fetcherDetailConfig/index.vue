@@ -36,7 +36,7 @@
                 v-for="sourceTypeName in sourceTypeNameList"
                 :key="sourceTypeName.name"
                 draggable="true"
-                class="mv-5"
+                class="mv-10"
                 @dragstart.native="setDragItem(sourceTypeName,sourceTypeNameList)"
               >
                 {{
@@ -44,9 +44,10 @@
                 }}
               </el-tag>
             </div>
+            <!--这是组的卡片-->
             <el-card
               v-for="(group,groupIndex) in servers.server" :key="'group'+groupIndex"
-              class="mh-5"
+              class="mh-10"
             >
               <div class="flex-start">
                 <el-button
@@ -61,22 +62,27 @@
                   <el-card
                     v-for="(datasource,datasourceIndex) in group.groups"
                     :key="'datasource'+datasourceIndex"
-                    class="mh-5 mv-5"
+                    class="mh-10 mv-10"
                     :data-serversIndex="servers.number"
                     :data-groupIndex="groupIndex"
                     :data-datasourceIndex="datasourceIndex"
                     @dragover.native="e=>e.preventDefault()"
                     @drop.native="addSourceInDatasource"
                   >
+                    <!--这里是卡片的内容，如果你要在里面加字段，请先在groupAddDatasource方法内初始化的时候添加相应字段以免无法监听-->
                     <div>
                       <i class="mb-10">{{ datasource.name }}</i>
                       <br />
+                      <el-input
+                        v-model="datasource.time" class="mh-10"
+                        placeholder="我也不知道你要输入什么，反正就放在这里了"
+                      />
                       <i v-if="datasource.datasource.length == 0" style="color: #848488">拖拽tag把来源添加到这里</i>
                       <div v-else>
                         <el-tag
                           v-for="sourceTypeName in datasource.datasource"
                           :key="sourceTypeName.name"
-                          class="mv-5"
+                          class="mv-10"
                           closable
                           @close="removeSource(sourceTypeName.name,servers.number,groupIndex,datasourceIndex)"
                         >
@@ -188,9 +194,11 @@ export default {
                 inputPattern: /\S/,
                 inputErrorMessage: '你要打字啊'
             }).then(({ value }) => {
+                // 这里初始化卡片的对象
                 findData.groups.push({
                     name: value,
                     datasource: [],
+                    time:null
                 });
             }).catch(() => {
 
@@ -251,12 +259,12 @@ export default {
     margin-top: 20px;
   }
 
-  .mv-5 {
-    margin: 0 5px 0 5px;
+  .mv-10 {
+    margin: 0 10px 0 10px;
   }
 
-  .mh-5 {
-    margin: 5px 0 5px 0;
+  .mh-10 {
+    margin: 10px 0 10px 0;
   }
 
   .flex-center {
