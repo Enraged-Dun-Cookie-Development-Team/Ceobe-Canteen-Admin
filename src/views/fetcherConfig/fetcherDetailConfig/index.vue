@@ -31,26 +31,18 @@
             v-for="(servers) in serverLiveList" :key="servers.number+''"
             :label="'只存活了'+(servers.number)+'条的情况'"
           >
-            <div class="flex-between mb-10">
-              <div>
-                <el-tag
-                  v-for="sourceTypeName in sourceTypeNameList"
-                  :key="sourceTypeName.name"
-                  draggable="true"
-                  class="mv-5"
-                  @dragstart.native="setDragItem(sourceTypeName)"
-                >
-                  {{
-                    sourceTypeName.name
-                  }}
-                </el-tag>
-              </div>
-              <el-button
-                size="mini" icon="el-icon-plus"
-                @click="serverAddGroups(servers.number)"
+            <div class="mb-10">
+              <el-tag
+                v-for="sourceTypeName in sourceTypeNameList"
+                :key="sourceTypeName.name"
+                draggable="true"
+                class="mv-5"
+                @dragstart.native="setDragItem(sourceTypeName)"
               >
-                添加组(groups)
-              </el-button>
+                {{
+                  sourceTypeName.name
+                }}
+              </el-tag>
             </div>
             <el-card v-for="(group,groupIndex) in servers.server" :key="'group'+groupIndex">
               <div class="flex-start">
@@ -171,14 +163,17 @@ export default {
                     number: 3,
                     server: []
                 }, { number: 4, server: [] }];
-
+                this.serverAddGroups();
             }, 300);
         },
         // 每种server下添加groups
-        serverAddGroups(number) {
-            let findData = this.serverLiveList.find(x => x.number == number);
-            findData.server.push({
-                groups: [],
+        serverAddGroups() {
+            this.serverLiveList.forEach(item=>{
+                for (let i = 0; i < item.number; i++) {
+                    item.server.push({
+                        groups: [],
+                    });
+                }
             });
         },
         // 每种groups下添加datasource
