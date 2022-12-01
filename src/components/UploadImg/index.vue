@@ -1,15 +1,16 @@
 <template>
   <div>
     <el-upload
+      :class="{ disabled: uploadDisabled() }"
       :action="url"
       :headers="{
-        'token': store.getters.token
+        'token': $store.getters.token
       }"
       list-type="picture-card"
-      drag="true"
-      auto-upload="true"
+      :drag="true"
+      :auto-upload="true"
       :limit="1"
-      multiple="false"
+      :multiple="false"
       :file-list="fileList"
       class="upload"
       :on-error="onError"
@@ -20,14 +21,17 @@
     >
       <i class="el-icon-plus"></i>
     </el-upload>
-    <el-dialog v-model="dialogVisible">
+    <el-dialog
+      :visible.sync="dialogVisible"
+      :modal-append-to-body="false"
+      :append-to-body="true"
+    >
       <el-image style="width: 100%" :src="dialogImageUrl" />
     </el-dialog>
   </div>
 </template>
 
 <script>
-
 export default {
     name: 'UploadImg',
     props: {
@@ -40,7 +44,7 @@ export default {
         url: {
             type: String,
             default: () => {
-                return ``;
+                return `/`;
             }
         }
     },
@@ -55,15 +59,15 @@ export default {
             console.log(err);
         },
         onSuccess(data) {
-            if (data.code === 0) {
+            if (data.code === "000000") {
                 this.$message({
-                    message: data.msg,
+                    message: data.message,
                     type: 'success'
                 });
                 this.$emit('success', data);
             } else {
                 this.$message({
-                    message: data.msg,
+                    message: data.message,
                     type: 'error'
                 });
             }
@@ -75,38 +79,21 @@ export default {
             this.dialogImageUrl = file.url;
             this.dialogVisible = true;
         },
+        // 隐藏图片上传按钮
+        uploadDisabled() {
+            return this.fileList.length > 0;   //判断图片上传的数量动态控制按钮隐藏与显示
+        },
     }
 };
 </script>
 
 <style lang="scss" scoped>
-::v-deep(.el-upload--picture-card) {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100px!important;
-  height: 100px!important;
+::v-deep(.el-upload-dragger) {
+  width: 100%;
+  height: 100%;
 }
 
-::v-deep(.el-upload-list__item) {
-  width: 100px;
-  height: 100px;
-}
-
-::v-deep(.is-uploading) {
-
-  .el-progress {
-    width: 100px;
-
-    .el-progress-circle {
-      width: 100px!important;
-      height: 100px!important;
-    }
-  }
-}
-
-.upload {
-  display: flex;
-  flex-wrap: wrap;
+.disabled ::v-deep(.el-upload--picture-card) {
+  display: none;
 }
 </style>

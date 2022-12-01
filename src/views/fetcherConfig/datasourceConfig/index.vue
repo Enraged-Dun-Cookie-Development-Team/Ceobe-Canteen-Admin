@@ -3,17 +3,17 @@
     <h3>数据源配置</h3>
     <div class="search-area">
       <el-form
-        :inline="true" :model="queryParams"
+        :inline="true" :model="search"
         class="demo-form-inline" @submit.native.prevent
       >
         <el-form-item label="平台">
           <el-select
-            v-model="value" clearable
+            v-model="search.platform" clearable
             placeholder="请选择"
             size="small"
           >
             <el-option
-              v-for="item in options"
+              v-for="item in platformOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -95,13 +95,11 @@ export default {
                 total_count: 0,
                 total_page: 0
             },
-            options:[
-                {
-                    label:"",
-                    value: "",
-                }
-            ],
+            platformOptions:[],
             value: "",
+            search: {
+                platform: "",
+            }
         };
     },
     mounted() {
