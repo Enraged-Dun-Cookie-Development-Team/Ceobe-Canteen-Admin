@@ -85,16 +85,5 @@ export default {
   :deep(label) {
     font-weight: 500;
   }
-
-  .btn-username {
-    border-color: #FFBA4B;
-    background-color: #FFBA4B;
-  }
-
-  .btn-username:focus,
-  .btn-username:hover {
-    border-color: #FFC76E;
-    background-color: #FFC76E;
-  }
 }
 </style>

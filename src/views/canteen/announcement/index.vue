@@ -68,7 +68,7 @@
             </el-form-item>
             <el-form-item label="是否推送" prop="notice">
               <el-switch
-                v-model="announcement.notice" active-color="#ffba4b" inactive-color="#97a8be"
+                v-model="announcement.notice"
                 @blur="checkForm(index)"
               />
             </el-form-item>
@@ -79,7 +79,6 @@
               <span class="preview-label">快速预览</span>
               <el-switch
                 v-model="modeList[index].day"
-                active-color="#e6aa60"
                 inactive-color="#3f3932"
               />
             </div>

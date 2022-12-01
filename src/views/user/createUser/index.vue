@@ -119,34 +119,5 @@ export default {
   :deep(label) {
     font-weight: 500;
   }
-
-  :deep(.radio) {
-
-    .is-checked {
-
-      .el-radio__inner {
-        border-color: #FFBA4B;
-        background: #FFBA4B;
-      }
-    }
-
-    .is-checked + .el-radio__label {
-      color: #FFBA4B;
-    }
-  }
-
-  .btn-confirm,
-  .btn-copy {
-    border-color: #FFBA4B;
-    background-color: #FFBA4B;
-  }
-
-  .btn-confirm:focus,
-  .btn-confirm:hover,
-  .btn-copy:focus,
-  .btn-copy:hover {
-    border-color: #FFC76E;
-    background-color: #FFC76E;
-  }
 }
 </style>

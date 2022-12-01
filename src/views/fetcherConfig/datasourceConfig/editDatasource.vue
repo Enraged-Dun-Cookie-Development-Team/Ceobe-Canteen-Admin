@@ -8,6 +8,7 @@
     @close="onClose"
   >
     <div class="edit-area pr-24 pl-24">
+      el-form
     </div>
   </el-drawer>
 </template>

@@ -121,20 +121,6 @@ export default {
 <style lang="scss" scoped>
 #fetcherDetailConfig {
 
-  .btn-search,
-  .btn-add {
-    border-color: #FFBA4B;
-    background-color: #FFBA4B;
-  }
-
-  .btn-search:focus,
-  .btn-search:hover,
-  .btn-add:focus,
-  .btn-coaddpy:hover {
-    border-color: #FFC76E;
-    background-color: #FFC76E;
-  }
-
   .block {
     display: flex;
     justify-content: flex-end;
