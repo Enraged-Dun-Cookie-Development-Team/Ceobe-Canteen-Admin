@@ -156,6 +156,12 @@ export const asyncRoutes = [
         meta: { title: '程序信息',  icon: 'el-icon-document-checked',roles: ['chef', 'cooker', 'architect'] },
         children: [
             {
+                path: 'platformConfig',
+                name: '配置平台',
+                component: () => import('@/views/fetcherConfig/platformConfig/index'),
+                meta: { title: '配置平台', icon: 'el-icon-s-platform' }
+            },
+            {
                 path: 'datasourceConfig',
                 name: '配置数据源',
                 component: () => import('@/views/fetcherConfig/datasourceConfig/index'),
