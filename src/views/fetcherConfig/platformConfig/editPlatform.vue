@@ -34,10 +34,20 @@
 
         <el-form-item>
           <el-button
+            v-if="create"
             type="primary"
             size="small"
+            @click="addData"
           >
-            确定
+            创建
+          </el-button>
+          <el-button
+            v-else
+            type="primary"
+            size="small"
+            @click="updateData"
+          >
+            更新
           </el-button>
         </el-form-item>
       </el-form>
@@ -54,12 +64,7 @@ export default {
         return {
             create: false,
             showDraw: false,
-            platformData: {
-                id: null,
-                type_id: "",
-                platform: "",
-                min_request_interval: 15
-            }
+            platformData: {},
         };
     },
     mounted() {
@@ -67,7 +72,15 @@ export default {
     },
     methods: {
         init() {
-
+            this.initPlatformData();
+        },
+        initPlatformData() {
+            this.platformData = {
+                id: null,
+                type_id: "",
+                platform: "",
+                min_request_interval: 15
+            };
         },
         open(create, data) {
             this.create = create;
@@ -78,7 +91,45 @@ export default {
         },
         onClose() {
 
-        }
+        },
+        createData() {
+            this.$store
+                .dispatch("fetcherConfig/addPlatform",this.platformData)
+                .then(() => {
+                    this.$message({
+                        showClose: true,
+                        message: "新建成功",
+                        type: "success",
+                    });
+                    this.showDraw = false;
+                    this.init();
+                }).catch(() =>{
+                    this.$message({
+                        showClose: true,
+                        message: "新建失败",
+                        type: "error",
+                    });
+                });
+        },
+        updateData() {
+            this.$store
+                .dispatch("fetcherConfig/updatePlatform",this.platformData)
+                .then(() => {
+                    this.$message({
+                        showClose: true,
+                        message: "修改成功",
+                        type: "success",
+                    });
+                    this.showDraw = false;
+                    this.init();
+                }).catch(() =>{
+                    this.$message({
+                        showClose: true,
+                        message: "修改失败",
+                        type: "error",
+                    });
+                });
+        },
     }
 };
 </script>

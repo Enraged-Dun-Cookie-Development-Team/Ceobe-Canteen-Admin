@@ -99,12 +99,6 @@ export default {
                     this.loading = false;
                 });
         },
-        createData() {
-
-        },
-        updateData() {
-
-        },
     }
 };
 </script>
