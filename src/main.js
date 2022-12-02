@@ -17,6 +17,7 @@ import '@/icons'; // icon
 import '@/permission'; // permission control
 
 import VueClipboard from 'vue-clipboard2';
+import VueForm from '@lljj/vue-json-schema-form';
 
 Vue.use(VueClipboard);
 
@@ -39,6 +40,8 @@ Vue.use(ElementUI, { locale    });
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false;
+
+Vue.component('VueForm', VueForm);
 
 new Vue({
     el: '#app',
