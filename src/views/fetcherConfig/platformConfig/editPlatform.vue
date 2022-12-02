@@ -20,7 +20,10 @@
           />
         </el-form-item>
         <el-form-item label="平台名字:" prop="platform">
-          <el-input v-model="platformData.platform" placeholder="平台名字" />
+          <el-input
+            v-model="platformData.platform" placeholder="平台名字"
+            :disabled="!create"
+          />
         </el-form-item>
         <el-form-item label="最小蹲饼间隔:" prop="min_request_interval">
           <el-input-number
@@ -59,7 +62,13 @@ export default {
             }
         };
     },
+    mounted() {
+        this.init();
+    },
     methods: {
+        init() {
+
+        },
         open(create, data) {
             this.create = create;
             if(data) {
@@ -69,13 +78,7 @@ export default {
         },
         onClose() {
 
-        },
-        onSuccess(data) {
-            this.datasource.avatar = data?.data?.url;
-        },
-        onRemove() {
-            this.datasource.avatar = '';
-        },
+        }
     }
 };
 </script>

@@ -10,6 +10,7 @@
       </el-button>
     </div>
     <el-table
+      v-loading="loading"
       :data="dataSourceTable"
       style="width: 100%"
     >
@@ -21,14 +22,14 @@
           <el-button
             type="text"
             size="small"
-            @click.native.prevent="editData(scope.$row)"
+            @click.native.prevent="editData(scope.row)"
           >
             编辑
           </el-button>
           <el-button
             type="text"
             size="small"
-            @click.native.prevent="deleteDatasource(scope.$row)"
+            @click.native.prevent="deleteDatasource(scope.row)"
           >
             删除
           </el-button>
@@ -57,7 +58,9 @@ export default {
     components: { EditPlatform },
     data() {
         return {
+            loading: true,
             create: false, // 创建还是编辑
+            dataSourceTable:[],
             pageSize: {
                 page: 1,
                 size: 10,
@@ -66,13 +69,42 @@ export default {
             },
         };
     },
+    mounted() {
+        this.init();
+    },
     methods: {
+        init() {
+            this.getPlatformList();
+        },
         addData() {
             this.$refs.editPlatform.open(true);
         },
         editData(data) {
             this.$refs.editPlatform.open(false, data);
-        }
+        },
+        getPlatformList() {
+            this.loading = true;
+            this.$store
+                .dispatch("fetcherConfig/platformList", this.pageSize)
+                .then((response) => {
+                    this.dataSourceTable = response.data.list;
+                    this.pageSize = response.data.page_size;
+                }).catch(() =>{
+                    this.$message({
+                        showClose: true,
+                        message: "获取平台配置列表失败",
+                        type: "error",
+                    });
+                }).finally(() =>{
+                    this.loading = false;
+                });
+        },
+        createData() {
+
+        },
+        updateData() {
+
+        },
     }
 };
 </script>

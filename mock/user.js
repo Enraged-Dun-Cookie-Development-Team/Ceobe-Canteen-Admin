@@ -217,7 +217,7 @@ module.exports = [
                 };
             }
             let data = {
-                user_table: userTable.slice((page-1)*size,page*size),
+                list: userTable.slice((page-1)*size,page*size),
                 page_size: {
                     page: page,
                     size: size,
