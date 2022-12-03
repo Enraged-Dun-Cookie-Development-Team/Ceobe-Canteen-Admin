@@ -75,7 +75,7 @@ module.exports = [
             }
 
             return {
-                code: null,
+                code: "00000",
                 data: token
             };
         }
@@ -98,7 +98,7 @@ module.exports = [
             }
 
             return {
-                code: null,
+                code: "00000",
                 data: info
             };
         }
@@ -110,7 +110,7 @@ module.exports = [
         type: 'post',
         response: _ => {
             return {
-                code: null,
+                code: "00000",
                 data: 'success'
             };
         }
@@ -126,7 +126,7 @@ module.exports = [
             if (token == 'chef-token') {
                 const userInfo = newUser[permission];
                 return {
-                    code: null,
+                    code: "00000",
                     data: userInfo
                 };
             } else {
@@ -156,7 +156,7 @@ module.exports = [
                 };
             } else {
                 return {
-                    code: null,
+                    code: "00000",
                     message: '修改用户名成功',
                     data: { username }
                 };
@@ -174,7 +174,7 @@ module.exports = [
             };
 
             return {
-                code: null,
+                code: "00000",
                 message: '修改密码成功',
                 data: data
             };
@@ -191,7 +191,7 @@ module.exports = [
             };
 
             return {
-                code: null,
+                code: "00000",
                 message: '修改密码成功',
                 data: data
             };
@@ -227,7 +227,7 @@ module.exports = [
             };
 
             return {
-                code: null,
+                code: "00000",
                 message: '获取用户列表成功',
                 data: data
             };
@@ -242,7 +242,7 @@ module.exports = [
             console.log(req.body);
 
             return {
-                code: null,
+                code: "00000",
                 message: '修改权限成功',
                 data: null
             };
@@ -265,7 +265,7 @@ module.exports = [
             }
 
             return {
-                code: null,
+                code: "00000",
                 message: '删除用户成功',
                 data: null
             };
