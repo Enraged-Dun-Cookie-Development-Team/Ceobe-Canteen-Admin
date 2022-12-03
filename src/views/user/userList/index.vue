@@ -52,7 +52,7 @@
     <div class="block">
       <el-pagination
         :current-page.sync="pageSize.page"
-        :page-sizes="[10, 20]"
+        :page-sizes="[5, 10, 20]"
         :page-size.sync="pageSize.size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageSize.total_count"
@@ -142,23 +142,29 @@ export default {
                 });
         },
         deleteUser(index) {
-            this.$store
-                .dispatch("user/deleteUser", this.userTable[index].id)
-                .then(() => {
-                    this.$message({
-                        showClose: true,
-                        message: "删除用户成功",
-                        type: "success",
+            this.$confirm('是否确定删除?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(()=> {
+                this.$store
+                    .dispatch("user/deleteUser", this.userTable[index].id)
+                    .then(() => {
+                        this.$message({
+                            showClose: true,
+                            message: "删除用户成功",
+                            type: "success",
+                        });
+                    }).catch(() =>{
+                        this.$message({
+                            showClose: true,
+                            message: "删除用户失败",
+                            type: "error",
+                        });
+                    }).finally(() => {
+                        this.getUserList();
                     });
-                }).catch(() =>{
-                    this.$message({
-                        showClose: true,
-                        message: "删除用户失败",
-                        type: "error",
-                    });
-                }).finally(() => {
-                    this.getUserList();
-                });
+            });
         },
     },
 };
