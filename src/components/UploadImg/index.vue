@@ -59,7 +59,7 @@ export default {
             console.log(err);
         },
         onSuccess(data) {
-            if (data.code === "000000") {
+            if (data.code === "00000") {
                 this.$message({
                     message: data.message,
                     type: 'success'
