@@ -9,26 +9,27 @@
   >
     <div class="edit-area pr-24 pl-24">
       <el-form
-        :model="datasource"
-        class=""
-        label-position="right" label-width="120px"
+        ref="platformForm"
+        :model="platformData" label-position="right"
+        label-width="120px"
+        :rules="platformRules"
       >
-        <el-form-item label="注册类型ID:" prop="type_id">
+        <el-form-item label="平台类型ID:" prop="type_id">
           <el-input
             v-model="platformData.type_id" placeholder="请输入博类型ID"
-            :disabled="!create"
+            :disabled="!create" required
           />
         </el-form-item>
-        <el-form-item label="平台名字:" prop="platform">
+        <el-form-item label="平台名字:" prop="platform_name">
           <el-input
-            v-model="platformData.platform" placeholder="平台名字"
-            :disabled="!create"
+            v-model="platformData.platform_name" placeholder="平台名字"
+            :disabled="!create" required
           />
         </el-form-item>
         <el-form-item label="最小蹲饼间隔:" prop="min_request_interval">
           <el-input-number
             v-model="platformData.min_request_interval" controls-position="right"
-            :min="1" @change="handleChange"
+            :min="1"
           />
         </el-form-item>
 
@@ -37,7 +38,7 @@
             v-if="create"
             type="primary"
             size="small"
-            @click="addData"
+            @click="createData"
           >
             创建
           </el-button>
@@ -65,6 +66,14 @@ export default {
             create: false,
             showDraw: false,
             platformData: {},
+            platformRules: {
+                type_id: {
+                    required: true, message: "填写平台类型ID", trigger: "blur"
+                },
+                platform_name: {
+                    required: true, message: "填写平台名字", trigger: "blur"
+                }
+            }
         };
     },
     mounted() {
@@ -74,11 +83,16 @@ export default {
         init() {
             this.initPlatformData();
         },
+        clearValidate() {
+            this.$nextTick(() => {
+                this.$refs["platformForm"].clearValidate();
+            });
+        },
         initPlatformData() {
             this.platformData = {
                 id: null,
                 type_id: "",
-                platform: "",
+                platform_name: "",
                 min_request_interval: 15
             };
         },
@@ -90,45 +104,64 @@ export default {
             this.showDraw = true;
         },
         onClose() {
-
+            this.init();
+            this.clearValidate();
         },
         createData() {
-            this.$store
-                .dispatch("fetcherConfig/addPlatform",this.platformData)
-                .then(() => {
-                    this.$message({
-                        showClose: true,
-                        message: "新建成功",
-                        type: "success",
+            let allPass = true;
+            this.$refs["platformForm"].validate((valid) => {
+                if (!valid) {
+                    allPass = false;
+                    return;
+                }
+            });
+            if (allPass) {
+                this.$store
+                    .dispatch("fetcherConfig/createPlatform",this.platformData)
+                    .then(() => {
+                        this.$message({
+                            showClose: true,
+                            message: "新建成功",
+                            type: "success",
+                        });
+                        this.showDraw = false;
+                        this.init();
+                    }).catch(() =>{
+                        this.$message({
+                            showClose: true,
+                            message: "新建失败",
+                            type: "error",
+                        });
                     });
-                    this.showDraw = false;
-                    this.init();
-                }).catch(() =>{
-                    this.$message({
-                        showClose: true,
-                        message: "新建失败",
-                        type: "error",
-                    });
-                });
+            }
         },
         updateData() {
-            this.$store
-                .dispatch("fetcherConfig/updatePlatform",this.platformData)
-                .then(() => {
-                    this.$message({
-                        showClose: true,
-                        message: "修改成功",
-                        type: "success",
+            let allPass = true;
+            this.$refs["platformForm"].validate((valid) => {
+                if (!valid) {
+                    allPass = false;
+                    return;
+                }
+            });
+            if (allPass) {
+                this.$store
+                    .dispatch("fetcherConfig/updatePlatform",this.platformData)
+                    .then(() => {
+                        this.$message({
+                            showClose: true,
+                            message: "修改成功",
+                            type: "success",
+                        });
+                        this.showDraw = false;
+                        this.init();
+                    }).catch(() =>{
+                        this.$message({
+                            showClose: true,
+                            message: "修改失败",
+                            type: "error",
+                        });
                     });
-                    this.showDraw = false;
-                    this.init();
-                }).catch(() =>{
-                    this.$message({
-                        showClose: true,
-                        message: "修改失败",
-                        type: "error",
-                    });
-                });
+            }
         },
     }
 };
