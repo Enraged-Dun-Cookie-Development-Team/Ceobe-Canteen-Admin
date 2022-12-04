@@ -1,3 +1,4 @@
+const Mock = require('mockjs');
 module.exports = [
     {
         url: '/admin/fetcherConfig/uploadAvatar',
@@ -25,12 +26,13 @@ module.exports = [
             for(let i = 0; i < 28; i++) {
                 let minTime = Math.floor(Math.random()*100);
 
-                platformTable[i] = {
+                platformTable[i] = Mock.mock({
                     id: i,
                     type_id: "type"+i,
                     platform_name: "platform"+i,
                     min_request_interval:minTime,
-                };
+                    "has_datasource|1": true
+                });
             }
             let data = {
                 list: platformTable.slice((page-1)*size,page*size),
@@ -38,7 +40,7 @@ module.exports = [
                     page: Number(page),
                     size: Number(size),
                     total_count: platformTable.length,
-                    total_page:  Math.ceil(platformTable.length/size)
+                    total_page:  Math.ceil(platformTable.length/size),
                 }
             };
 

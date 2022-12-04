@@ -27,6 +27,7 @@
             编辑
           </el-button>
           <el-button
+            v-if="!scope.row.has_datasource"
             type="text"
             size="small"
             @click.native.prevent="deleteData(scope.row)"
