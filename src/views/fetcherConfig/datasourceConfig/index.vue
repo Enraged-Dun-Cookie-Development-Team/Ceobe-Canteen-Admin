@@ -20,6 +20,20 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="数据源">
+          <el-select
+            v-model="search.datasource" clearable
+            placeholder="请选择"
+            size="small"
+          >
+            <el-option
+              v-for="item in datasourceOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
 
         <el-form-item>
           <el-button
@@ -35,6 +49,7 @@
       <el-button
         type="primary" icon="el-icon-plus"
         size="small" class="btn-add"
+        @click="addData"
       >
         新增
       </el-button>
@@ -44,22 +59,29 @@
       style="width: 100%"
     >
       <el-table-column prop="platform" label="平台" />
-      <el-table-column prop="uid" label="uid" />
-      <el-table-column prop="name" label="昵称" />
+      <el-table-column prop="datasource" label="数据源" />
+      <el-table-column prop="nickname" label="昵称" />
       <el-table-column prop="avatar" label="头像" />
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
             type="text"
             size="small"
-            @click.native.prevent="editDatasource(scope.row)"
+            @click.native.prevent="checkDetail(scope.row)"
+          >
+            详细
+          </el-button>
+          <el-button
+            type="text"
+            size="small"
+            @click.native.prevent="editData(scope.row)"
           >
             编辑
           </el-button>
           <el-button
             type="text"
             size="small"
-            @click.native.prevent="deleteDatasource(scope.$row)"
+            @click.native.prevent="deleteData(scope.$row)"
           >
             删除
           </el-button>
@@ -77,7 +99,7 @@
         @current-change="getDatasourceList"
       />
     </div>
-    <edit-datasource />
+    <edit-datasource ref="editDatasource" />
   </div>
 </template>
 
@@ -96,10 +118,12 @@ export default {
                 total_page: 0
             },
             platformOptions:[],
+            datasourceOptions: [],
             value: "",
             search: {
                 platform: "",
-            }
+                datasource: "",
+            },
         };
     },
     mounted() {
@@ -107,11 +131,41 @@ export default {
     },
     methods: {
         init() {
-
+            this.getPlatformList();
         },
         getDatasourceList() {
 
-        }
+        },
+        getPlatformList() {
+            this.$store
+                .dispatch("fetcherConfig/getPlatform")
+                .then((response) => {
+                    response.data.platform_list.forEach(item => {
+                        this.platformOptions.append({
+                            label: item,
+                            value: item
+                        });
+                    });
+                    response.data.datasource_list.forEach(item => {
+                        this.datasourceOptions.append({
+                            label: item,
+                            value: item
+                        });
+                    });
+                }).catch(() =>{
+                    this.$message({
+                        showClose: true,
+                        message: "获取平台列表失败",
+                        type: "error",
+                    });
+                });
+        },
+        addData() {
+            this.$refs.editDatasource.open(true, this.platformOptions);
+        },
+        editData(data) {
+            this.$refs.editDatasource.open(false, this.platformOptions, data);
+        },
     }
 };
 </script>
