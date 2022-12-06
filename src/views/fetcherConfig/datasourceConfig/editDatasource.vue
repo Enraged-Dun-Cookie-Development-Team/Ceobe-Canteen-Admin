@@ -18,13 +18,13 @@
             v-model="datasourceData.platform" clearable
             placeholder="请选择"
             size="small"
+            @blur.native.capture="fillPlatform"
           >
             <el-option
-              v-for="item in platformOptions"
+              v-for="item in platformIdOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
-              @blur="fillPlatform"
             />
           </el-select>
         </el-form-item>
@@ -54,13 +54,13 @@
             @success="(data)=>onSuccess(data)" @remove="onRemove()"
           />
         </el-form-item>
-        <arknights-game-public v-if="datasourceData.platform == 'arknights-game'" />
-        <arknights-website-public v-else-if="datasourceData.platform == 'arknights-website'" />
-        <bilibili-dynamic v-else-if="datasourceData.platform == 'bilibili'" />
-        <netease-cloud-albums v-else-if="datasourceData.platform == 'netease-cloud-music'" />
-        <weibo-dynamic v-else-if="datasourceData.platform == 'weibo'" />
-        <default v-else />
       </el-form>
+      <arknights-game-public v-if="datasourceData.platform == 'arknights-game'" />
+      <arknights-website-public v-else-if="datasourceData.platform == 'arknights-website'" />
+      <bilibili-dynamic v-else-if="datasourceData.platform == 'bilibili'" />
+      <netease-cloud-albums v-else-if="datasourceData.platform == 'netease-cloud-music'" />
+      <weibo-dynamic v-else-if="datasourceData.platform == 'weibo'" />
+      <default v-else />
     </div>
   </el-drawer>
 </template>
@@ -85,7 +85,8 @@ export default {
             showDraw: false,
             url: "api/v1/admin/fetcherConfig/uploadAvatar",
             datasourceData: {},
-            platformOptions:[],
+            platformIdOptions:[],
+            datasourceOptions: [],
         };
     },
     mounted() {
@@ -95,6 +96,7 @@ export default {
         init() {
             this.initPlatformData();
         },
+        // 清除表单验证
         clearValidate() {
             this.$nextTick(() => {
                 this.$refs["datasourceForm"].clearValidate();
@@ -106,42 +108,56 @@ export default {
                 datasource: "",
                 nickname: "",
                 avatar: "",
-                detail: {}
+                config: {}
             };
         },
-        open(create, platformOptions, data) {
+        // 打开抽屉
+        open(create, platformIdOptions, data) {
             this.create = create;
-            this.platformOptions = platformOptions;
+            this.platformIdOptions = platformIdOptions;
             if(data) {
                 this.datasourceData = data;
             }
             this.showDraw = true;
         },
+        // 关闭抽屉
         onClose() {
-
+            this.init();
+            this.clearValidate();
         },
+        // 图片成功
         onSuccess(data) {
             this.datasourceData.avatar = data?.data?.url;
         },
+        // 删除图片
         onRemove() {
             this.datasourceData.avatar = '';
         },
+        // 补充平台对应数据呀u呢信息
         fillPlatform() {
             switch(this.datasourceData.platform) {
             case "bilibili":
-                this.datasourceData = BILIBILI_OPTION;
+                this.datasourceData.datasource = "";
+                this.datasourceOptions = BILIBILI_OPTION;
                 break;
             case "weibo":
-                this.datasourceData = WEIBO_OPTION;
+                this.datasourceData.datasource = "";
+                this.datasourceOptions = WEIBO_OPTION;
                 break;
             case "netease-cloud-music":
-                this.datasourceData = NETEASE_OPTION;
+                this.datasourceData.datasource = "";
+                this.datasourceOptions = NETEASE_OPTION;
                 break;
             case "arknights-game":
-                this.datasourceData = ARKNIGHTS_GAME_OPTION;
+                this.datasourceData.datasource = "";
+                this.datasourceOptions = ARKNIGHTS_GAME_OPTION;
                 break;
             case "arknights-website":
-                this.datasourceData = ARKNIHTS_WEBSITE_OPTION;
+                this.datasourceData.datasource = "";
+                this.datasourceOptions = ARKNIHTS_WEBSITE_OPTION;
+                break;
+            default:
+                this.datasourceData.datasource = "";
                 break;
             }
         }

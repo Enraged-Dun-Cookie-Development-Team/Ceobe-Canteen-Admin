@@ -35,3 +35,11 @@ export function deletePlatform(token, id) {
         data: id
     });
 }
+
+export function getPlatformAndDatasourceOption(token) {
+    return request({
+        url: '/admin/fetcherConfig/getPlatformAndDatasourceOption',
+        method: 'get',
+        headers: token,
+    });
+}

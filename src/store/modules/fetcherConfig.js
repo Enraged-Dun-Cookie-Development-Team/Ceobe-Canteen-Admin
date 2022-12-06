@@ -1,4 +1,4 @@
-import { platformList, createPlatform, updatePlatform, deletePlatform } from '@/api/fetcherConfig';
+import { platformList, createPlatform, updatePlatform, deletePlatform, getPlatformAndDatasourceOption } from '@/api/fetcherConfig';
 import store from '..';
 
 const actions = {
@@ -39,6 +39,17 @@ const actions = {
     deletePlatform(_, id) {
         return new Promise((resolve, reject) => {
             deletePlatform({ token: store.getters.token }, { id: id }).then(response => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+    // 获取平台与数据源选项
+    getPlatformAndDatasourceOption() {
+        return new Promise((resolve, reject) => {
+            getPlatformAndDatasourceOption({ token: store.getters.token }).then(response => {
                 resolve(response);
             }).catch(error => {
                 reject(error);

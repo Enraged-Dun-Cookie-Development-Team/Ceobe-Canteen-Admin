@@ -13,7 +13,7 @@
             size="small"
           >
             <el-option
-              v-for="item in platformOptions"
+              v-for="item in platformIdOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -117,7 +117,7 @@ export default {
                 total_count: 0,
                 total_page: 0
             },
-            platformOptions:[],
+            platformIdOptions: [],
             datasourceOptions: [],
             value: "",
             search: {
@@ -138,16 +138,16 @@ export default {
         },
         getPlatformList() {
             this.$store
-                .dispatch("fetcherConfig/getPlatform")
+                .dispatch("fetcherConfig/getPlatformAndDatasourceOption")
                 .then((response) => {
                     response.data.platform_list.forEach(item => {
-                        this.platformOptions.append({
+                        this.platformIdOptions.push({
                             label: item,
                             value: item
                         });
                     });
                     response.data.datasource_list.forEach(item => {
-                        this.datasourceOptions.append({
+                        this.datasourceOptions.push({
                             label: item,
                             value: item
                         });
@@ -161,10 +161,10 @@ export default {
                 });
         },
         addData() {
-            this.$refs.editDatasource.open(true, this.platformOptions);
+            this.$refs.editDatasource.open(true, this.platformIdOptions);
         },
         editData(data) {
-            this.$refs.editDatasource.open(false, this.platformOptions, data);
+            this.$refs.editDatasource.open(false, this.platformIdOptions, data);
         },
     }
 };
