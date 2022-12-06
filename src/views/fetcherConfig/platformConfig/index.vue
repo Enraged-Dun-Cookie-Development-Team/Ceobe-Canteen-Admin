@@ -62,12 +62,7 @@ export default {
             loading: true,
             create: false, // 创建还是编辑
             platformTable:[],
-            pageSize: {
-                page: 1,
-                size: 10,
-                total_count: 0,
-                total_page: 0
-            },
+            pageSize: {},
         };
     },
     mounted() {
@@ -75,7 +70,16 @@ export default {
     },
     methods: {
         init() {
+            this.initPageSize();
             this.getPlatformList();
+        },
+        initPageSize() {
+            this.pageSize = {
+                page: 1,
+                size: 10,
+                total_count: 0,
+                total_page: 0
+            };
         },
         addData() {
             this.$refs.editPlatform.open(true);
@@ -97,7 +101,7 @@ export default {
                             message: "删除成功",
                             type: "success",
                         });
-                        this.init();
+                        this.getPlatformList();
                     }).catch(() =>{
                         this.$message({
                             showClose: true,
@@ -126,7 +130,7 @@ export default {
                 });
         },
         uploadDone() {
-            this.getPlatformList();
+            this.init();
         }
     }
 };
