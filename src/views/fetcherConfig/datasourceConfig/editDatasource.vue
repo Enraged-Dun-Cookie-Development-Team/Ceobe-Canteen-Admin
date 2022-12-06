@@ -67,12 +67,12 @@
 
 <script>
 import UploadImg from "@/components/UploadImg/index.vue";
-import Default from "./datasource/default.vue";
-import ArknightsGamePublic from "./datasource/arknightsGamePublic.vue";
-import ArknightsWebsitePublic from "./datasource/arknightsWebsitePublic.vue";
-import BilibiliDynamic from "./datasource/bilibiliDynamic.vue";
-import NeteaseCloudAlbums from "./datasource/neteaseCloudAlbums.vue";
-import WeiboDynamic from "./datasource/weiboDynamic.vue";
+import Default from "./editForm/default.vue";
+import ArknightsGamePublic from "./editForm/arknightsGamePublic.vue";
+import ArknightsWebsitePublic from "./editForm/arknightsWebsitePublic.vue";
+import BilibiliDynamic from "./editForm/bilibiliDynamic.vue";
+import NeteaseCloudAlbums from "./editForm/neteaseCloudAlbums.vue";
+import WeiboDynamic from "./editForm/weiboDynamic.vue";
 import { BILIBILI_OPTION, WEIBO_OPTION, NETEASE_OPTION, ARKNIGHTS_GAME_OPTION, ARKNIHTS_WEBSITE_OPTION } from "@/const/fetcherConfig.js";
 export default {
     name: "EditDatasource",
