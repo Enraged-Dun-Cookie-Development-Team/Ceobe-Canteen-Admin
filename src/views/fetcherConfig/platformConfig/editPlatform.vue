@@ -99,7 +99,7 @@ export default {
         open(create, data) {
             this.create = create;
             if(data) {
-                this.platformData = data;
+                this.platformData = JSON.parse(JSON.stringify(data));
             }
             this.showDraw = true;
         },
@@ -132,6 +132,8 @@ export default {
                             message: "新建失败",
                             type: "error",
                         });
+                    }).finally(()=>{
+                        this.$emit("uploadDone");
                     });
             }
         },
@@ -160,6 +162,8 @@ export default {
                             message: "修改失败",
                             type: "error",
                         });
+                    }).finally(()=>{
+                        this.$emit("uploadDone");
                     });
             }
         },

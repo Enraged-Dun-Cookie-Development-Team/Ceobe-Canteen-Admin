@@ -48,7 +48,7 @@
         @current-change="getPlatformList"
       />
     </div>
-    <edit-platform ref="editPlatform" />
+    <edit-platform ref="editPlatform" @uploadDone="uploadDone" />
   </div>
 </template>
 
@@ -125,6 +125,9 @@ export default {
                     this.loading = false;
                 });
         },
+        uploadDone() {
+            this.getPlatformList();
+        }
     }
 };
 </script>
