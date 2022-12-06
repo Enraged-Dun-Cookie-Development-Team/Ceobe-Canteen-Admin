@@ -9,7 +9,7 @@
   >
     <div class="edit-area pr-24 pl-24">
       <el-form
-        ref="platformForm"
+        ref="datasourceForm"
         :model="datasourceData"
         label-position="right" label-width="120px"
       >
@@ -18,6 +18,7 @@
             v-model="datasourceData.platform" clearable
             placeholder="请选择"
             size="small"
+            :disabled="!create"
             @blur.native.capture="fillPlatform"
           >
             <el-option
@@ -35,7 +36,7 @@
           <el-select
             v-model="datasourceData.datasource" clearable
             placeholder="请选择"
-            size="small"
+            size="small" :disabled="!create"
           >
             <el-option
               v-for="item in datasourceOptions"
@@ -55,12 +56,30 @@
           />
         </el-form-item>
       </el-form>
-      <arknights-game-public v-if="datasourceData.platform == 'arknights-game'" />
-      <arknights-website-public v-else-if="datasourceData.platform == 'arknights-website'" />
-      <bilibili-dynamic v-else-if="datasourceData.platform == 'bilibili'" />
-      <netease-cloud-albums v-else-if="datasourceData.platform == 'netease-cloud-music'" />
-      <weibo-dynamic v-else-if="datasourceData.platform == 'weibo'" />
-      <default v-else />
+      <arknights-game-public
+        v-if="datasourceData.platform == 'arknights-game'" ref="extendForm"
+        @complete="completeForm"
+      />
+      <arknights-website-public
+        v-else-if="datasourceData.platform == 'arknights-website'" ref="extendForm"
+        @complete="completeForm"
+      />
+      <bilibili-dynamic
+        v-else-if="datasourceData.platform == 'bilibili'" ref="extendForm"
+        @complete="completeForm"
+      />
+      <netease-cloud-albums
+        v-else-if="datasourceData.platform == 'netease-cloud-music'" ref="extendForm"
+        @complete="completeForm"
+      />
+      <weibo-dynamic
+        v-else-if="datasourceData.platform == 'weibo'" ref="extendForm"
+        @complete="completeForm"
+      />
+      <default
+        v-else ref="extendForm"
+        @complete="completeForm"
+      />
     </div>
   </el-drawer>
 </template>
@@ -116,7 +135,12 @@ export default {
             this.create = create;
             this.platformIdOptions = platformIdOptions;
             if(data) {
-                this.datasourceData = data;
+                this.datasourceData = JSON.parse(JSON.stringify(data));
+                // 使用nextTick避免无法获取到ref
+                this.$nextTick(()=>{
+                    this.$refs.extendForm.open(create, this.datasourceData.config);
+                });
+
             }
             this.showDraw = true;
         },
@@ -160,6 +184,65 @@ export default {
                 this.datasourceData.datasource = "";
                 break;
             }
+        },
+        completeForm(config) {
+            this.datasourceData.config = config;
+            let allPass = true;
+            this.$refs["datasourceForm"].validate((valid) => {
+                if (!valid) {
+                    allPass = false;
+                    return;
+                }
+            });
+            if (allPass) {
+                if (this.create) {
+                    this.createData();
+                } else {
+                    this.updateData();
+                }
+            }
+        },
+        createData() {
+            this.$store
+                .dispatch("fetcherConfig/createDatasource",this.datasourceData)
+                .then(() => {
+                    this.$message({
+                        showClose: true,
+                        message: "修改成功",
+                        type: "success",
+                    });
+                    this.showDraw = false;
+                    this.init();
+                }).catch(() =>{
+                    this.$message({
+                        showClose: true,
+                        message: "修改失败",
+                        type: "error",
+                    });
+                }).finally(()=>{
+                    this.$emit("uploadDone");
+                });
+        },
+        updateData() {
+            this.$store
+                .dispatch("fetcherConfig/updateDatasource",this.datasourceData)
+                .then(() => {
+                    this.$message({
+                        showClose: true,
+                        message: "修改成功",
+                        type: "success",
+                    });
+                    this.showDraw = false;
+                    this.init();
+                }).catch(() =>{
+                    this.$message({
+                        showClose: true,
+                        message: "修改失败",
+                        type: "error",
+                    });
+                }).finally(()=>{
+                    this.$emit("uploadDone");
+                });
         }
     }
 };

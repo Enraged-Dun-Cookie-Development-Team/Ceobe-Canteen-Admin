@@ -1,4 +1,4 @@
-import { platformList, createPlatform, updatePlatform, deletePlatform, getPlatformAndDatasourceOption } from '@/api/fetcherConfig';
+import { platformList, createPlatform, updatePlatform, deletePlatform, getPlatformAndDatasourceOption, getDatasourceList, deleteDatasource , createDatasource, updateDatasource } from '@/api/fetcherConfig';
 import store from '..';
 
 const actions = {
@@ -55,7 +55,51 @@ const actions = {
                 reject(error);
             });
         });
-    }
+    },
+
+    // 获取数据源列表
+    getDatasourceList(_, { platform, datasource, page, size }) {
+        return new Promise((resolve, reject) => {
+            getDatasourceList({ token: store.getters.token }, { platform, datasource, page, size }).then(response => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+    // 删除数据源配置信息
+    deleteDatasource(_, id) {
+        return new Promise((resolve, reject) => {
+            deleteDatasource({ token: store.getters.token }, { id: id }).then(response => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+    // 新增数据源配置信息
+    createDatasource(_, data) {
+        return new Promise((resolve, reject) => {
+            createDatasource({ token: store.getters.token }, data).then(response => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+    // 修改数据源配置信息
+    updateDatasource(_, data) {
+        return new Promise((resolve, reject) => {
+            updateDatasource({ token: store.getters.token }, data).then(response => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
 };
 
 export default {

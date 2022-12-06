@@ -43,3 +43,39 @@ export function getPlatformAndDatasourceOption(token) {
         headers: token,
     });
 }
+
+export function getDatasourceList(token, data) {
+    return request({
+        url: '/admin/fetcherConfig/getDatasourceList',
+        method: 'get',
+        headers: token,
+        params: data
+    });
+}
+
+export function deleteDatasource(token, id) {
+    return request({
+        url: '/admin/fetcherConfig/deleteDatasource',
+        method: 'delete',
+        headers: token,
+        data: id
+    });
+}
+
+export function createDatasource(token, data) {
+    return request({
+        url: '/admin/fetcherConfig/createDatasource',
+        method: 'post',
+        headers: token,
+        data: data
+    });
+}
+
+export function updateDatasource(token, data) {
+    return request({
+        url: '/admin/fetcherConfig/updateDatasource',
+        method: 'post',
+        headers: token,
+        data: data
+    });
+}

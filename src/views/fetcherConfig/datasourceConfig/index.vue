@@ -34,11 +34,11 @@
             />
           </el-select>
         </el-form-item>
-
         <el-form-item>
           <el-button
             type="primary" icon="el-icon-search"
             size="small" class="btn-search"
+            @click="searchList"
           >
             查询
           </el-button>
@@ -54,20 +54,38 @@
         新增
       </el-button>
     </div>
+
     <el-table
+      v-loading="loading"
       :data="dataSourceTable"
       style="width: 100%"
     >
-      <el-table-column prop="platform" label="平台" />
-      <el-table-column prop="datasource" label="数据源" />
-      <el-table-column prop="nickname" label="昵称" />
-      <el-table-column prop="avatar" label="头像" />
-      <el-table-column label="操作">
+      <el-table-column
+        prop="platform" label="平台"
+        align="center"
+      />
+      <el-table-column
+        prop="datasource" label="数据源"
+        align="center"
+      />
+      <el-table-column
+        prop="nickname" label="昵称"
+        align="center"
+      />
+      <el-table-column
+        label="头像"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <img style="width:60px;height:60px" :src="scope.row.avatar" />
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button
             type="text"
             size="small"
-            @click.native.prevent="checkDetail(scope.row)"
+            @click.native.prevent="editData(scope.row)"
           >
             详细
           </el-button>
@@ -81,7 +99,7 @@
           <el-button
             type="text"
             size="small"
-            @click.native.prevent="deleteData(scope.$row)"
+            @click.native.prevent="deleteData(scope.row)"
           >
             删除
           </el-button>
@@ -99,7 +117,7 @@
         @current-change="getDatasourceList"
       />
     </div>
-    <edit-datasource ref="editDatasource" />
+    <edit-datasource ref="editDatasource" @uploadDone="uploadDone" />
   </div>
 </template>
 
@@ -110,13 +128,9 @@ export default {
     components: { EditDatasource },
     data() {
         return {
+            loading: false,
             dataSourceTable:[],
-            pageSize: {
-                page: 1,
-                size: 10,
-                total_count: 0,
-                total_page: 0
-            },
+            pageSize: {},
             platformIdOptions: [],
             datasourceOptions: [],
             value: "",
@@ -131,12 +145,40 @@ export default {
     },
     methods: {
         init() {
-            this.getPlatformList();
+            this.initPageSize();
+            this.getPlatformAndDatasourceOption();
+            this.getDatasourceList();
+        },
+        initPageSize() {
+            this.pageSize = {
+                page: 1,
+                size: 10,
+                total_count: 0,
+                total_page: 0
+            };
         },
         getDatasourceList() {
-
+            this.loading = true;
+            this.$store
+                .dispatch("fetcherConfig/getDatasourceList", { ...this.search, ...this.pageSize })
+                .then((response) => {
+                    this.dataSourceTable = response.data?.list;
+                    this.pageSize = response.data?.page_size;
+                }).catch(() =>{
+                    this.$message({
+                        showClose: true,
+                        message: "获取平台列表失败",
+                        type: "error",
+                    });
+                }).finally(()=> {
+                    this.loading = false;
+                });
         },
-        getPlatformList() {
+        searchList() {
+            this.initPageSize();
+            this.getDatasourceList();
+        },
+        getPlatformAndDatasourceOption() {
             this.$store
                 .dispatch("fetcherConfig/getPlatformAndDatasourceOption")
                 .then((response) => {
@@ -166,6 +208,33 @@ export default {
         editData(data) {
             this.$refs.editDatasource.open(false, this.platformIdOptions, data);
         },
+        deleteData(data) {
+            this.$confirm('是否确定删除?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(()=> {
+                this.$store
+                    .dispatch("fetcherConfig/deleteDatasource", data.id)
+                    .then(() => {
+                        this.$message({
+                            showClose: true,
+                            message: "删除成功",
+                            type: "success",
+                        });
+                        this.getDatasourceList();
+                    }).catch(() =>{
+                        this.$message({
+                            showClose: true,
+                            message: "删除失败",
+                            type: "error",
+                        });
+                    });
+            });
+        },
+        uploadDone() {
+            this.init();
+        }
     }
 };
 </script>

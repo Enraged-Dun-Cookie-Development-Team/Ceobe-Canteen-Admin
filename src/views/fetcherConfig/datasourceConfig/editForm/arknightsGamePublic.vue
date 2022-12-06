@@ -9,6 +9,7 @@
         v-model="config.platform"
         placeholder="请选择"
         size="small"
+        :disabled="!create"
       >
         <el-option
           v-for="item in platformOptions"
@@ -23,8 +24,9 @@
       <el-button
         type="primary"
         size="small"
+        @click="complete"
       >
-        确定
+        {{ create ? "创建":"更新" }}
       </el-button>
     </el-form-item>
   </el-form>
@@ -51,8 +53,27 @@ export default {
             ],
             config: {
                 platform: "Android"
-            }
+            },
+            create: true,
         };
+    },
+    methods: {
+        open(create, config) {
+            this.create = create;
+            this.config = JSON.parse(JSON.stringify(config));
+        },
+        complete() {
+            let allPass = true;
+            this.$refs["configForm"].validate((valid) => {
+                if (!valid) {
+                    allPass = false;
+                    return;
+                }
+            });
+            if (allPass) {
+                this.$emit("complete", this.config);
+            }
+        }
     }
 };
 </script>
