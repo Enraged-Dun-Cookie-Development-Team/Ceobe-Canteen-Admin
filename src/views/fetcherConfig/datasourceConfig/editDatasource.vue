@@ -12,6 +12,7 @@
         ref="datasourceForm"
         :model="datasourceData"
         label-position="right" label-width="120px"
+        :rules="datasourceRules"
       >
         <el-form-item label="平台:" prop="platform">
           <el-select
@@ -106,6 +107,20 @@ export default {
             datasourceData: {},
             platformIdOptions:[],
             datasourceOptions: [],
+            datasourceRules: {
+                platform: {
+                    required: true, message: "请选择平台", trigger: "change"
+                },
+                datasource: {
+                    required: true, message: "请选择数据源", trigger: "change"
+                },
+                nickname: {
+                    required: true, message: "请选择昵称", trigger: "blur"
+                },
+                avatar: {
+                    required: true, message: "请上传图片", trigger: "change"
+                }
+            }
         };
     },
     mounted() {
