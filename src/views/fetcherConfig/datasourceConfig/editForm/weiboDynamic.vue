@@ -3,6 +3,7 @@
     ref="configForm"
     :model="config"
     label-position="right" label-width="120px"
+    :rules="configRules"
   >
     <el-form-item label="uid:" prop="uid">
       <el-input
@@ -34,6 +35,11 @@ export default {
             config: {
                 uid: "",
                 ignoreEmpty: false,
+            },
+            configRules: {
+                uid: {
+                    required: true, message: "uid要填噢～", trigger: "blur"
+                },
             },
             create: true,
         };

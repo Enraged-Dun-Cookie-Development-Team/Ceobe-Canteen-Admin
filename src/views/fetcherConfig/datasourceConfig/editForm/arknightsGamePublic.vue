@@ -3,6 +3,7 @@
     ref="configForm"
     :model="config"
     label-position="right" label-width="120px"
+    :rules="configRules"
   >
     <el-form-item label="客户端平台:" prop="platform">
       <el-select
@@ -53,6 +54,11 @@ export default {
             ],
             config: {
                 platform: "Android"
+            },
+            configRules: {
+                platform: {
+                    required: true, message: "请选择平台噢～", trigger: "blur"
+                },
             },
             create: true,
         };

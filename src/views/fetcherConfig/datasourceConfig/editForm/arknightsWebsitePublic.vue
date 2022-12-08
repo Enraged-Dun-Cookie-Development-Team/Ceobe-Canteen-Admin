@@ -3,6 +3,7 @@
     ref="configForm"
     :model="config"
     label-position="right" label-width="120px"
+    :rules="configRules"
   >
     <el-form-item>
       <el-button
@@ -23,6 +24,7 @@ export default {
         return {
             config: {},
             create: true,
+            configRules: {},
         };
     },
     methods: {

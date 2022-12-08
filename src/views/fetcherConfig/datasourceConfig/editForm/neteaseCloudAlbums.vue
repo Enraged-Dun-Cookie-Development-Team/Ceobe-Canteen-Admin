@@ -3,6 +3,7 @@
     ref="configForm"
     :model="config"
     label-position="right" label-width="120px"
+    :rules="configRules"
   >
     <el-form-item label="专辑id:" prop="artistId">
       <el-input
@@ -29,6 +30,11 @@ export default {
         return {
             config: {
                 artistId: "",
+            },
+            configRules: {
+                artistId: {
+                    required: true, message: "artistId要填噢～", trigger: "blur"
+                },
             },
             create: true,
         };
