@@ -3,6 +3,7 @@
     <el-steps :active="stepIndex" align-center>
       <el-step title="选择数据来源平台" />
       <el-step title="蹲饼器不同存活状态的组设置" />
+      <el-step title="验证与确认" />
     </el-steps>
     <el-card v-show="stepIndex == 1">
       <div class="flex-center">
@@ -14,7 +15,7 @@
             v-for="item in sourceTypeList"
             :key="item"
             type="primary"
-            @click="checkSourceType(item)"
+            @click="checkPlatformType(item)"
           >
             {{ item }}
           </el-button>
@@ -33,14 +34,14 @@
           >
             <div class="mb-10">
               <el-tag
-                v-for="sourceTypeName in sourceTypeNameList"
-                :key="sourceTypeName.name"
+                v-for="sourceTypeName in sourceTypeNameList[servers.number]"
+                :key="sourceTypeName.nickname"
                 draggable="true"
                 class="mv-10"
-                @dragstart.native="setDragItem(sourceTypeName,sourceTypeNameList)"
+                @dragstart.native="setDragItem(sourceTypeName,sourceTypeNameList[servers.number])"
               >
                 {{
-                  sourceTypeName.name
+                  sourceTypeName.nickname
                 }}
               </el-tag>
             </div>
@@ -78,28 +79,25 @@
                         class="mh-10 cursor-pointer"
                         @click="getIntervalByTimeRangeAndShowWindow(datasource,servers.number,groupIndex,datasourceIndex)"
                       >
-                        非规定时间段的常规频率：<b style="color: #23ADE5">{{ datasource.time?datasource.time:0 }}</b>毫秒
+                        非规定时间段的常规频率：<b style="color: #23ADE5">{{ datasource.interval?datasource.interval:0 }}</b>毫秒
                       </div>
                       <div
                         class="cursor-pointer"
                         @click="getIntervalByTimeRangeAndShowWindow(datasource,servers.number,groupIndex,datasourceIndex)"
-                        v-html="datasource.intervalByTimeRange.length>0?getIntervalByTimeRangeString(datasource.intervalByTimeRange):'点击这里修改频率'"
+                        v-html="datasource.interval_by_time_range.length>0?getIntervalByTimeRangeString(datasource.interval_by_time_range):'点击这里修改频率'"
                       >
                       </div>
                       <br />
                       <i v-if="datasource.datasource.length == 0" style="color: #848488">拖拽tag把来源添加到这里</i>
                       <div v-else>
                         <el-tag
-                          v-for="sourceTypeName in datasource.datasource"
-                          :key="sourceTypeName.name"
+                          v-for="sourceTypeId in datasource.datasource"
+                          :key="sourceTypeId"
                           class="mv-10 cursor-pointer"
                           closable
-                          :title="sourceTypeName.arg.ignoreEmpty?'当前是未启用的状态':''"
-                          :type="sourceTypeName.arg.ignoreEmpty?'info':''"
-                          @close="removeSource(sourceTypeName,servers.number,groupIndex,datasourceIndex)"
-                          @click="changeIgnoreEmptyStatus(sourceTypeName,servers.number,groupIndex,datasourceIndex)"
+                          @close="removeSource(sourceTypeId,servers.number,groupIndex,datasourceIndex)"
                         >
-                          {{ sourceTypeName.name }}
+                          {{ sourceTypeNameMap[sourceTypeId] }}
                         </el-tag>
                       </div>
                     </div>
@@ -111,6 +109,7 @@
         </el-tabs>
       </div>
     </el-card>
+    <el-card v-show="stepIndex == 3" />
     <el-input
       v-model="textarea"
       type="textarea"
@@ -124,11 +123,14 @@
       width="450px"
       :title="timePickerWindowInfo.title"
     >
-      <el-input
-        v-model="timePickerWindowInfo.time"
-        class="mh-10"
-        placeholder="时间段外的常规频率"
-      />
+      <div>
+        <span>单组蹲饼时间: </span>
+        <el-input-number
+          v-model="timePickerWindowInfo.time" controls-position="right"
+          :min="0" :step="1000" class="ml-5"
+          step-strictly
+        />
+      </div>
       <div
         v-for="(item,index) in timePicker" :key="'timePicker'+index"
         class="flex-between mh-10"
@@ -154,11 +156,10 @@
           class="ml-5"
           placeholder="结束时间"
         />
-        <el-input
-          v-model="timePicker[index].interval"
-          style="flex:1"
-          class="ml-5"
-          placeholder="蹲饼轮询毫秒"
+        <el-input-number
+          v-model="timePicker[index].interval" controls-position="right"
+          :min="0" :step="1000"
+          step-strictly class="ml-5"
         />
       </div>
       <div class="flex flex-between mv-10 mh-10">
@@ -178,10 +179,12 @@ export default {
     name: "FetcherDetailConfig",
     data() {
         return {
+            platform: '',
             stepIndex: 1, // 当前步骤
             serverLiveList: [], // 生成数数组
             sourceTypeList: [], // 类别
             sourceTypeNameList: [], // 类别下的账号
+            sourceTypeNameMap: {},
             dragItem: {}, // 拖拽对象
             timePickerWindowInfo: {
                 show: false,
@@ -210,35 +213,99 @@ export default {
             }, 300);
         },
         // 获取类别下账号 获取存活数量的数字
-        getSourceTypeNameList() {
+        getPlatformTypeNameList() {
             setTimeout(_ => {
                 this.sourceTypeNameList = [
-                    {
-                        name: '官方账号',
-                        type: 'bilibili',
-                        arg: { uid: '161775300', }
-                    },
-                    {
-                        name: '明日方舟终末地',
-                        type: 'bilibili',
-                        arg: { uid: '1265652806' }
-                    },
-                    {
-                        name: '来自星尘',
-                        type: 'bilibili',
-                        arg: { uid: '1883857209' }
-                    },
-                    {
-                        name: '重力井动画',
-                        type: 'bilibili',
-                        arg: { uid: '1554642444' }
-                    },
-                    {
-                        name: 'CubesCollective',
-                        type: 'bilibili',
-                        arg: { uid: '2123591088' }
-                    },
+                    [
+                        {
+                            nickname: '官方账号',
+                            id: 10
+                        },
+                        {
+                            nickname: '明日方舟终末地',
+                            id: 4
+                        },
+                        {
+                            nickname: '来自星尘',
+                            id: 1
+                        },
+                        {
+                            nickname: '重力井动画',
+                            id: 7
+                        },
+                        {
+                            nickname: 'CubesCollective',
+                            id: 9
+                        },
+                    ],
+                    [
+                        {
+                            nickname: '官方账号',
+                            id: 10
+                        },
+                        {
+                            nickname: '明日方舟终末地',
+                            id: 4
+                        },
+                        {
+                            nickname: '来自星尘',
+                            id: 1
+                        },
+                        {
+                            nickname: '重力井动画',
+                            id: 7
+                        },
+                        {
+                            nickname: 'CubesCollective',
+                            id: 9
+                        },
+                    ],
+                    [
+                        {
+                            nickname: '官方账号',
+                            id: 10
+                        },
+                        {
+                            nickname: '明日方舟终末地',
+                            id: 4
+                        },
+                        {
+                            nickname: '来自星尘',
+                            id: 1
+                        },
+                        {
+                            nickname: '重力井动画',
+                            id: 7
+                        },
+                        {
+                            nickname: 'CubesCollective',
+                            id: 9
+                        },
+                    ],
+                    [
+                        {
+                            nickname: '官方账号',
+                            id: 10
+                        },
+                        {
+                            nickname: '明日方舟终末地',
+                            id: 4
+                        },
+                        {
+                            nickname: '来自星尘',
+                            id: 1
+                        },
+                        {
+                            nickname: '重力井动画',
+                            id: 7
+                        },
+                        {
+                            nickname: 'CubesCollective',
+                            id: 9
+                        },
+                    ]
                 ];
+                this.sourceTypeNameMap = { "10":"官方账号", "4":"明日方舟终末地","1":"来自星尘","7":"重力井动画","9":"CubesCollective" };
                 this.serverLiveList = [{ number: 1, server: [] }, { number: 2, server: [] }, {
                     number: 3,
                     server: []
@@ -269,18 +336,20 @@ export default {
                 // 这里初始化卡片的对象
                 findData.groups.push({
                     name: value,
+                    type: this.platform ,
                     datasource: [],
-                    time: null,
-                    intervalByTimeRange: []
+                    interval: null,
+                    interval_by_time_range: []
                 });
             }).catch(() => {
 
             });
         },
         // 获取平台信息 bilibili 微博 等
-        checkSourceType(name) {
+        checkPlatformType(name) {
+            this.platform=name;
             this.nextPage();
-            this.getSourceTypeNameList(name);
+            this.getPlatformTypeNameList(name);
         },
         // 跳转到下一操作步骤
         nextPage() {
@@ -309,17 +378,23 @@ export default {
                 let datasourceIndex = event.currentTarget.dataset.datasourceindex;
                 let serverLive = this.serverLiveList.find(x => x.number == serversIndex);
                 let datasource = serverLive.server[groupIndex].groups[datasourceIndex];
-                if (datasource.datasource.findIndex(x => x.name == this.dragItem.name) < 0) {
-                    datasource.datasource.push(this.dragItem);
+                if (datasource.datasource.findIndex(x => x == this.dragItem.id) < 0) {
+                    datasource.datasource.push(this.dragItem.id);
+                    let index = this.sourceTypeNameList[serversIndex].findIndex(x => x.id == this.dragItem.id);
+                    this.sourceTypeNameList[serversIndex].splice(index, 1);
                 }
             }
             this.dragItem = null;
         },
         // 点击标签的x删除总对象内的蹲饼源
-        removeSource(sourceTypeName, serversIndex, groupIndex, datasourceIndex) {
+        removeSource(sourceTypeId, serversIndex, groupIndex, datasourceIndex) {
             let datasource = this.serverLiveList.find(x => x.number == serversIndex).server[groupIndex].groups[datasourceIndex];
-            let index = datasource.datasource.findIndex(x => x.name == sourceTypeName.name);
+            let index = datasource.datasource.findIndex(x => x == sourceTypeId);
             datasource.datasource.splice(index, 1);
+            this.sourceTypeNameList[serversIndex].push({
+                nickname: this.sourceTypeNameMap[sourceTypeId],
+                id: sourceTypeId
+            });
         },
         // 修改源状态（ignoreEmpty）的true和false
         changeIgnoreEmptyStatus(sourceTypeName, serversIndex, groupIndex, datasourceIndex) {
@@ -343,24 +418,24 @@ export default {
                 groupIndex,
                 datasourceIndex,
                 title: '添加 ' + datasource.name + ' 的蹲饼频率',
-                time:datasource.time
+                time:datasource.interval
             };
-            this.timePicker = datasource.intervalByTimeRange.map(x=>{
-                return { startTime:x.timeRange[0],
-                    endTime:x.timeRange[1],
+            this.timePicker = datasource.interval_by_time_range.map(x=>{
+                return { startTime:x.time_range[0],
+                    endTime:x.time_range[1],
                     interval:x.interval };
             });
         },
         // 把设置好得蹲饼时间段频率功能添加到总对象字符串内
         addIntervalByTimeRangeToGroups() {
             let datasource = this.serverLiveList.find(x => x.number == this.timePickerWindowInfo.serversIndex).server[this.timePickerWindowInfo.groupIndex].groups[this.timePickerWindowInfo.datasourceIndex];
-            datasource.intervalByTimeRange = this.timePicker.map(x => {
+            datasource.interval_by_time_range = this.timePicker.map(x => {
                 return {
-                    timeRange: [x.startTime, x.endTime],
+                    time_range: [x.startTime, x.endTime],
                     interval: x.interval
                 };
             });
-            datasource.time = this.timePickerWindowInfo.time;
+            datasource.interval = this.timePickerWindowInfo.time;
             this.timePickerWindowInfo= {
                 show: false,
                 serversIndex: null,
@@ -375,7 +450,7 @@ export default {
         getIntervalByTimeRangeString(data) {
             let html = `<div class="interval-by-time-range-html"><span>共${data.length}条:</span>`;
             html += data.map((x, index) => {
-                return `<span>第<b>${index + 1}</b>条:<b>${x.timeRange[0]}</b>到<b>${x.timeRange[0]}</b>,频率为<b>${x.interval}</b>毫秒;</span>`;
+                return `<span>第<b>${index + 1}</b>条:<b>${x.time_range[0]}</b>到<b>${x.time_range[1]}</b>,频率为<b>${x.interval}</b>毫秒;</span>`;
             });
             html += '</div>';
             return html;
