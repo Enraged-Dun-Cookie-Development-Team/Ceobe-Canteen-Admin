@@ -41,7 +41,7 @@ module.exports = [
             const { page, size } = req.query;
             let platformTable = [];
             for(let i = 0; i < 28; i++) {
-                let minTime = Math.floor(Math.random()*100);
+                let minTime = Math.floor(Math.random()*40)*1000;
 
                 platformTable[i] = Mock.mock({
                     id: i,

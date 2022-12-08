@@ -29,7 +29,7 @@
         <el-form-item label="最小蹲饼间隔:" prop="min_request_interval">
           <el-input-number
             v-model="platformData.min_request_interval" controls-position="right"
-            :min="1"
+            :min="1000" :step="1000"
           />
         </el-form-item>
 
@@ -93,7 +93,7 @@ export default {
                 id: null,
                 type_id: "",
                 platform_name: "",
-                min_request_interval: 15
+                min_request_interval: 15000
             };
         },
         open(create, data) {
