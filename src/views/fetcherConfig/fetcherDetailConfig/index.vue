@@ -445,7 +445,7 @@ export default {
         },
         // 时间添加一行
         addIntervalByTimeRangeLine() {
-            this.timePicker.push({});
+            this.timePicker.push({ startTime: "04:00", endTime: "04:00", interval:0 });
         },
         // 打开蹲饼时间段频率功能的窗口
         getIntervalByTimeRangeAndShowWindow(datasource, serversIndex, groupIndex, datasourceIndex) {
