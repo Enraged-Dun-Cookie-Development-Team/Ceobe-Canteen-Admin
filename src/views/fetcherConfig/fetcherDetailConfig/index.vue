@@ -115,7 +115,9 @@
         </el-tabs>
       </div>
     </el-card>
-    <el-card v-show="stepIndex == 3" />
+    <el-card v-show="stepIndex == 3">
+      <valid-and-confirm :server-live-list="serverLiveList" />
+    </el-card>
     <el-input
       v-model="textarea"
       type="textarea"
@@ -183,7 +185,7 @@
       class="btn-reset"
       @click="initData"
     >
-      提交
+      重置
     </el-button>
     <el-button
       v-if="stepIndex == 2"
@@ -191,14 +193,16 @@
       class="btn-next"
       @click="completeConfig"
     >
-      下一页
+      前往验证
     </el-button>
   </div>
 </template>
 
 <script>
+import ValidAndConfirm from "./validAndConfirm.vue";
 export default {
     name: "FetcherDetailConfig",
+    components: { ValidAndConfirm },
     data() {
         return {
             platform: '',
@@ -516,19 +520,30 @@ export default {
             }
         },
         completeConfig() {
-            let complete = 0;
+            let uncomplete = [];
             this.sourceTypeNameList.forEach((k, v)=> {
                 if (k.length > 0) {
-                    complete = v+1;
+                    let sourceName = k.map(x=>x.nickname);
+                    uncomplete.push({
+                        server: v+1,
+                        source:sourceName
+                    });
                 }
             });
-            if (complete > 0) {
-                this.$message({
-                    message: `存活${complete}个的情况，数据源还没有配置完`,
-                    type: 'error'
+            if (uncomplete.length > 0) {
+                let noticeStr = '';
+                for (let i = 0; i < uncomplete.length; i++) {
+                    noticeStr += `存活${uncomplete[i].server}个，数据源：`+uncomplete[i].source.join("，")+"\n";
+                }
+                noticeStr += '以上情况还未配置，是否继续？';
+                this.$confirm(noticeStr, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    customClass: "notice-box"
+                }).then(()=> {
+                    this.nextPage();
                 });
-            } else {
-                this.nextPage();
             }
         }
     }
@@ -623,5 +638,10 @@ export default {
     right:80px;
     bottom: 20px;
   }
+}
+</style>
+<style lang="scss">
+.notice-box {
+  white-space: pre-line;
 }
 </style>
