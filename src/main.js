@@ -20,6 +20,11 @@ import VueClipboard from 'vue-clipboard2';
 
 Vue.use(VueClipboard);
 
+import JsonViewer from 'vue-json-viewer';
+
+// Import JsonViewer as a Vue.js plugin
+Vue.use(JsonViewer);
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
