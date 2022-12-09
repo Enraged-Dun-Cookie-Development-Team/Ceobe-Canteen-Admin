@@ -177,6 +177,22 @@
         </el-button>
       </div>
     </el-dialog>
+    <el-button
+      v-if="stepIndex !== 1"
+      type="danger"
+      class="btn-reset"
+      @click="initData"
+    >
+      提交
+    </el-button>
+    <el-button
+      v-if="stepIndex == 2"
+      type="primary"
+      class="btn-next"
+      @click="completeConfig"
+    >
+      下一页
+    </el-button>
   </div>
 </template>
 
@@ -212,11 +228,28 @@ export default {
         this.getSourceType();
     },
     methods: {
-    // 获取类别
+        // 获取类别
         getSourceType() {
             setTimeout(_ => {
                 this.sourceTypeList = ['bilibili', '微博', '网易云音乐'];
             }, 300);
+        },
+        initData() {
+            this.platform= '';
+            this.stepIndex= 1; // 当前步骤
+            this.serverLiveList= []; // 生成数数组
+            this.sourceTypeNameList= []; // 类别下的账号
+            this.sourceTypeNameMap= {};
+            this.dragItem= {}; // 拖拽对象
+            this.timePickerWindowInfo= {
+                show: false,
+                serversIndex: null,
+                groupIndex: null,
+                datasourceIndex: null,
+                title: "",
+                time: null,
+            };// 打开的弹窗内保存的信息
+            this.timePicker= [{}];// 时间列表
         },
         // 获取类别下账号 获取存活数量的数字
         getPlatformTypeNameList() {
@@ -481,6 +514,22 @@ export default {
                 });
                 this.serverLiveList[serversNumber-1]?.server[groupIndex]?.groups.splice(datasourceIndex,1);
             }
+        },
+        completeConfig() {
+            let complete = 0;
+            this.sourceTypeNameList.forEach((k, v)=> {
+                if (k.length > 0) {
+                    complete = v+1;
+                }
+            });
+            if (complete > 0) {
+                this.$message({
+                    message: `存活${complete}个的情况，数据源还没有配置完`,
+                    type: 'error'
+                });
+            } else {
+                this.nextPage();
+            }
         }
     }
 };
@@ -561,6 +610,18 @@ export default {
 
   .position-right-18 {
     right: 18px
+  }
+
+  .btn-reset {
+    position: fixed;
+    right:180px;
+    bottom: 20px;
+  }
+
+  .btn-next {
+    position: fixed;
+    right:80px;
+    bottom: 20px;
   }
 }
 </style>
