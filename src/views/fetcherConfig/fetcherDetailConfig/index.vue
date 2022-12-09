@@ -470,21 +470,25 @@ export default {
         // 把设置好得蹲饼时间段频率功能添加到总对象字符串内
         addIntervalByTimeRangeToGroups() {
             let datasource = this.serverLiveList.find(x => x.number == this.timePickerWindowInfo.serversIndex).server[this.timePickerWindowInfo.groupIndex].groups[this.timePickerWindowInfo.datasourceIndex];
+            let timeRangeInterval = [];
+            this.$delete(datasource, "interval_by_time_range");
             for (let i = 0; i < this.timePicker.length; i++) {
-                delete datasource.interval_by_time_range;
                 if (this.timePicker[i]?.interval != 0 && this.timePicker[i]?.startTime && this.timePicker[i]?.endTime) {
                     if (!("interval_by_time_range" in datasource)) {
                         datasource.interval_by_time_range=[];
                     }
-                    datasource.interval_by_time_range.push({
+                    timeRangeInterval.push({
                         time_range: [this.timePicker[i].startTime, this.timePicker[i].endTime],
                         interval: this.timePicker[i].interval
                     });
                 }
             }
-            delete datasource.interval;
+            if (timeRangeInterval.length > 0) {
+                this.$set(datasource, 'interval_by_time_range', timeRangeInterval);
+            }
+            this.$delete(datasource, "interval");
             if (this.timePickerWindowInfo.time != 0) {
-                datasource.interval = this.timePickerWindowInfo.time;
+                this.$set(datasource, 'interval', this.timePickerWindowInfo.time);
             }
 
             this.timePickerWindowInfo= {
