@@ -13,6 +13,7 @@
 import JsonViewer from 'vue-json-viewer';
 export default {
     name: 'ValidAndConfirm',
+    components: { JsonViewer },
     props: {
         serverLiveList: {
             type: Array,
@@ -24,7 +25,6 @@ export default {
 
         };
     },
-    computed: { JsonViewer },
     mounted() {
 
     },
