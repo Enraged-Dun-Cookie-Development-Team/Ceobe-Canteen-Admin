@@ -34,11 +34,11 @@
           >
             <div class="mb-10">
               <el-tag
-                v-for="sourceTypeName in sourceTypeNameList[servers.number]"
+                v-for="sourceTypeName in sourceTypeNameList[servers.number-1]"
                 :key="sourceTypeName.nickname"
                 draggable="true"
                 class="mv-10"
-                @dragstart.native="setDragItem(sourceTypeName,sourceTypeNameList[servers.number])"
+                @dragstart.native="setDragItem(sourceTypeName,sourceTypeNameList[servers.number-1])"
               >
                 {{
                   sourceTypeName.nickname
@@ -63,7 +63,7 @@
                   <el-card
                     v-for="(datasource,datasourceIndex) in group.groups"
                     :key="'datasource'+datasourceIndex"
-                    class="mh-10 mv-10"
+                    class="mh-10 mv-10 position-relative"
                     :data-serversIndex="servers.number"
                     :data-groupIndex="groupIndex"
                     :data-datasourceIndex="datasourceIndex"
@@ -72,6 +72,12 @@
                   >
                     <!--这里是卡片的内容，如果你要在里面加字段，请先在groupAddDatasource方法内初始化的时候添加相应字段以免无法监听-->
                     <div>
+                      <el-button
+                        type="text" class="position-absolute position-top-0 position-right-18"
+                        @click="removeDatasources(servers.number, groupIndex, datasourceIndex)"
+                      >
+                        x
+                      </el-button>
                       <div class="mb-10">
                         <i class="el-icon-s-order mr-5"></i>{{ datasource.name }}
                       </div>
@@ -381,7 +387,7 @@ export default {
                 if (datasource.datasource.findIndex(x => x == this.dragItem.id) < 0) {
                     datasource.datasource.push(this.dragItem.id);
                     let index = this.sourceTypeNameList[serversIndex].findIndex(x => x.id == this.dragItem.id);
-                    this.sourceTypeNameList[serversIndex].splice(index, 1);
+                    this.sourceTypeNameList[serversIndex-1].splice(index, 1);
                 }
             }
             this.dragItem = null;
@@ -391,7 +397,7 @@ export default {
             let datasource = this.serverLiveList.find(x => x.number == serversIndex).server[groupIndex].groups[datasourceIndex];
             let index = datasource.datasource.findIndex(x => x == sourceTypeId);
             datasource.datasource.splice(index, 1);
-            this.sourceTypeNameList[serversIndex].push({
+            this.sourceTypeNameList[serversIndex-1].push({
                 nickname: this.sourceTypeNameMap[sourceTypeId],
                 id: sourceTypeId
             });
@@ -454,6 +460,19 @@ export default {
             });
             html += '</div>';
             return html;
+        },
+        // 删除一个来源组(datasource)
+        removeDatasources(serversNumber, groupIndex, datasourceIndex) {
+            if (this.serverLiveList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]) {
+                this.serverLiveList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex];
+                this.serverLiveList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]?.datasource.find(sourceTypeId => {
+                    this.sourceTypeNameList[serversNumber-1].push({
+                        nickname: this.sourceTypeNameMap[sourceTypeId],
+                        id: sourceTypeId
+                    });
+                });
+                this.serverLiveList[serversNumber-1]?.server[groupIndex]?.groups.splice(datasourceIndex,1);
+            }
         }
     }
 };
@@ -518,6 +537,22 @@ export default {
     b {
       color: #23ADE5;
     }
+  }
+
+  .position-relative {
+    position: relative;
+  }
+
+  .position-absolute {
+    position: absolute;
+  }
+
+  .position-top-0 {
+    top: 0
+  }
+
+  .position-right-18 {
+    right: 18px
   }
 }
 </style>
