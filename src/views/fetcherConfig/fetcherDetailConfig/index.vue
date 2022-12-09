@@ -90,7 +90,7 @@
                       <div
                         class="cursor-pointer"
                         @click="getIntervalByTimeRangeAndShowWindow(datasource,servers.number,groupIndex,datasourceIndex)"
-                        v-html="datasource.interval_by_time_range.length>0?getIntervalByTimeRangeString(datasource.interval_by_time_range):'点击这里修改频率'"
+                        v-html="datasource.interval_by_time_range?.length>0?getIntervalByTimeRangeString(datasource.interval_by_time_range):'点击这里修改频率'"
                       >
                       </div>
                       <br />
@@ -344,8 +344,6 @@ export default {
                     name: value,
                     type: this.platform ,
                     datasource: [],
-                    interval: null,
-                    interval_by_time_range: []
                 });
             }).catch(() => {
 
@@ -386,7 +384,7 @@ export default {
                 let datasource = serverLive.server[groupIndex].groups[datasourceIndex];
                 if (datasource.datasource.findIndex(x => x == this.dragItem.id) < 0) {
                     datasource.datasource.push(this.dragItem.id);
-                    let index = this.sourceTypeNameList[serversIndex].findIndex(x => x.id == this.dragItem.id);
+                    let index = this.sourceTypeNameList[serversIndex-1].findIndex(x => x.id == this.dragItem.id);
                     this.sourceTypeNameList[serversIndex-1].splice(index, 1);
                 }
             }
@@ -424,24 +422,34 @@ export default {
                 groupIndex,
                 datasourceIndex,
                 title: '添加 ' + datasource.name + ' 的蹲饼频率',
-                time:datasource.interval
+                time:datasource.interval?datasource.interval:0
             };
-            this.timePicker = datasource.interval_by_time_range.map(x=>{
-                return { startTime:x.time_range[0],
-                    endTime:x.time_range[1],
+            this.timePicker = datasource.interval_by_time_range?datasource.interval_by_time_range.map(x=>{
+                return { startTime:x.time_range[0]?x.time_range[0]:null,
+                    endTime:x.time_range[1]?x.time_range[1]:null,
                     interval:x.interval };
-            });
+            }):[];
         },
         // 把设置好得蹲饼时间段频率功能添加到总对象字符串内
         addIntervalByTimeRangeToGroups() {
             let datasource = this.serverLiveList.find(x => x.number == this.timePickerWindowInfo.serversIndex).server[this.timePickerWindowInfo.groupIndex].groups[this.timePickerWindowInfo.datasourceIndex];
-            datasource.interval_by_time_range = this.timePicker.map(x => {
-                return {
-                    time_range: [x.startTime, x.endTime],
-                    interval: x.interval
-                };
-            });
-            datasource.interval = this.timePickerWindowInfo.time;
+            for (let i = 0; i < this.timePicker.length; i++) {
+                delete datasource.interval_by_time_range;
+                if (this.timePicker[i]?.interval != 0 && this.timePicker[i]?.startTime && this.timePicker[i]?.endTime) {
+                    if (!("interval_by_time_range" in datasource)) {
+                        datasource.interval_by_time_range=[];
+                    }
+                    datasource.interval_by_time_range.push({
+                        time_range: [this.timePicker[i].startTime, this.timePicker[i].endTime],
+                        interval: this.timePicker[i].interval
+                    });
+                }
+            }
+            delete datasource.interval;
+            if (this.timePickerWindowInfo.time != 0) {
+                datasource.interval = this.timePickerWindowInfo.time;
+            }
+
             this.timePickerWindowInfo= {
                 show: false,
                 serversIndex: null,
