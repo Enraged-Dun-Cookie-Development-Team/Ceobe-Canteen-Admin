@@ -156,12 +156,6 @@ export const asyncRoutes = [
         meta: { title: '程序信息',  icon: 'el-icon-document-checked',roles: ['chef', 'cooker', 'architect'] },
         children: [
             {
-                path: 'globalConfig',
-                name: '配置全局',
-                component: () => import('@/views/fetcherConfig/globalConfig/index'),
-                meta: { title: '配置全局', icon: 'el-icon-coin' }
-            },
-            {
                 path: 'platformConfig',
                 name: '配置平台',
                 component: () => import('@/views/fetcherConfig/platformConfig/index'),
@@ -172,6 +166,12 @@ export const asyncRoutes = [
                 name: '配置数据源',
                 component: () => import('@/views/fetcherConfig/datasourceConfig/index'),
                 meta: { title: '配置数据源', icon: 'el-icon-s-management' }
+            },
+            {
+                path: 'globalConfig',
+                name: '配置蹲饼器全局',
+                component: () => import('@/views/fetcherConfig/globalConfig/index'),
+                meta: { title: '配置蹲饼器全局', icon: 'el-icon-coin' }
             },
             {
                 path: 'fetcherDetailConfig',

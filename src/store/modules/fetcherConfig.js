@@ -1,4 +1,4 @@
-import { platformList, createPlatform, updatePlatform, deletePlatform, getPlatformAndDatasourceOption, getDatasourceList, deleteDatasource , createDatasource, updateDatasource } from '@/api/fetcherConfig';
+import { platformList, createPlatform, updatePlatform, deletePlatform, getPlatformAndDatasourceOption, getDatasourceList, deleteDatasource , createDatasource, updateDatasource, getGlobalConfig, uploadGlobalConfig } from '@/api/fetcherConfig';
 import store from '..';
 
 const actions = {
@@ -100,6 +100,28 @@ const actions = {
             });
         });
     },
+
+    // 上传蹲饼器全局配置
+    uploadGlobalConfig(_, data) {
+        return new Promise((resolve, reject) => {
+            uploadGlobalConfig({ token: store.getters.token }, data).then(response => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+    // 获取蹲饼器全局配置
+    getGlobalConfig(_, data) {
+        return new Promise((resolve, reject) => {
+            getGlobalConfig({ token: store.getters.token }, data).then(response => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    }
 };
 
 export default {

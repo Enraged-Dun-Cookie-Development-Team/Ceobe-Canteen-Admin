@@ -251,4 +251,37 @@ module.exports = [
             };
         }
     },
+    {
+        url: '/admin/fetcherConfig/getGlobalConfig',
+        type: 'get',
+        response: req => {
+            const { token } = req.headers;
+            console.log(token);
+
+            let data = {
+                default_interval: 15000
+            };
+            return {
+                code: "00000",
+                message: '更新数据源配置成功',
+                data: data
+            };
+        }
+    },
+    {
+        url: '/admin/fetcherConfig/uploadGlobalConfig',
+        type: 'post',
+        response: req => {
+            const { token } = req.headers;
+            console.log(token);
+            const body = req.body;
+            console.log(body);
+
+            return {
+                code: "00000",
+                message: '更新数据源配置成功',
+                data: null
+            };
+        }
+    },
 ];

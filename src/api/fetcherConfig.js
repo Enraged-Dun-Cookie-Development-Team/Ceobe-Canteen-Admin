@@ -79,3 +79,20 @@ export function updateDatasource(token, data) {
         data: data
     });
 }
+
+export function getGlobalConfig(token) {
+    return request({
+        url: '/admin/fetcherConfig/getGlobalConfig',
+        method: 'get',
+        headers: token,
+    });
+}
+
+export function uploadGlobalConfig(token, data) {
+    return request({
+        url: '/admin/fetcherConfig/uploadGlobalConfig',
+        method: 'post',
+        headers: token,
+        data: data
+    });
+}
