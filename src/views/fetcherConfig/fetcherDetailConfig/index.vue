@@ -307,18 +307,21 @@ export default {
             // 配置每种情况下未配置的数据源
             this.fethcerConfigList.forEach(data => {
                 let datasourceConfigured = {};
-                data.groups?.forEach(group => {
-                    group.datasource.forEach(datasourceId => {
-                        datasourceConfigured[datasourceId] = true;
+                data.server?.forEach(server=> {
+                    server.groups?.forEach(group => {
+                        group.datasource?.forEach(datasourceId => {
+                            datasourceConfigured[datasourceId] = true;
+                        });
                     });
                 });
+
                 // let datasourceTemp = JSON.parse(JSON.stringify(datasources))
                 let datasourceTemp = datasources.map(x => {
-                    if (x.id in datasourceConfigured) {
+                    if (!(x.id in datasourceConfigured)) {
                         return x;
                     }
                 });
-                this.datasourceList.push(datasourceTemp);
+                this.datasourceList.push(datasourceTemp || []);
             });
 
             // setTimeout(_ => {
