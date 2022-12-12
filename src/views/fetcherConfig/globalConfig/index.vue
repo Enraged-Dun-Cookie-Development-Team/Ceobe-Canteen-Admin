@@ -7,7 +7,6 @@
       ref="globalForm"
       :model="globalData"
       label-position="right"
-      :rules="datasourceRules"
     >
       <el-form-item label="蹲饼频率:" prop="default_interval">
         <el-input-number

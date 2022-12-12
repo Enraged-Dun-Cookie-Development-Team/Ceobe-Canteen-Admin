@@ -166,7 +166,7 @@
         />
         <el-input-number
           v-model="timePicker[index].interval" controls-position="right"
-          :min="0" :step="1000"
+          :min="-1000" :step="1000"
           step-strictly class="ml-5"
         />
       </div>
@@ -449,7 +449,7 @@ export default {
         },
         // 时间添加一行
         addIntervalByTimeRangeLine() {
-            this.timePicker.push({ startTime: "04:00", endTime: "04:00", interval:0 });
+            this.timePicker.push({ startTime: "04:00", endTime: "04:00", interval:-1000 });
         },
         // 打开蹲饼时间段频率功能的窗口
         getIntervalByTimeRangeAndShowWindow(datasource, serversIndex, groupIndex, datasourceIndex) {
@@ -473,7 +473,7 @@ export default {
             let timeRangeInterval = [];
             this.$delete(datasource, "interval_by_time_range");
             for (let i = 0; i < this.timePicker.length; i++) {
-                if (this.timePicker[i]?.interval != 0 && this.timePicker[i]?.startTime && this.timePicker[i]?.endTime) {
+                if (this.timePicker[i]?.interval != -1000 && this.timePicker[i]?.startTime && this.timePicker[i]?.endTime) {
                     if (!("interval_by_time_range" in datasource)) {
                         datasource.interval_by_time_range=[];
                     }
