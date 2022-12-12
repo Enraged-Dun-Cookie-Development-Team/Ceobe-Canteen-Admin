@@ -6,39 +6,39 @@
       <el-step title="验证与确认" />
     </el-steps>
     <el-card v-show="stepIndex == 1">
-      <div class="flex-center">
-        <div v-if="sourceTypeList.length == 0">
-          Loading
+      <div v-loading="platformLoading" class="flex-center">
+        <div v-if="platformList.length == 0">
+          请先到配置平台页面添加平台
         </div>
         <el-button-group v-else>
           <el-button
-            v-for="item in sourceTypeList"
-            :key="item"
+            v-for="item in platformList"
+            :key="item.typeId"
             type="primary"
             @click="checkPlatformType(item)"
           >
-            {{ item }}
+            {{ item.platfromName }}
           </el-button>
         </el-button-group>
       </div>
     </el-card>
     <el-card v-show="stepIndex == 2">
-      <div v-if="serverLiveList.length == 0">
-        让我看看有多少存活逻辑
+      <div v-if="pageTwoNotice != ''">
+        {{ pageTwoNotice }}
       </div>
       <div v-else class="flex-center">
         <el-tabs style="width: 100%;height: 100%" type="border-card">
           <el-tab-pane
-            v-for="(servers) in serverLiveList" :key="servers.number+''"
-            :label="'只存活了'+(servers.number)+'条的情况'"
+            v-for="(servers) in fethcerConfigList" :key="servers.number+''"
+            :label="`只存活了${servers.number}条的情况${completeServer[servers.number-1]?'✅':'❌'}`"
           >
             <div class="mb-10">
               <el-tag
-                v-for="sourceTypeName in sourceTypeNameList[servers.number-1]"
+                v-for="sourceTypeName in datasourceList[servers.number-1]"
                 :key="sourceTypeName.nickname"
                 draggable="true"
                 class="mv-10"
-                @dragstart.native="setDragItem(sourceTypeName,sourceTypeNameList[servers.number-1])"
+                @dragstart.native="setDragItem(sourceTypeName,datasourceList[servers.number-1])"
               >
                 {{
                   sourceTypeName.nickname
@@ -103,7 +103,7 @@
                           closable
                           @close="removeSource(sourceTypeId,servers.number,groupIndex,datasourceIndex)"
                         >
-                          {{ sourceTypeNameMap[sourceTypeId] }}
+                          {{ datasourceMap[sourceTypeId].nickname }}
                         </el-tag>
                       </div>
                     </div>
@@ -116,7 +116,7 @@
       </div>
     </el-card>
     <el-card v-show="stepIndex == 3">
-      <valid-and-confirm :server-live-list="serverLiveList" />
+      <valid-and-confirm :server-live-list="fethcerConfigList" />
     </el-card>
     <el-input
       v-model="textarea"
@@ -205,12 +205,16 @@ export default {
     components: { ValidAndConfirm },
     data() {
         return {
+            pageTwoNotice: '',
+            fetcherLiveNumber: 0,
             platform: '',
             stepIndex: 1, // 当前步骤
-            serverLiveList: [], // 生成数数组
-            sourceTypeList: [], // 类别
-            sourceTypeNameList: [], // 类别下的账号
-            sourceTypeNameMap: {},
+            fethcerConfigList: [], // 蹲饼器配置数组
+            platformList: [], // 平台类别
+            platformLoading: false, // 平台加载
+            datasourceList: [], // 类别下的账号
+            datasourceMap: {},
+            completeServer: [], //完成情况
             dragItem: {}, // 拖拽对象
             timePickerWindowInfo: {
                 show: false,
@@ -225,25 +229,42 @@ export default {
     },
     computed: {
         textarea() {
-            return JSON.stringify(this.serverLiveList);
+            return JSON.stringify(this.fethcerConfigList);
         }
     },
     mounted() {
-        this.getSourceType();
+        this.getPlatformList();
     },
     methods: {
         // 获取类别
-        getSourceType() {
-            setTimeout(_ => {
-                this.sourceTypeList = ['bilibili', '微博', '网易云音乐'];
-            }, 300);
+        getPlatformList() {
+            this.platformLoading = true;
+            this.$store
+                .dispatch("fetcherConfig/allPlatformList")
+                .then((response) => {
+                    this.platformList = response.data.map(x => { return { typeId: x.type_id, platfromName: x.platform_name };});
+                }).catch(() =>{
+                    this.$message({
+                        showClose: true,
+                        message: "获取平台配置列表失败",
+                        type: "error",
+                    });
+                }).finally(() =>{
+                    this.platformLoading = false;
+                });
         },
+        // 初始化数据
         initData() {
+            this.pageTwoNotice = "";
+            this.fetcherLiveNumber = 0;
             this.platform= '';
             this.stepIndex= 1; // 当前步骤
-            this.serverLiveList= []; // 生成数数组
-            this.sourceTypeNameList= []; // 类别下的账号
-            this.sourceTypeNameMap= {};
+            this.fethcerConfigList= []; // 蹲饼器配置数组
+            this.platformList= [], // 平台类别
+            this.platformLoading= false, // 平台加载
+            this.datasourceList= []; // 类别下的账号
+            this.datasourceMap= {};
+            this.completeServer= [], //完成情况
             this.dragItem= {}; // 拖拽对象
             this.timePickerWindowInfo= {
                 show: false,
@@ -254,121 +275,217 @@ export default {
                 time: null,
             };// 打开的弹窗内保存的信息
             this.timePicker= [{}];// 时间列表
+            this.getPlatformList();
         },
         // 获取类别下账号 获取存活数量的数字
-        getPlatformTypeNameList() {
-            setTimeout(_ => {
-                this.sourceTypeNameList = [
-                    [
-                        {
-                            nickname: '官方账号',
-                            id: 10
-                        },
-                        {
-                            nickname: '明日方舟终末地',
-                            id: 4
-                        },
-                        {
-                            nickname: '来自星尘',
-                            id: 1
-                        },
-                        {
-                            nickname: '重力井动画',
-                            id: 7
-                        },
-                        {
-                            nickname: 'CubesCollective',
-                            id: 9
-                        },
-                    ],
-                    [
-                        {
-                            nickname: '官方账号',
-                            id: 10
-                        },
-                        {
-                            nickname: '明日方舟终末地',
-                            id: 4
-                        },
-                        {
-                            nickname: '来自星尘',
-                            id: 1
-                        },
-                        {
-                            nickname: '重力井动画',
-                            id: 7
-                        },
-                        {
-                            nickname: 'CubesCollective',
-                            id: 9
-                        },
-                    ],
-                    [
-                        {
-                            nickname: '官方账号',
-                            id: 10
-                        },
-                        {
-                            nickname: '明日方舟终末地',
-                            id: 4
-                        },
-                        {
-                            nickname: '来自星尘',
-                            id: 1
-                        },
-                        {
-                            nickname: '重力井动画',
-                            id: 7
-                        },
-                        {
-                            nickname: 'CubesCollective',
-                            id: 9
-                        },
-                    ],
-                    [
-                        {
-                            nickname: '官方账号',
-                            id: 10
-                        },
-                        {
-                            nickname: '明日方舟终末地',
-                            id: 4
-                        },
-                        {
-                            nickname: '来自星尘',
-                            id: 1
-                        },
-                        {
-                            nickname: '重力井动画',
-                            id: 7
-                        },
-                        {
-                            nickname: 'CubesCollective',
-                            id: 9
-                        },
-                    ]
-                ];
-                this.sourceTypeNameMap = { "10":"官方账号", "4":"明日方舟终末地","1":"来自星尘","7":"重力井动画","9":"CubesCollective" };
-                this.serverLiveList = [{ number: 1, server: [] }, { number: 2, server: [] }, {
-                    number: 3,
-                    server: []
-                }, { number: 4, server: [] }];
-                this.serverAddGroups();
-            }, 300);
+        async InitPageTwo() {
+            let datasources = await this.getDatasourceList();
+            console.log(datasources);
+            if (datasources.length == 0) {
+                this.pageTwoNotice = "还为配置数据源，先去配置数据源吧";
+                return;
+            }
+            await this.getFetcherConfigList();
+            if (!await this.getFetcherLiveNumber()) {
+                this.pageTwoNotice = "未能获取到蹲饼器存活个数，无法继续";
+                return;
+            }
+            if (this.fetcherLiveNumber==0) {
+                this.pageTwoNotice = "还没有蹲饼器噢，不用配置，去休息一下吧";
+                return;
+            }
+            // 获取的的数据源配置的都为已完成
+            for (let i = 0; i < this.fethcerConfigList.length; i++) {
+                this.completeServer.push(true);
+            }
+            // 如果当前配置蹲饼器小于最大存活数量，则补充
+            while (this.fetcherLiveNumber > this.fethcerConfigList.length) {
+                this.fethcerConfigList.push({ number: this.fethcerConfigList.length+1, server: [] });
+                this.completeServer.push(false);
+            }
+            this.serverAddGroups();
+            // 配置每种情况下未配置的数据源
+            this.fethcerConfigList.forEach(data => {
+                let datasourceConfigured = {};
+                data.groups?.forEach(group => {
+                    group.datasource.forEach(datasourceId => {
+                        datasourceConfigured[datasourceId] = true;
+                    });
+                });
+                // let datasourceTemp = JSON.parse(JSON.stringify(datasources))
+                let datasourceTemp = datasources.map(x => {
+                    if (x.id in datasourceConfigured) {
+                        return x;
+                    }
+                });
+                this.datasourceList.push(datasourceTemp);
+            });
+
+            // setTimeout(_ => {
+            //     this.completeServer=[true, false,false,false];
+            //     this.datasourceList = [
+            //         [
+            //             {
+            //                 nickname: '官方账号',
+            //                 id: 10
+            //             },
+            //             {
+            //                 nickname: '明日方舟终末地',
+            //                 id: 4
+            //             },
+            //             {
+            //                 nickname: '来自星尘',
+            //                 id: 1
+            //             },
+            //             {
+            //                 nickname: '重力井动画',
+            //                 id: 7
+            //             },
+            //             {
+            //                 nickname: 'CubesCollective',
+            //                 id: 9
+            //             },
+            //         ],
+            //         [
+            //             {
+            //                 nickname: '官方账号',
+            //                 id: 10
+            //             },
+            //             {
+            //                 nickname: '明日方舟终末地',
+            //                 id: 4
+            //             },
+            //             {
+            //                 nickname: '来自星尘',
+            //                 id: 1
+            //             },
+            //             {
+            //                 nickname: '重力井动画',
+            //                 id: 7
+            //             },
+            //             {
+            //                 nickname: 'CubesCollective',
+            //                 id: 9
+            //             },
+            //         ],
+            //         [
+            //             {
+            //                 nickname: '官方账号',
+            //                 id: 10
+            //             },
+            //             {
+            //                 nickname: '明日方舟终末地',
+            //                 id: 4
+            //             },
+            //             {
+            //                 nickname: '来自星尘',
+            //                 id: 1
+            //             },
+            //             {
+            //                 nickname: '重力井动画',
+            //                 id: 7
+            //             },
+            //             {
+            //                 nickname: 'CubesCollective',
+            //                 id: 9
+            //             },
+            //         ],
+            //         [
+            //             {
+            //                 nickname: '官方账号',
+            //                 id: 10
+            //             },
+            //             {
+            //                 nickname: '明日方舟终末地',
+            //                 id: 4
+            //             },
+            //             {
+            //                 nickname: '来自星尘',
+            //                 id: 1
+            //             },
+            //             {
+            //                 nickname: '重力井动画',
+            //                 id: 7
+            //             },
+            //             {
+            //                 nickname: 'CubesCollective',
+            //                 id: 9
+            //             },
+            //         ]
+            //     ];
+            //     this.datasourceMap = { "10":"官方账号", "4":"明日方舟终末地","1":"来自星尘","7":"重力井动画","9":"CubesCollective" };
+            //     this.fethcerConfigList = [{ number: 1, server: [] }, { number: 2, server: [] }, {
+            //         number: 3,
+            //         server: []
+            //     }, { number: 4, server: [] }];
+            //     this.serverAddGroups();
+            // }, 300);
+        },
+        // 获取数据源信息
+        async getDatasourceList() {
+            let datasources = [];
+            try {
+                let response = await this.$store.dispatch("fetcherConfig/getAllDatasourceList", { "type_id":this.platform });
+                datasources = response.data;
+                datasources.forEach(x => {
+                    this.datasourceMap[x.id+'']={
+                        nickname: x.nickname,
+                        config: x.config,
+                    };
+                });
+            } catch {
+                this.$message({
+                    showClose: true,
+                    message: "获取数据源失败",
+                    type: "error",
+                });
+            }
+            return datasources;
+        },
+        // 获取最高存活个数
+        async getFetcherLiveNumber() {
+            let success = true;
+            try {
+                let response = await this.$store.dispatch("fetcherConfig/getFetcherLiveNumber", { "type_id":this.platform });
+                this.fetcherLiveNumber = response.data.fetcher_live_number;
+            } catch {
+                success = false;
+                this.$message({
+                    showClose: true,
+                    message: "获取最高存活数失败",
+                    type: "error",
+                });
+            }
+            return success;
+        },
+        // 获取已配置列表
+        async getFetcherConfigList() {
+            try {
+                let response = await this.$store.dispatch("fetcherConfig/getFetcherConfigList");
+                this.fethcerConfigList = response.data;
+            } catch{
+                this.$message({
+                    showClose: true,
+                    message: "获取蹲饼器列表失败",
+                    type: "error",
+                });
+            }
         },
         // 每种server下添加groups
         serverAddGroups() {
-            this.serverLiveList.forEach(item => {
-                for (let i = 0; i < item.number; i++) {
-                    item.server.push({
-                        groups: [],
-                    });
+            this.fethcerConfigList.forEach((item,index) => {
+                if (!this.completeServer[index]) {
+                    for (let i = 0; i < item.number; i++) {
+                        item.server.push({
+                            groups: [],
+                        });
+                    }
                 }
             });
         },
         // 每种groups下添加datasource
         groupAddDatasource(serverLiveListNumber, groupIndex) {
-            let serverLive = this.serverLiveList.find(x => x.number == serverLiveListNumber);
+            let serverLive = this.fethcerConfigList.find(x => x.number == serverLiveListNumber);
             let findData = serverLive.server[groupIndex];
             this.$prompt('请输入组名称', '提示', {
                 confirmButtonText: '确定',
@@ -379,7 +496,7 @@ export default {
                 // 这里初始化卡片的对象
                 findData.groups.push({
                     name: value,
-                    type: this.platform ,
+                    type: this.platform,
                     datasource: [],
                 });
             }).catch(() => {
@@ -387,10 +504,10 @@ export default {
             });
         },
         // 获取平台信息 bilibili 微博 等
-        checkPlatformType(name) {
-            this.platform=name;
+        async checkPlatformType(platform) {
+            this.platform=platform.typeId;
             this.nextPage();
-            this.getPlatformTypeNameList(name);
+            await this.InitPageTwo(platform.typeId);
         },
         // 跳转到下一操作步骤
         nextPage() {
@@ -417,29 +534,29 @@ export default {
                 let serversIndex = event.currentTarget.dataset.serversindex;
                 let groupIndex = event.currentTarget.dataset.groupindex;
                 let datasourceIndex = event.currentTarget.dataset.datasourceindex;
-                let serverLive = this.serverLiveList.find(x => x.number == serversIndex);
+                let serverLive = this.fethcerConfigList.find(x => x.number == serversIndex);
                 let datasource = serverLive.server[groupIndex].groups[datasourceIndex];
                 if (datasource.datasource.findIndex(x => x == this.dragItem.id) < 0) {
                     datasource.datasource.push(this.dragItem.id);
-                    let index = this.sourceTypeNameList[serversIndex-1].findIndex(x => x.id == this.dragItem.id);
-                    this.sourceTypeNameList[serversIndex-1].splice(index, 1);
+                    let index = this.datasourceList[serversIndex-1].findIndex(x => x.id == this.dragItem.id);
+                    this.datasourceList[serversIndex-1].splice(index, 1);
                 }
             }
             this.dragItem = null;
         },
         // 点击标签的x删除总对象内的蹲饼源
         removeSource(sourceTypeId, serversIndex, groupIndex, datasourceIndex) {
-            let datasource = this.serverLiveList.find(x => x.number == serversIndex).server[groupIndex].groups[datasourceIndex];
+            let datasource = this.fethcerConfigList.find(x => x.number == serversIndex).server[groupIndex].groups[datasourceIndex];
             let index = datasource.datasource.findIndex(x => x == sourceTypeId);
             datasource.datasource.splice(index, 1);
-            this.sourceTypeNameList[serversIndex-1].push({
-                nickname: this.sourceTypeNameMap[sourceTypeId],
+            this.datasourceList[serversIndex-1].push({
+                nickname: this.datasourceMap[sourceTypeId].nickname,
                 id: sourceTypeId
             });
         },
         // 修改源状态（ignoreEmpty）的true和false
         changeIgnoreEmptyStatus(sourceTypeName, serversIndex, groupIndex, datasourceIndex) {
-            let datasource = this.serverLiveList.find(x => x.number == serversIndex).server[groupIndex].groups[datasourceIndex];
+            let datasource = this.fethcerConfigList.find(x => x.number == serversIndex).server[groupIndex].groups[datasourceIndex];
             let source = datasource.datasource.find(x => x.name == sourceTypeName.name);
             if (source.arg && Object.prototype.hasOwnProperty.call(source.arg, "ignoreEmpty")) {
                 this.$set(source.arg, 'ignoreEmpty', !source.arg.ignoreEmpty);
@@ -469,7 +586,7 @@ export default {
         },
         // 把设置好得蹲饼时间段频率功能添加到总对象字符串内
         addIntervalByTimeRangeToGroups() {
-            let datasource = this.serverLiveList.find(x => x.number == this.timePickerWindowInfo.serversIndex).server[this.timePickerWindowInfo.groupIndex].groups[this.timePickerWindowInfo.datasourceIndex];
+            let datasource = this.fethcerConfigList.find(x => x.number == this.timePickerWindowInfo.serversIndex).server[this.timePickerWindowInfo.groupIndex].groups[this.timePickerWindowInfo.datasourceIndex];
             let timeRangeInterval = [];
             this.$delete(datasource, "interval_by_time_range");
             for (let i = 0; i < this.timePicker.length; i++) {
@@ -512,20 +629,20 @@ export default {
         },
         // 删除一个来源组(datasource)
         removeDatasources(serversNumber, groupIndex, datasourceIndex) {
-            if (this.serverLiveList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]) {
-                this.serverLiveList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex];
-                this.serverLiveList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]?.datasource.find(sourceTypeId => {
-                    this.sourceTypeNameList[serversNumber-1].push({
-                        nickname: this.sourceTypeNameMap[sourceTypeId],
+            if (this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]) {
+                this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex];
+                this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]?.datasource.find(sourceTypeId => {
+                    this.datasourceList[serversNumber-1].push({
+                        nickname: this.datasourceMap[sourceTypeId].nickname,
                         id: sourceTypeId
                     });
                 });
-                this.serverLiveList[serversNumber-1]?.server[groupIndex]?.groups.splice(datasourceIndex,1);
+                this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups.splice(datasourceIndex,1);
             }
         },
         completeConfig() {
             let uncomplete = [];
-            this.sourceTypeNameList.forEach((k, v)=> {
+            this.datasourceList.forEach((k, v)=> {
                 if (k.length > 0) {
                     let sourceName = k.map(x=>x.nickname);
                     uncomplete.push({

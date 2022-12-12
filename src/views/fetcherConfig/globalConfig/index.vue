@@ -11,7 +11,7 @@
       <el-form-item label="蹲饼频率:" prop="default_interval">
         <el-input-number
           v-model="globalData.default_interval" controls-position="right"
-          :min="0" :step="1000" class="ml-5"
+          :min="0" :step="1000"
           step-strictly
         />
       </el-form-item>

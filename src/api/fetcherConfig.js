@@ -96,3 +96,37 @@ export function uploadGlobalConfig(token, data) {
         data: data
     });
 }
+
+export function allPlatformList(token) {
+    return request({
+        url: '/admin/fetcherConfig/allPlatformList',
+        method: 'get',
+        headers: token,
+    });
+}
+
+export function getAllDatasourceList(token, data) {
+    return request({
+        url: '/admin/fetcherConfig/getAllDatasourceList',
+        method: 'get',
+        headers: token,
+        params: data
+    });
+}
+
+export function getFetcherConfigList(token, data) {
+    return request({
+        url: '/admin/fetcherConfig/getFetcherConfigList',
+        method: 'get',
+        headers: token,
+        params: data
+    });
+}
+
+export function getFetcherLiveNumber(token) {
+    return request({
+        url: '/admin/fetcherConfig/getFetcherLiveNumber',
+        method: 'get',
+        headers: token,
+    });
+}
