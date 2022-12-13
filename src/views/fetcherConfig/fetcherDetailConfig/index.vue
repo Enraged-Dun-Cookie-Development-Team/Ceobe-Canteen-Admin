@@ -280,7 +280,6 @@ export default {
         // 获取类别下账号 获取存活数量的数字
         async InitPageTwo() {
             let datasources = await this.getDatasourceList();
-            console.log(datasources);
             if (datasources.length == 0) {
                 this.pageTwoNotice = "还为配置数据源，先去配置数据源吧";
                 return;
@@ -304,6 +303,7 @@ export default {
                 this.completeServer.push(false);
             }
             this.serverAddGroups();
+
             // 配置每种情况下未配置的数据源
             this.fethcerConfigList.forEach(data => {
                 let datasourceConfigured = {};
@@ -316,113 +316,14 @@ export default {
                 });
 
                 // let datasourceTemp = JSON.parse(JSON.stringify(datasources))
-                let datasourceTemp = datasources.map(x => {
+                let datasourceTemp = datasources.filter(x => {
                     if (!(x.id in datasourceConfigured)) {
-                        return x;
+                        return true;
                     }
+                    return false;
                 });
                 this.datasourceList.push(datasourceTemp || []);
             });
-
-            // setTimeout(_ => {
-            //     this.completeServer=[true, false,false,false];
-            //     this.datasourceList = [
-            //         [
-            //             {
-            //                 nickname: '官方账号',
-            //                 id: 10
-            //             },
-            //             {
-            //                 nickname: '明日方舟终末地',
-            //                 id: 4
-            //             },
-            //             {
-            //                 nickname: '来自星尘',
-            //                 id: 1
-            //             },
-            //             {
-            //                 nickname: '重力井动画',
-            //                 id: 7
-            //             },
-            //             {
-            //                 nickname: 'CubesCollective',
-            //                 id: 9
-            //             },
-            //         ],
-            //         [
-            //             {
-            //                 nickname: '官方账号',
-            //                 id: 10
-            //             },
-            //             {
-            //                 nickname: '明日方舟终末地',
-            //                 id: 4
-            //             },
-            //             {
-            //                 nickname: '来自星尘',
-            //                 id: 1
-            //             },
-            //             {
-            //                 nickname: '重力井动画',
-            //                 id: 7
-            //             },
-            //             {
-            //                 nickname: 'CubesCollective',
-            //                 id: 9
-            //             },
-            //         ],
-            //         [
-            //             {
-            //                 nickname: '官方账号',
-            //                 id: 10
-            //             },
-            //             {
-            //                 nickname: '明日方舟终末地',
-            //                 id: 4
-            //             },
-            //             {
-            //                 nickname: '来自星尘',
-            //                 id: 1
-            //             },
-            //             {
-            //                 nickname: '重力井动画',
-            //                 id: 7
-            //             },
-            //             {
-            //                 nickname: 'CubesCollective',
-            //                 id: 9
-            //             },
-            //         ],
-            //         [
-            //             {
-            //                 nickname: '官方账号',
-            //                 id: 10
-            //             },
-            //             {
-            //                 nickname: '明日方舟终末地',
-            //                 id: 4
-            //             },
-            //             {
-            //                 nickname: '来自星尘',
-            //                 id: 1
-            //             },
-            //             {
-            //                 nickname: '重力井动画',
-            //                 id: 7
-            //             },
-            //             {
-            //                 nickname: 'CubesCollective',
-            //                 id: 9
-            //             },
-            //         ]
-            //     ];
-            //     this.datasourceMap = { "10":"官方账号", "4":"明日方舟终末地","1":"来自星尘","7":"重力井动画","9":"CubesCollective" };
-            //     this.fethcerConfigList = [{ number: 1, server: [] }, { number: 2, server: [] }, {
-            //         number: 3,
-            //         server: []
-            //     }, { number: 4, server: [] }];
-            //     this.serverAddGroups();
-            // }, 300);
         },
         // 获取数据源信息
         async getDatasourceList() {
@@ -502,9 +403,24 @@ export default {
                     type: this.platform,
                     datasource: [],
                 });
+                this.completeServer[serverLiveListNumber-1] = false;
             }).catch(() => {
 
             });
+        },
+        // 删除一个来源组(datasource)
+        removeDatasources(serversNumber, groupIndex, datasourceIndex) {
+            if (this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]) {
+                this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex];
+                this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]?.datasource.find(sourceTypeId => {
+                    this.datasourceList[serversNumber-1].push({
+                        nickname: this.datasourceMap[sourceTypeId].nickname,
+                        id: sourceTypeId
+                    });
+                });
+                this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups.splice(datasourceIndex,1);
+                this.completeServer[serversNumber-1] = false;
+            }
         },
         // 获取平台信息 bilibili 微博 等
         async checkPlatformType(platform) {
@@ -530,7 +446,7 @@ export default {
         setDragItem(item) {
             this.dragItem = item;
         },
-        // 总对象内添加蹲饼源
+        // 从对象内添加蹲饼源
         addSourceInDatasource(event) {
             event.preventDefault();
             if (event.currentTarget.classList.contains('el-card')) {
@@ -544,6 +460,7 @@ export default {
                     let index = this.datasourceList[serversIndex-1].findIndex(x => x.id == this.dragItem.id);
                     this.datasourceList[serversIndex-1].splice(index, 1);
                 }
+                this.completeServer[serversIndex-1] = false;
             }
             this.dragItem = null;
         },
@@ -556,16 +473,7 @@ export default {
                 nickname: this.datasourceMap[sourceTypeId].nickname,
                 id: sourceTypeId
             });
-        },
-        // 修改源状态（ignoreEmpty）的true和false
-        changeIgnoreEmptyStatus(sourceTypeName, serversIndex, groupIndex, datasourceIndex) {
-            let datasource = this.fethcerConfigList.find(x => x.number == serversIndex).server[groupIndex].groups[datasourceIndex];
-            let source = datasource.datasource.find(x => x.name == sourceTypeName.name);
-            if (source.arg && Object.prototype.hasOwnProperty.call(source.arg, "ignoreEmpty")) {
-                this.$set(source.arg, 'ignoreEmpty', !source.arg.ignoreEmpty);
-            } else {
-                this.$set(source.arg, 'ignoreEmpty', true);
-            }
+            this.completeServer[serversIndex-1] = false;
         },
         // 时间添加一行
         addIntervalByTimeRangeLine() {
@@ -610,6 +518,7 @@ export default {
             if (this.timePickerWindowInfo.time != 0) {
                 this.$set(datasource, 'interval', this.timePickerWindowInfo.time);
             }
+            this.completeServer[this.timePickerWindowInfo.serversIndex-1] = false;
 
             this.timePickerWindowInfo= {
                 show: false,
@@ -629,19 +538,6 @@ export default {
             });
             html += '</div>';
             return html;
-        },
-        // 删除一个来源组(datasource)
-        removeDatasources(serversNumber, groupIndex, datasourceIndex) {
-            if (this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]) {
-                this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex];
-                this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]?.datasource.find(sourceTypeId => {
-                    this.datasourceList[serversNumber-1].push({
-                        nickname: this.datasourceMap[sourceTypeId].nickname,
-                        id: sourceTypeId
-                    });
-                });
-                this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups.splice(datasourceIndex,1);
-            }
         },
         completeConfig() {
             let uncomplete = [];

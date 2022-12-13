@@ -458,13 +458,169 @@ module.exports = [
         response: req => {
             const { token } = req.headers;
             console.log(token);
-            const body = req.body;
-            console.log(body);
+
+            let data = [
+                {
+                    "number": 1,
+                    "server": [
+                        {
+                            "groups": [
+                                {
+                                    "name": "test1",
+                                    "type": "bilibili",
+                                    "datasource": [
+                                        0,
+                                        1
+                                    ],
+                                    "interval": 3000
+                                },
+                                {
+                                    "name": "test2",
+                                    "type": "bilibili",
+                                    "datasource": [
+                                        2,
+                                        3
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 2,
+                    "server": [
+                        {
+                            "groups": [
+                                {
+                                    "name": "test3",
+                                    "type": "bilibili",
+                                    "datasource": [
+                                        0,
+                                        1,
+                                        2,
+                                        3
+                                    ],
+                                    "interval_by_time_range": [
+                                        {
+                                            "time_range": [
+                                                "04:00",
+                                                "06:00"
+                                            ],
+                                            "interval": 0
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "groups": [
+                                {
+                                    "name": "test4",
+                                    "type": "bilibili",
+                                    "datasource": [
+                                        4
+                                    ],
+                                    "interval": 3000
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 3,
+                    "server": [
+                        {
+                            "groups": [
+                                {
+                                    "name": "test4",
+                                    "type": "bilibili",
+                                    "datasource": [
+                                        0,
+                                        1,
+                                        2
+                                    ]
+                                },
+                                {
+                                    "name": "test5",
+                                    "type": "bilibili",
+                                    "datasource": [
+                                        3
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "groups": [
+                                {
+                                    "name": "test6",
+                                    "type": "bilibili",
+                                    "datasource": [
+                                        4
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "groups": []
+                        }
+                    ]
+                },
+                {
+                    "number": 4,
+                    "server": [
+                        {
+                            "groups": [
+                                {
+                                    "name": "test7",
+                                    "type": "bilibili",
+                                    "datasource": [
+                                        0,
+                                        4
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "groups": [
+                                {
+                                    "name": "test8",
+                                    "type": "bilibili",
+                                    "datasource": [
+                                        1
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "groups": [
+                                {
+                                    "name": "test9",
+                                    "type": "bilibili",
+                                    "datasource": [
+                                        2
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "groups": [
+                                {
+                                    "name": "test10",
+                                    "type": "bilibili",
+                                    "datasource": [
+                                        3
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ];
 
             return {
                 code: "00000",
                 message: '更新数据源配置成功',
-                data: []
+                data: data
             };
         }
     },
