@@ -32,7 +32,7 @@
             v-for="(servers) in fethcerConfigList" :key="servers.number+''"
             :label="`只存活了${servers.number}条的情况${completeServer[servers.number-1]?'✅':'❌'}`"
           >
-            <div>
+            <div style="width:calc(100% - 100px); min-height:42px;">
               <el-tag
                 v-for="sourceTypeName in datasourceList[servers.number-1]"
                 :key="sourceTypeName.nickname"
@@ -44,6 +44,16 @@
                   sourceTypeName.nickname
                 }}
               </el-tag>
+            </div>
+            <div>
+              <el-button
+                v-if="stepIndex !== 1"
+                type="primary"
+                class="btn-valid"
+                @click="validConfig(servers.number)"
+              >
+                验证
+              </el-button>
             </div>
             <!--这是组的卡片-->
             <el-card
@@ -193,13 +203,14 @@
       class="btn-next"
       @click="completeConfig"
     >
-      前往验证
+      准备提交
     </el-button>
   </div>
 </template>
 
 <script>
 import ValidAndConfirm from "./validAndConfirm.vue";
+// import { FetchController } from '@enraged-dun-cookie-development-team/cookie-fetcher';
 export default {
     name: "FetcherDetailConfig",
     components: { ValidAndConfirm },
@@ -216,6 +227,7 @@ export default {
             datasourceMap: {},
             completeServer: [], //完成情况
             dragItem: {}, // 拖拽对象
+            globalConfig: {}, // 全局配置
             timePickerWindowInfo: {
                 show: false,
                 serversIndex: null,
@@ -234,15 +246,30 @@ export default {
     },
     mounted() {
         this.getPlatformList();
+        this.getGlobalConfig();
     },
     methods: {
+        // 获取全局配置
+        getGlobalConfig(){
+            this.$store
+                .dispatch("fetcherConfig/getGlobalConfig")
+                .then((response) => {
+                    this.globalData = response.data;
+                }).catch(() =>{
+                    this.$message({
+                        showClose: true,
+                        message: "获取全局配置失败",
+                        type: "error",
+                    });
+                });
+        },
         // 获取类别
         getPlatformList() {
             this.platformLoading = true;
             this.$store
                 .dispatch("fetcherConfig/allPlatformList")
                 .then((response) => {
-                    this.platformList = response.data.map(x => { return { typeId: x.type_id, platfromName: x.platform_name };});
+                    this.platformList = response.data.map(x => { return { typeId: x.type_id, platfromName: x.platform_name, minRequestInterval: x.min_request_interval };});
                 }).catch(() =>{
                     this.$message({
                         showClose: true,
@@ -275,7 +302,6 @@ export default {
                 time: null,
             };// 打开的弹窗内保存的信息
             this.timePicker= [{}];// 时间列表
-            this.getPlatformList();
         },
         // 获取类别下账号 获取存活数量的数字
         async InitPageTwo() {
@@ -539,6 +565,7 @@ export default {
             html += '</div>';
             return html;
         },
+        // 完成配置
         completeConfig() {
             let uncomplete = [];
             this.datasourceList.forEach((k, v)=> {
@@ -565,6 +592,17 @@ export default {
                     this.nextPage();
                 });
             }
+        },
+        // 验证一种情况下的配置
+        validConfig(serverLiveNumber) {
+            try {
+                // FetchController.validateConfig(this.fethcerConfigList[serverLiveNumber - 1]);
+                this.$set(this.completeServer, serverLiveNumber - 1, true);
+            } catch (e) {
+                console.log('配置无效：');
+                console.log(e.message);
+            }
+
         }
     }
 };
@@ -645,6 +683,12 @@ export default {
 
   .position-right-18 {
     right: 18px
+  }
+
+  .btn-valid {
+    position: absolute;
+    top: 10px;
+    right:29px;
   }
 
   .btn-reset {

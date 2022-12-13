@@ -294,23 +294,28 @@ module.exports = [
             let data = [
                 {
                     type_id: "bilibili",
-                    platform_name: "Bilibili"
+                    platform_name: "Bilibili",
+                    min_request_interval: 10000
                 },
                 {
                     type_id: "weibo",
-                    platform_name: "微博"
+                    platform_name: "微博",
+                    min_request_interval: 4000
                 },
                 {
                     type_id: "netease-cloud-music",
-                    platform_name: "网易云音乐"
+                    platform_name: "网易云音乐",
+                    min_request_interval: 10000
                 },
                 {
                     type_id: "arknights-game",
-                    platform_name: "明日方舟游戏"
+                    platform_name: "明日方舟游戏",
+                    min_request_interval: 3000
                 },
                 {
                     type_id: "arknights-website",
-                    platform_name: "明日方舟官网"
+                    platform_name: "明日方舟官网",
+                    min_request_interval: 3000
                 },
             ];
             return {
