@@ -458,169 +458,21 @@ module.exports = [
         response: req => {
             const { token } = req.headers;
             console.log(token);
+            const { type_id } = req.query;
 
-            let data = [
-                {
-                    "number": 1,
-                    "server": [
-                        {
-                            "groups": [
-                                {
-                                    "name": "test1",
-                                    "type": "bilibili",
-                                    "datasource": [
-                                        0,
-                                        1
-                                    ],
-                                    "interval": 3000
-                                },
-                                {
-                                    "name": "test2",
-                                    "type": "bilibili",
-                                    "datasource": [
-                                        2,
-                                        3
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "number": 2,
-                    "server": [
-                        {
-                            "groups": [
-                                {
-                                    "name": "test3",
-                                    "type": "bilibili",
-                                    "datasource": [
-                                        0,
-                                        1,
-                                        2,
-                                        3
-                                    ],
-                                    "interval_by_time_range": [
-                                        {
-                                            "time_range": [
-                                                "04:00",
-                                                "06:00"
-                                            ],
-                                            "interval": 0
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "groups": [
-                                {
-                                    "name": "test4",
-                                    "type": "bilibili",
-                                    "datasource": [
-                                        4
-                                    ],
-                                    "interval": 3000
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "number": 3,
-                    "server": [
-                        {
-                            "groups": [
-                                {
-                                    "name": "test4",
-                                    "type": "bilibili",
-                                    "datasource": [
-                                        0,
-                                        1,
-                                        2
-                                    ]
-                                },
-                                {
-                                    "name": "test5",
-                                    "type": "bilibili",
-                                    "datasource": [
-                                        3
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "groups": [
-                                {
-                                    "name": "test6",
-                                    "type": "bilibili",
-                                    "datasource": [
-                                        4
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "groups": []
-                        }
-                    ]
-                },
-                {
-                    "number": 4,
-                    "server": [
-                        {
-                            "groups": [
-                                {
-                                    "name": "test7",
-                                    "type": "bilibili",
-                                    "datasource": [
-                                        0,
-                                        4
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "groups": [
-                                {
-                                    "name": "test8",
-                                    "type": "bilibili",
-                                    "datasource": [
-                                        1
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "groups": [
-                                {
-                                    "name": "test9",
-                                    "type": "bilibili",
-                                    "datasource": [
-                                        2
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "groups": [
-                                {
-                                    "name": "test10",
-                                    "type": "bilibili",
-                                    "datasource": [
-                                        3
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ];
+            let data = {
+                "bilibili": [{ "number":1,"server":[{ "groups":[{ "name":"test1","type":"bilibili","datasource":[0,1],"interval":3000 },{ "name":"test2","type":"bilibili","datasource":[2,3] }] }] },{ "number":2,"server":[{ "groups":[{ "name":"test3","type":"bilibili","datasource":[0,1,2,3],"interval_by_time_range":[{ "time_range":["04:00","06:00"],"interval":0 }] }] },{ "groups":[{ "name":"test4","type":"bilibili","datasource":[4],"interval":3000 }] }] },{ "number":3,"server":[{ "groups":[{ "name":"test4","type":"bilibili","datasource":[0,1,2] },{ "name":"test5","type":"bilibili","datasource":[3] }] },{ "groups":[{ "name":"test6","type":"bilibili","datasource":[4] }] },{ "groups":[] }] },{ "number":4,"server":[{ "groups":[{ "name":"test7","type":"bilibili","datasource":[0,4] }] },{ "groups":[{ "name":"test8","type":"bilibili","datasource":[1] }] },{ "groups":[{ "name":"test9","type":"bilibili","datasource":[2] }] },{ "groups":[{ "name":"test10","type":"bilibili","datasource":[3] }] }] }],
+                "weibo": [{ "number":1,"server":[{ "groups":[{ "name":"weibo1","type":"weibo","datasource":[5,11] },{ "name":"weibo2","type":"weibo","datasource":[6,7,8,10,9] }] }] },{ "number":2,"server":[{ "groups":[{ "name":"weibo3","type":"weibo","datasource":[6,7,8,9,10] }] },{ "groups":[{ "name":"微博4","type":"weibo","datasource":[11] },{ "name":"微博5","type":"weibo","datasource":[5] }] }] },{ "number":3,"server":[{ "groups":[{ "name":"微博6","type":"weibo","datasource":[5,6,10] }] },{ "groups":[{ "name":"微博7","type":"weibo","datasource":[7,8,11] }] },{ "groups":[{ "name":"微博8","type":"weibo","datasource":[9] }] }] },{ "number":4,"server":[{ "groups":[{ "name":"微博9","type":"weibo","datasource":[5,6] }] },{ "groups":[{ "name":"微博10","type":"weibo","datasource":[7,9] }] },{ "groups":[{ "name":"微博11","type":"weibo","datasource":[10] }] },{ "groups":[{ "name":"微博12","type":"weibo","datasource":[11,8] }] }] },{ "number":5,"server":[{ "groups":[{ "name":"微博13","type":"weibo","datasource":[11,5,7] }] },{ "groups":[{ "name":"微博17","type":"weibo","datasource":[8] }] },{ "groups":[{ "name":"微博16","type":"weibo","datasource":[10] }] },{ "groups":[{ "name":"微博15","type":"weibo","datasource":[6] }] },{ "groups":[{ "name":"微博14","type":"weibo","datasource":[9] }] }] }],
+                "netease-cloud-music": [{ "number":1,"server":[{ "groups":[{ "name":"网易云1","type":"netease-cloud-music","datasource":[12,13] }] }] },{ "number":2,"server":[{ "groups":[{ "name":"网易云2","type":"netease-cloud-music","datasource":[12] }] },{ "groups":[{ "name":"网易云3","type":"netease-cloud-music","datasource":[13] }] }] },{ "number":3,"server":[{ "groups":[{ "name":"网易云4","type":"netease-cloud-music","datasource":[12] }] },{ "groups":[{ "name":"网易云5","type":"netease-cloud-music","datasource":[13] }] },{ "groups":[] }] },{ "number":4,"server":[{ "groups":[{ "name":"网易云6","type":"netease-cloud-music","datasource":[12] }] },{ "groups":[{ "name":"网易云7","type":"netease-cloud-music","datasource":[13] }] },{ "groups":[] },{ "groups":[] }] },{ "number":5,"server":[{ "groups":[{ "name":"网易云8","type":"netease-cloud-music","datasource":[12] }] },{ "groups":[{ "name":"网易云9","type":"netease-cloud-music","datasource":[13] }] },{ "groups":[] },{ "groups":[] },{ "groups":[] }] }],
+                "arknights-game": [{ "number":1,"server":[{ "groups":[{ "name":"game1","type":"arknights-game","datasource":[14] },{ "name":"game2","type":"arknights-game","datasource":[15] }] }] },{ "number":2,"server":[{ "groups":[{ "name":"game3","type":"arknights-game","datasource":[14] }] },{ "groups":[{ "name":"game4","type":"arknights-game","datasource":[15] }] }] },{ "number":3,"server":[{ "groups":[{ "name":"game5","type":"arknights-game","datasource":[14] }] },{ "groups":[{ "name":"game6","type":"arknights-game","datasource":[15] }] },{ "groups":[] }] },{ "number":4,"server":[{ "groups":[{ "name":"game7","type":"arknights-game","datasource":[14] }] },{ "groups":[{ "name":"game8","type":"arknights-game","datasource":[15] }] },{ "groups":[] },{ "groups":[] }] },{ "number":5,"server":[{ "groups":[{ "name":"game9","type":"arknights-game","datasource":[14] }] },{ "groups":[{ "name":"game10","type":"arknights-game","datasource":[15] }] },{ "groups":[] },{ "groups":[] },{ "groups":[] }] }],
+                "arknights-website": [{ "number":1,"server":[{ "groups":[{ "name":"web4","type":"arknights-website","datasource":[16,17,18] }] }] },{ "number":2,"server":[{ "groups":[{ "name":"web5","type":"arknights-website","datasource":[16,17] }] },{ "groups":[{ "name":"web6","type":"arknights-website","datasource":[18] }] }] },{ "number":3,"server":[{ "groups":[{ "name":"web7","type":"arknights-website","datasource":[16] }] },{ "groups":[{ "name":"web8","type":"arknights-website","datasource":[17] }] },{ "groups":[{ "name":"web9","type":"arknights-website","datasource":[18] }] }] },{ "number":4,"server":[{ "groups":[{ "name":"web10","type":"arknights-website","datasource":[16] }] },{ "groups":[{ "name":"web11","type":"arknights-website","datasource":[17] }] },{ "groups":[{ "name":"web12","type":"arknights-website","datasource":[18] }] },{ "groups":[] }] },{ "number":5,"server":[{ "groups":[{ "name":"web1","type":"arknights-website","datasource":[16] }] },{ "groups":[{ "name":"web2","type":"arknights-website","datasource":[17] }] },{ "groups":[{ "name":"web3","type":"arknights-website","datasource":[18] }] },{ "groups":[] },{ "groups":[] }] }],
+            };
+
 
             return {
                 code: "00000",
-                message: '更新数据源配置成功',
-                data: data
+                message: 'Operate Success',
+                data: data[type_id]
             };
         }
     },

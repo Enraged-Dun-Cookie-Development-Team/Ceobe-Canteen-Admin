@@ -32,12 +32,12 @@
             v-for="(servers) in fethcerConfigList" :key="servers.number+''"
             :label="`只存活了${servers.number}条的情况${completeServer[servers.number-1]?'✅':'❌'}`"
           >
-            <div class="mb-10">
+            <div>
               <el-tag
                 v-for="sourceTypeName in datasourceList[servers.number-1]"
                 :key="sourceTypeName.nickname"
                 draggable="true"
-                class="mv-10"
+                class="mb-10 mv-10"
                 @dragstart.native="setDragItem(sourceTypeName,datasourceList[servers.number-1])"
               >
                 {{
@@ -99,7 +99,7 @@
                         <el-tag
                           v-for="sourceTypeId in datasource.datasource"
                           :key="sourceTypeId"
-                          class="mv-10 cursor-pointer"
+                          class="mb-10 mv-10 cursor-pointer"
                           closable
                           @close="removeSource(sourceTypeId,servers.number,groupIndex,datasourceIndex)"
                         >
@@ -350,7 +350,7 @@ export default {
         async getFetcherLiveNumber() {
             let success = true;
             try {
-                let response = await this.$store.dispatch("fetcherConfig/getFetcherLiveNumber", { "type_id":this.platform });
+                let response = await this.$store.dispatch("fetcherConfig/getFetcherLiveNumber");
                 this.fetcherLiveNumber = response.data.fetcher_live_number;
             } catch {
                 success = false;
@@ -365,7 +365,7 @@ export default {
         // 获取已配置列表
         async getFetcherConfigList() {
             try {
-                let response = await this.$store.dispatch("fetcherConfig/getFetcherConfigList");
+                let response = await this.$store.dispatch("fetcherConfig/getFetcherConfigList", { "type_id":this.platform });
                 this.fethcerConfigList = response.data;
             } catch{
                 this.$message({
@@ -582,7 +582,7 @@ export default {
   }
 
   .mb-10 {
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
   }
 
   .mt-20 {
