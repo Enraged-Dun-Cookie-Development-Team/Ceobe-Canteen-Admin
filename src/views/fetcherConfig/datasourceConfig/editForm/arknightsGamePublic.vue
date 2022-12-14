@@ -75,6 +75,13 @@ export default {
             }
             this.$refs["requestOptions"].open(this.config.requestOptions);
         },
+        openWithoutConfig(create) {
+            this.create = create;
+            if(!("requestOptions" in this.config)) {
+                this.$set(this.config, "requestOptions", {});
+            }
+            this.$refs["requestOptions"].open(this.config.requestOptions);
+        },
         complete() {
             let allPass = true;
             this.$refs["configForm"].validate((valid) => {

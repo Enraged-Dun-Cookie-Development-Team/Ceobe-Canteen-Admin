@@ -155,7 +155,6 @@ export default {
                 this.$nextTick(()=>{
                     this.$refs.extendForm.open(create, this.datasourceData.config);
                 });
-
             }
             this.showDraw = true;
         },
@@ -178,25 +177,49 @@ export default {
             case "bilibili":
                 this.datasourceData.datasource = "";
                 this.datasourceOptions = BILIBILI_OPTION;
+                // 使用nextTick避免无法获取到ref
+                this.$nextTick(()=>{
+                    this.$refs.extendForm.openWithoutConfig(this.create);
+                });
                 break;
             case "weibo":
                 this.datasourceData.datasource = "";
                 this.datasourceOptions = WEIBO_OPTION;
+                // 使用nextTick避免无法获取到ref
+                this.$nextTick(()=>{
+                    this.$refs.extendForm.openWithoutConfig(this.create);
+                });
                 break;
             case "netease-cloud-music":
                 this.datasourceData.datasource = "";
                 this.datasourceOptions = NETEASE_OPTION;
+                // 使用nextTick避免无法获取到ref
+                this.$nextTick(()=>{
+                    this.$refs.extendForm.openWithoutConfig(this.create);
+                });
                 break;
             case "arknights-game":
                 this.datasourceData.datasource = "";
                 this.datasourceOptions = ARKNIGHTS_GAME_OPTION;
+                // 使用nextTick避免无法获取到ref
+                this.$nextTick(()=>{
+                    this.$refs.extendForm.openWithoutConfig(this.create);
+                });
                 break;
             case "arknights-website":
                 this.datasourceData.datasource = "";
                 this.datasourceOptions = ARKNIHTS_WEBSITE_OPTION;
+                // 使用nextTick避免无法获取到ref
+                this.$nextTick(()=>{
+                    this.$refs.extendForm.openWithoutConfig(this.create);
+                });
                 break;
             default:
                 this.datasourceData.datasource = "";
+                // 使用nextTick避免无法获取到ref
+                this.$nextTick(()=>{
+                    this.$refs.extendForm.openWithoutConfig(this.create);
+                });
                 break;
             }
         },
@@ -224,7 +247,7 @@ export default {
                 .then(() => {
                     this.$message({
                         showClose: true,
-                        message: "修改成功",
+                        message: "创建成功",
                         type: "success",
                     });
                     this.showDraw = false;
@@ -232,7 +255,7 @@ export default {
                 }).catch(() =>{
                     this.$message({
                         showClose: true,
-                        message: "修改失败",
+                        message: "创建失败",
                         type: "error",
                     });
                 }).finally(()=>{
