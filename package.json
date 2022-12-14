@@ -17,7 +17,7 @@
     "test:ci": "npm run lint && npm run test:unit"
   },
   "dependencies": {
-    "@enraged-dun-cookie-development-team/cookie-fetcher": "^0.0.1-alpha.12",
+    "@enraged-dun-cookie-development-team/cookie-fetcher": "^0.0.1-alpha.16",
     "@wangeditor/editor": "^5.1.18",
     "@wangeditor/editor-for-vue": "^1.0.2",
     "animate.css": "^4.1.1",
