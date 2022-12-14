@@ -26,8 +26,14 @@
       <div v-if="pageTwoNotice != ''">
         {{ pageTwoNotice }}
       </div>
-      <div v-else class="flex-center">
-        <el-tabs style="width: 100%;height: 100%" type="border-card">
+      <div
+        v-else v-loading="configLoading"
+        class="flex-center"
+      >
+        <el-tabs
+          style="width: 100%;height: 100%"
+          type="border-card"
+        >
           <el-tab-pane
             v-for="(servers) in fethcerConfigList" :key="servers.number+''"
             :label="`只存活了${servers.number}条的情况${completeServer[servers.number-1]?'✅':'❌'}`"
@@ -221,6 +227,7 @@ export default {
             platform: '',
             stepIndex: 1, // 当前步骤
             fethcerConfigList: [], // 蹲饼器配置数组
+            configLoading: false,
             platformList: [], // 平台类别
             platformLoading: false, // 平台加载
             datasourceList: [], // 类别下的账号
@@ -245,8 +252,8 @@ export default {
         }
     },
     mounted() {
-        this.getPlatformList();
         this.getGlobalConfig();
+        this.getPlatformList();
     },
     methods: {
         // 获取全局配置
@@ -254,7 +261,7 @@ export default {
             this.$store
                 .dispatch("fetcherConfig/getGlobalConfig")
                 .then((response) => {
-                    this.globalData = response.data;
+                    this.globalConfig = response.data;
                 }).catch(() =>{
                     this.$message({
                         showClose: true,
@@ -263,7 +270,7 @@ export default {
                     });
                 });
         },
-        // 获取类别
+        // 获取平台
         getPlatformList() {
             this.platformLoading = true;
             this.$store
@@ -287,7 +294,7 @@ export default {
             this.platform= '';
             this.stepIndex= 1; // 当前步骤
             this.fethcerConfigList= []; // 蹲饼器配置数组
-            this.platformList= [], // 平台类别
+            this.configLoading= false;
             this.platformLoading= false, // 平台加载
             this.datasourceList= []; // 类别下的账号
             this.datasourceMap= {};
@@ -567,43 +574,61 @@ export default {
         },
         // 完成配置
         completeConfig() {
-            let uncomplete = [];
-            this.datasourceList.forEach((k, v)=> {
-                if (k.length > 0) {
-                    let sourceName = k.map(x=>x.nickname);
-                    uncomplete.push({
-                        server: v+1,
-                        source:sourceName
-                    });
-                }
+            let allComplete = this.completeServer.every((item)=>{
+                return item;
             });
-            if (uncomplete.length > 0) {
-                let noticeStr = '';
-                for (let i = 0; i < uncomplete.length; i++) {
-                    noticeStr += `存活${uncomplete[i].server}个，数据源：`+uncomplete[i].source.join("，")+"\n";
-                }
-                noticeStr += '以上情况还未配置，是否继续？';
-                this.$confirm(noticeStr, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning',
-                    customClass: "notice-box"
-                }).then(()=> {
-                    this.nextPage();
+            if (allComplete) {
+                this.nextPage();
+            } else {
+                this.$message({
+                    message: '还有情况没有配置完成噢',
+                    type: 'warning'
                 });
             }
         },
         // 验证一种情况下的配置
         validConfig(serverLiveNumber) {
-            try {
-                // FetchController.validateConfig(this.fethcerConfigList[serverLiveNumber - 1]);
-                this.$set(this.completeServer, serverLiveNumber - 1, true);
-            } catch (e) {
-                console.log('配置无效：');
-                console.log(e.message);
-            }
+            this.configLoading = true;
+            let fetcherConfigValidation = [];
+            this.fethcerConfigList[serverLiveNumber - 1]?.server?.forEach((server, index) => {
+                try {
+                    // 替换config下面的datasources id为详细内容
+                    let singleFetcher = JSON.parse(JSON.stringify(server));
+                    singleFetcher.groups?.forEach((groupItem, groupIndex) => {
+                        groupItem.datasource?.forEach((datasourceItem, datasourceIndex) => {
+                            groupItem.datasource?.splice(datasourceIndex, 1, this.datasourceMap[datasourceItem].config);
+                        });
+                        singleFetcher.groups[groupIndex] = groupItem;
+                    });
+                    // 制作平台配置
+                    let platform = {};
+                    this.platformList.forEach((item) => {
+                        platform[item.typeId] = { min_request_interval: item.minRequestInterval };
+                    });
+                    // 拼接全局变量与平台配置
+                    let fetcherConfig = { ...this.globalConfig, ...singleFetcher, platform };
+                    console.log(fetcherConfig);
+                    // FetchController.validateConfig(fetcherConfig);
 
-        }
+                } catch (e) {
+                    fetcherConfigValidation.push({ number: index+1, message: e.message });
+                }
+
+            });
+            if (fetcherConfigValidation.length == 0) {
+                this.$set(this.completeServer, serverLiveNumber - 1, true);
+            } else {
+                let noticeStr = "";
+                fetcherConfigValidation.forEach(item => {
+                    noticeStr += `第${item.number}个蹲饼器，配置失败\n失败原因：${item.message}\n`;
+                });
+                this.$alert(noticeStr, '验证失败', {
+                    confirmButtonText: '确定',
+                    customClass: "notice-box",
+                });
+            }
+            this.configLoading = false;
+        },
     }
 };
 </script>
