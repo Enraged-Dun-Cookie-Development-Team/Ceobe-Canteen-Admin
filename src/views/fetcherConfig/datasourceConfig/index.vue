@@ -233,7 +233,7 @@ export default {
             });
         },
         uploadDone() {
-            this.init();
+            this.getDatasourceList();
         }
     }
 };
