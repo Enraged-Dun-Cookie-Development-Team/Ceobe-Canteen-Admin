@@ -21,6 +21,7 @@
         />
       </el-select>
     </el-form-item>
+    <request-options />
     <el-form-item>
       <el-button
         type="primary"
@@ -34,8 +35,10 @@
 </template>
 
 <script>
+import RequestOptions from "../requestOptions.vue";
 export default {
     name: "ArknightsGamePublic",
+    components: { RequestOptions },
     data() {
         return {
             platformOptions: [
