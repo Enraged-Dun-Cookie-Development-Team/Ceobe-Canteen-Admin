@@ -499,4 +499,19 @@ module.exports = [
             };
         }
     },
+    {
+        url: '/admin/fetcherConfig/uploadFetcherConfig',
+        type: 'post',
+        response: req => {
+            const { token } = req.headers;
+            console.log(token);
+            console.log(JSON.stringify(req.body));
+
+            return {
+                code: "00000",
+                message: 'Operate Success',
+                data: null
+            };
+        }
+    },
 ];
