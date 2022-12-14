@@ -589,7 +589,7 @@ export default {
         // 验证一种情况下的配置
         validConfig(serverLiveNumber) {
             this.configLoading = true;
-            let fetcherConfigValidation = [];
+            let fetcherConfigValidationMessage = [];
             this.fethcerConfigList[serverLiveNumber - 1]?.server?.forEach((server, index) => {
                 try {
                     // 替换config下面的datasources id为详细内容
@@ -600,26 +600,39 @@ export default {
                         });
                         singleFetcher.groups[groupIndex] = groupItem;
                     });
-                    // 制作平台配置
-                    let platform = {};
-                    this.platformList.forEach((item) => {
-                        platform[item.typeId] = { min_request_interval: item.minRequestInterval };
-                    });
-                    // 拼接全局变量与平台配置
-                    let fetcherConfig = { ...this.globalConfig, ...singleFetcher, platform };
-                    console.log(fetcherConfig);
+                    // 如果组内没有这数据则去掉蹲饼
+                    for (let i = 0; i < singleFetcher.groups.length; i++) {
+                        if (singleFetcher.groups[i].datasource.length == 0) {
+                            singleFetcher.groups.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    let needValid = true;
+                    // 去除后，如果已经没有组，就不用验证
+                    if (singleFetcher.groups.length == 0) {
+                        needValid = false;
+                    }
+                    if (needValid) {
+                        // 制作平台配置
+                        let platform = {};
+                        this.platformList.forEach((item) => {
+                            platform[item.typeId] = { min_request_interval: item.minRequestInterval };
+                        });
+                        // 拼接全局变量与平台配置
+                        let fetcherConfig = { ...this.globalConfig, ...singleFetcher, platform };
+                        console.log(fetcherConfig);
                     // FetchController.validateConfig(fetcherConfig);
-
+                    }
                 } catch (e) {
-                    fetcherConfigValidation.push({ number: index+1, message: e.message });
+                    fetcherConfigValidationMessage.push({ number: index+1, message: e.message });
                 }
 
             });
-            if (fetcherConfigValidation.length == 0) {
+            if (fetcherConfigValidationMessage.length == 0) {
                 this.$set(this.completeServer, serverLiveNumber - 1, true);
             } else {
                 let noticeStr = "";
-                fetcherConfigValidation.forEach(item => {
+                fetcherConfigValidationMessage.forEach(item => {
                     noticeStr += `第${item.number}个蹲饼器，配置失败\n失败原因：${item.message}\n`;
                 });
                 this.$alert(noticeStr, '验证失败', {
