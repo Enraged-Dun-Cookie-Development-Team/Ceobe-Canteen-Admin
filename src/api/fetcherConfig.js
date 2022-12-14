@@ -130,3 +130,12 @@ export function getFetcherLiveNumber(token) {
         headers: token,
     });
 }
+
+export function uploadFetcherConfig(token, data) {
+    return request({
+        url: '/admin/fetcherConfig/uploadFetcherConfig',
+        method: 'post',
+        headers: token,
+        data: data
+    });
+}

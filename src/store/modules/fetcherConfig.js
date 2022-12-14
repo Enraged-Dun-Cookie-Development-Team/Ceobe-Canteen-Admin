@@ -1,4 +1,4 @@
-import { platformList, createPlatform, updatePlatform, deletePlatform, getPlatformAndDatasourceOption, getDatasourceList, deleteDatasource , createDatasource, updateDatasource, getGlobalConfig, uploadGlobalConfig, allPlatformList, getAllDatasourceList, getFetcherConfigList, getFetcherLiveNumber } from '@/api/fetcherConfig';
+import { platformList, createPlatform, updatePlatform, deletePlatform, getPlatformAndDatasourceOption, getDatasourceList, deleteDatasource , createDatasource, updateDatasource, getGlobalConfig, uploadGlobalConfig, allPlatformList, getAllDatasourceList, getFetcherConfigList, getFetcherLiveNumber, uploadFetcherConfig } from '@/api/fetcherConfig';
 import store from '..';
 
 const actions = {
@@ -160,6 +160,17 @@ const actions = {
     getFetcherLiveNumber(_) {
         return new Promise((resolve, reject) => {
             getFetcherLiveNumber({ token: store.getters.token }).then(response => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+    // 上传蹲饼器配置
+    uploadFetcherConfig(_, fetcherConfig) {
+        return new Promise((resolve, reject) => {
+            uploadFetcherConfig({ token: store.getters.token }, fetcherConfig).then(response => {
                 resolve(response);
             }).catch(error => {
                 reject(error);

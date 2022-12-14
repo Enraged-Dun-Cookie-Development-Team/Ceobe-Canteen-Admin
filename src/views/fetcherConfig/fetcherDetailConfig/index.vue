@@ -199,6 +199,14 @@
       </div>
     </el-dialog>
     <el-button
+      v-if="stepIndex === 3"
+      type="primary"
+      class="btn-prev"
+      @click="prevPage"
+    >
+      上一页
+    </el-button>
+    <el-button
       v-if="stepIndex !== 1"
       type="danger"
       class="btn-reset"
@@ -207,22 +215,24 @@
       重置
     </el-button>
     <el-button
-      v-if="stepIndex == 2"
+      v-if="stepIndex === 2"
       type="primary"
       class="btn-next"
       @click="completeConfig"
     >
       准备提交
     </el-button>
+    <form-button v-if="stepIndex === 3" @submit="submitConfig" />
   </div>
 </template>
 
 <script>
 import ShowAndConfirm from "./showAndConfirm.vue";
+import FormButton from "@/components/FormButton";
 // import { FetchController } from '@enraged-dun-cookie-development-team/cookie-fetcher';
 export default {
     name: "FetcherDetailConfig",
-    components: { ShowAndConfirm },
+    components: { ShowAndConfirm, FormButton },
     data() {
         return {
             pageTwoNotice: '',
@@ -646,6 +656,25 @@ export default {
             }
             this.configLoading = false;
         },
+        // 提交配置
+        submitConfig () {
+            this.$store
+                .dispatch("fetcherConfig/uploadFetcherConfig", this.fetcherConfigList)
+                .then(() => {
+                    this.$message({
+                        showClose: true,
+                        message: "上传蹲饼器配置成功",
+                        type: "success",
+                    });
+                }).catch(() =>{
+                    this.$message({
+                        showClose: true,
+                        message: "上传蹲饼器配置失败",
+                        type: "error",
+                    });
+                });
+            this.initData();
+        }
     }
 };
 </script>
@@ -730,18 +759,24 @@ export default {
   .btn-valid {
     position: absolute;
     top: 10px;
-    right:29px;
+    right: 29px;
+  }
+
+  .btn-prev {
+    position: fixed;
+    right: 280px;
+    bottom: 20px;
   }
 
   .btn-reset {
     position: fixed;
-    right:180px;
+    right: 180px;
     bottom: 20px;
   }
 
   .btn-next {
     position: fixed;
-    right:80px;
+    right: 80px;
     bottom: 20px;
   }
 }
