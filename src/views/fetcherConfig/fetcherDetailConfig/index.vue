@@ -229,7 +229,7 @@
 <script>
 import ShowAndConfirm from "./showAndConfirm.vue";
 import FormButton from "@/components/FormButton";
-// import { FetchController } from '@enraged-dun-cookie-development-team/cookie-fetcher';
+import { FetchController, registerDefaultDataSourceTypes } from '@enraged-dun-cookie-development-team/cookie-fetcher';
 export default {
     name: "FetcherDetailConfig",
     components: { ShowAndConfirm, FormButton },
@@ -265,6 +265,7 @@ export default {
         }
     },
     mounted() {
+        registerDefaultDataSourceTypes();
         this.getGlobalConfig();
         this.getPlatformList();
     },
@@ -634,8 +635,7 @@ export default {
                         });
                         // 拼接全局变量与平台配置
                         let fetcherConfig = { ...this.globalConfig, ...singleFetcher, platform };
-                        console.log(fetcherConfig);
-                    // FetchController.validateConfig(fetcherConfig);
+                        FetchController.validateConfig(fetcherConfig);
                     }
                 } catch (e) {
                     fetcherConfigValidationMessage.push({ number: index+1, message: e.message });
@@ -644,6 +644,10 @@ export default {
             });
             if (fetcherConfigValidationMessage.length == 0) {
                 this.$set(this.completeServer, serverLiveNumber - 1, true);
+                this.$message({
+                    message: '验证成功',
+                    type: 'success'
+                });
             } else {
                 let noticeStr = "";
                 fetcherConfigValidationMessage.forEach(item => {
