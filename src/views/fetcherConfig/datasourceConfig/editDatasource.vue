@@ -210,6 +210,7 @@ export default {
                 }
             });
             if (allPass) {
+                this.$refs.extendForm.outValidComplete();
                 if (this.create) {
                     this.createData();
                 } else {

@@ -14,7 +14,7 @@
     <el-form-item label="允许信息为空:" prop="ignoreEmpty">
       <el-switch v-model="config.ignoreEmpty" />
     </el-form-item>
-
+    <request-options ref="requestOptions" />
     <el-form-item>
       <el-button
         type="primary"
@@ -28,8 +28,10 @@
 </template>
 
 <script>
+import RequestOptions from "../requestOptions.vue";
 export default {
     name: "WeiboDynamic",
+    components: { RequestOptions },
     data() {
         return {
             config: {
@@ -48,6 +50,13 @@ export default {
         open(create, config) {
             this.create = create;
             this.config = JSON.parse(JSON.stringify(config));
+            if(!("ignoreEmpty" in this.config)) {
+                this.$set(this.config, "ignoreEmpty", false);
+            }
+            if(!("requestOptions" in this.config)) {
+                this.$set(this.config, "requestOptions", {});
+            }
+            this.$refs["requestOptions"].open(this.config.requestOptions);
         },
         complete() {
             let allPass = true;
@@ -59,6 +68,15 @@ export default {
             });
             if (allPass) {
                 this.$emit("complete", this.config);
+            }
+        },
+        outValidComplete() {
+            if(this.config.ignoreEmpty == false) {
+                this.$delete(this.config, "ignoreEmpty");
+            }
+            this.$refs["requestOptions"].complete();
+            if (Object.keys(this.config.requestOptions).length == 0) {
+                this.$delete(this.config, "requestOptions");
             }
         }
     }

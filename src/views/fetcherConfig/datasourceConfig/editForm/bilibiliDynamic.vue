@@ -11,6 +11,7 @@
         :disabled="!create"
       />
     </el-form-item>
+    <request-options ref="requestOptions" />
     <el-form-item>
       <el-button
         type="primary"
@@ -24,8 +25,10 @@
 </template>
 
 <script>
+import RequestOptions from "../requestOptions.vue";
 export default {
     name: "BilibiliDynamic",
+    components: { RequestOptions },
     data() {
         return {
             config: {
@@ -43,6 +46,10 @@ export default {
         open(create, config) {
             this.create = create;
             this.config = JSON.parse(JSON.stringify(config));
+            if(!("requestOptions" in this.config)) {
+                this.$set(this.config, "requestOptions", {});
+            }
+            this.$refs["requestOptions"].open(this.config.requestOptions);
         },
         complete() {
             let allPass = true;
@@ -54,6 +61,12 @@ export default {
             });
             if (allPass) {
                 this.$emit("complete", this.config);
+            }
+        },
+        outValidComplete() {
+            this.$refs["requestOptions"].complete();
+            if (Object.keys(this.config.requestOptions).length == 0) {
+                this.$delete(this.config, "requestOptions");
             }
         }
     }

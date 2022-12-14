@@ -123,7 +123,7 @@ module.exports = [
 
             let data = {
                 platform_list: ["bilibili", "weibo", "netease-cloud-music", "arknights-game", "arknights-website"],
-                datasource_list: ["bilibili", "weibo", "netease-cloud-music", "arknights/game-announcement", "arknights/game-version", "arknights/monster-siren", "arknights/official-website", "	arknights/terra-historicus"]
+                datasource_list: ["bilibili", "weibo", "netease-cloud-music", "arknights/game-announcement", "arknights/game-version", "arknights/monster-siren", "arknights/official-website", "arknights/terra-historicus"]
             };
             return {
                 code: "00000",

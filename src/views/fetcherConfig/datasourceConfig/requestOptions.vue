@@ -5,7 +5,6 @@
       ref="requestOptionsForm"
       :model="requestOptions"
       label-position="right" label-width="120px"
-      :rules="requestOptionsRules"
     >
       <el-form-item label="时间戳:" prop="appendTimestamp">
         <el-switch v-model="requestOptions.appendTimestamp" />
@@ -22,7 +21,7 @@
           新增
         </el-button>
         <div v-for="(item, index) in headerList" :key="index">
-          <el-input v-model="item.key" class="headers-input" />: <el-input v-model="item.value" class="headers-input" />
+          <el-input v-model="item.key" class="headers-key" />: <el-input v-model="item.value" class="headers-value" />
         </div>
       </el-form-item>
     </el-form>
@@ -43,6 +42,34 @@ export default {
         };
     },
     methods: {
+        open(data) {
+            this.requestOptions = data;
+            if (!("appendTimestamp" in this.requestOptions)) {
+                this.$set(this.requestOptions, "appendTimestamp", false);
+            }
+            if (!("timestampParamName" in this.requestOptions)) {
+                this.$set(this.requestOptions, "timestampParamName", "t");
+            }
+            if (!("headers" in this.requestOptions)) {
+                this.$set(this.requestOptions, "headers", {});
+            }
+        },
+        complete() {
+            this.headerList.forEach(header => {
+                if (header.key !== "" && header.value !== "") {
+                    this.$set(this.requestOptions.headers, header.key, header.value);
+                }
+            });
+            if (this.requestOptions.appendTimestamp == false) {
+                this.$delete(this.requestOptions, "appendTimestamp");
+            }
+            if (this.requestOptions.timestampParamName === "" || this.requestOptions.timestampParamName === "t") {
+                this.$delete(this.requestOptions, "timestampParamName");
+            }
+            if (Object.keys(this.requestOptions.headers).length == 0) {
+                this.$delete(this.requestOptions, "headers");
+            }
+        },
         addHeaders() {
             this.headerList.push({
                 key: "",
@@ -54,12 +81,21 @@ export default {
 </script>
 
 <style lang="scss">
-.headers-input {
+.headers-key {
   display: inline;
 
   .el-input__inner {
     margin-top: 5px;
     width: 30%;
+  }
+}
+
+.headers-value {
+  display: inline;
+
+  .el-input__inner {
+    margin-top: 5px;
+    width: 60%;
   }
 }
 </style>
