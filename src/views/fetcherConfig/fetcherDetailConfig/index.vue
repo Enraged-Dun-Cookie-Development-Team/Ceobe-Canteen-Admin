@@ -35,7 +35,7 @@
           type="border-card"
         >
           <el-tab-pane
-            v-for="(servers) in fethcerConfigList" :key="servers.number+''"
+            v-for="(servers) in fetcherConfigList" :key="servers.number+''"
             :label="`只存活了${servers.number}条的情况${completeServer[servers.number-1]?'✅':'❌'}`"
           >
             <div style="width:calc(100% - 100px); min-height:42px;">
@@ -132,7 +132,10 @@
       </div>
     </el-card>
     <el-card v-show="stepIndex == 3">
-      <valid-and-confirm :server-live-list="fethcerConfigList" />
+      <show-and-confirm
+        ref="showAndConfirm" :fetcher-config-list="fetcherConfigList"
+        :datasource-map="datasourceMap"
+      />
     </el-card>
     <el-input
       v-model="textarea"
@@ -215,18 +218,18 @@
 </template>
 
 <script>
-import ValidAndConfirm from "./validAndConfirm.vue";
+import ShowAndConfirm from "./showAndConfirm.vue";
 // import { FetchController } from '@enraged-dun-cookie-development-team/cookie-fetcher';
 export default {
     name: "FetcherDetailConfig",
-    components: { ValidAndConfirm },
+    components: { ShowAndConfirm },
     data() {
         return {
             pageTwoNotice: '',
             fetcherLiveNumber: 0,
             platform: '',
             stepIndex: 1, // 当前步骤
-            fethcerConfigList: [], // 蹲饼器配置数组
+            fetcherConfigList: [], // 蹲饼器配置数组
             configLoading: false,
             platformList: [], // 平台类别
             platformLoading: false, // 平台加载
@@ -248,7 +251,7 @@ export default {
     },
     computed: {
         textarea() {
-            return JSON.stringify(this.fethcerConfigList);
+            return JSON.stringify(this.fetcherConfigList);
         }
     },
     mounted() {
@@ -293,7 +296,7 @@ export default {
             this.fetcherLiveNumber = 0;
             this.platform= '';
             this.stepIndex= 1; // 当前步骤
-            this.fethcerConfigList= []; // 蹲饼器配置数组
+            this.fetcherConfigList= []; // 蹲饼器配置数组
             this.configLoading= false;
             this.platformLoading= false, // 平台加载
             this.datasourceList= []; // 类别下的账号
@@ -327,18 +330,18 @@ export default {
                 return;
             }
             // 获取的的数据源配置的都为已完成
-            for (let i = 0; i < this.fethcerConfigList.length; i++) {
+            for (let i = 0; i < this.fetcherConfigList.length; i++) {
                 this.completeServer.push(true);
             }
             // 如果当前配置蹲饼器小于最大存活数量，则补充
-            while (this.fetcherLiveNumber > this.fethcerConfigList.length) {
-                this.fethcerConfigList.push({ number: this.fethcerConfigList.length+1, server: [] });
+            while (this.fetcherLiveNumber > this.fetcherConfigList.length) {
+                this.fetcherConfigList.push({ number: this.fetcherConfigList.length+1, server: [] });
                 this.completeServer.push(false);
             }
             this.serverAddGroups();
 
             // 配置每种情况下未配置的数据源
-            this.fethcerConfigList.forEach(data => {
+            this.fetcherConfigList.forEach(data => {
                 let datasourceConfigured = {};
                 data.server?.forEach(server=> {
                     server.groups?.forEach(group => {
@@ -399,7 +402,7 @@ export default {
         async getFetcherConfigList() {
             try {
                 let response = await this.$store.dispatch("fetcherConfig/getFetcherConfigList", { "type_id":this.platform });
-                this.fethcerConfigList = response.data;
+                this.fetcherConfigList = response.data;
             } catch{
                 this.$message({
                     showClose: true,
@@ -410,7 +413,7 @@ export default {
         },
         // 每种server下添加groups
         serverAddGroups() {
-            this.fethcerConfigList.forEach((item,index) => {
+            this.fetcherConfigList.forEach((item,index) => {
                 if (!this.completeServer[index]) {
                     for (let i = 0; i < item.number; i++) {
                         item.server.push({
@@ -422,7 +425,7 @@ export default {
         },
         // 每种groups下添加datasource
         groupAddDatasource(serverLiveListNumber, groupIndex) {
-            let serverLive = this.fethcerConfigList.find(x => x.number == serverLiveListNumber);
+            let serverLive = this.fetcherConfigList.find(x => x.number == serverLiveListNumber);
             let findData = serverLive.server[groupIndex];
             this.$prompt('请输入组名称', '提示', {
                 confirmButtonText: '确定',
@@ -443,15 +446,15 @@ export default {
         },
         // 删除一个来源组(datasource)
         removeDatasources(serversNumber, groupIndex, datasourceIndex) {
-            if (this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]) {
-                this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex];
-                this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]?.datasource.find(sourceTypeId => {
+            if (this.fetcherConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]) {
+                this.fetcherConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex];
+                this.fetcherConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]?.datasource.find(sourceTypeId => {
                     this.datasourceList[serversNumber-1].push({
                         nickname: this.datasourceMap[sourceTypeId].nickname,
                         id: sourceTypeId
                     });
                 });
-                this.fethcerConfigList[serversNumber-1]?.server[groupIndex]?.groups.splice(datasourceIndex,1);
+                this.fetcherConfigList[serversNumber-1]?.server[groupIndex]?.groups.splice(datasourceIndex,1);
                 this.completeServer[serversNumber-1] = false;
             }
         },
@@ -486,7 +489,7 @@ export default {
                 let serversIndex = event.currentTarget.dataset.serversindex;
                 let groupIndex = event.currentTarget.dataset.groupindex;
                 let datasourceIndex = event.currentTarget.dataset.datasourceindex;
-                let serverLive = this.fethcerConfigList.find(x => x.number == serversIndex);
+                let serverLive = this.fetcherConfigList.find(x => x.number == serversIndex);
                 let datasource = serverLive.server[groupIndex].groups[datasourceIndex];
                 if (datasource.datasource.findIndex(x => x == this.dragItem.id) < 0) {
                     datasource.datasource.push(this.dragItem.id);
@@ -499,7 +502,7 @@ export default {
         },
         // 点击标签的x删除总对象内的蹲饼源
         removeSource(sourceTypeId, serversIndex, groupIndex, datasourceIndex) {
-            let datasource = this.fethcerConfigList.find(x => x.number == serversIndex).server[groupIndex].groups[datasourceIndex];
+            let datasource = this.fetcherConfigList.find(x => x.number == serversIndex).server[groupIndex].groups[datasourceIndex];
             let index = datasource.datasource.findIndex(x => x == sourceTypeId);
             datasource.datasource.splice(index, 1);
             this.datasourceList[serversIndex-1].push({
@@ -530,7 +533,7 @@ export default {
         },
         // 把设置好得蹲饼时间段频率功能添加到总对象字符串内
         addIntervalByTimeRangeToGroups() {
-            let datasource = this.fethcerConfigList.find(x => x.number == this.timePickerWindowInfo.serversIndex).server[this.timePickerWindowInfo.groupIndex].groups[this.timePickerWindowInfo.datasourceIndex];
+            let datasource = this.fetcherConfigList.find(x => x.number == this.timePickerWindowInfo.serversIndex).server[this.timePickerWindowInfo.groupIndex].groups[this.timePickerWindowInfo.datasourceIndex];
             let timeRangeInterval = [];
             this.$delete(datasource, "interval_by_time_range");
             for (let i = 0; i < this.timePicker.length; i++) {
@@ -579,6 +582,7 @@ export default {
             });
             if (allComplete) {
                 this.nextPage();
+                this.$refs["showAndConfirm"].open();
             } else {
                 this.$message({
                     message: '还有情况没有配置完成噢',
@@ -590,7 +594,7 @@ export default {
         validConfig(serverLiveNumber) {
             this.configLoading = true;
             let fetcherConfigValidationMessage = [];
-            this.fethcerConfigList[serverLiveNumber - 1]?.server?.forEach((server, index) => {
+            this.fetcherConfigList[serverLiveNumber - 1]?.server?.forEach((server, index) => {
                 try {
                     // 替换config下面的datasources id为详细内容
                     let singleFetcher = JSON.parse(JSON.stringify(server));
