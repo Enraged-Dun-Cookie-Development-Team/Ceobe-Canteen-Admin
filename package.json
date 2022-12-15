@@ -87,7 +87,7 @@
       "vue-cli-service lint"
     ],
     "**/src/**/*.{vue,css,sass,scss}": [
-      "stylelint --fix"
+      "stylelint --fix --allow-empty-input"
     ]
   }
 }
