@@ -9,7 +9,10 @@
       <el-form-item label="时间戳:" prop="appendTimestamp">
         <el-switch v-model="requestOptions.appendTimestamp" />
       </el-form-item>
-      <el-form-item label="时间戳参数名:" prop="timestampParamName">
+      <el-form-item
+        v-if="requestOptions.appendTimestamp" label="时间戳参数名:"
+        prop="timestampParamName"
+      >
         <el-input v-model="requestOptions.timestampParamName" />
       </el-form-item>
 
@@ -34,7 +37,7 @@ export default {
     data() {
         return {
             requestOptions: {
-                appendTimestamp: true,
+                appendTimestamp: false,
                 timestampParamName: "t",
                 headers: {},
             },
@@ -62,6 +65,7 @@ export default {
             });
             if (this.requestOptions.appendTimestamp == false) {
                 this.$delete(this.requestOptions, "appendTimestamp");
+                this.$delete(this.requestOptions, "timestampParamName");
             }
             if (this.requestOptions.timestampParamName === "" || this.requestOptions.timestampParamName === "t") {
                 this.$delete(this.requestOptions, "timestampParamName");
