@@ -52,7 +52,7 @@
         </el-form-item>
         <el-form-item label="头像:" prop="avatar">
           <upload-img
-            :file-list="datasourceData.avatar?[{name: '', url: datasourceData.avatar}] : []" :url="url"
+            :file-list="fileList" :url="url"
             @success="(data)=>onSuccess(data)" @remove="onRemove()"
           />
         </el-form-item>
@@ -122,6 +122,11 @@ export default {
                 }
             }
         };
+    },
+    computed:{
+        fileList(){
+            return this.datasourceData.avatar?[{ name: '', url: this.datasourceData.avatar }] : [];
+        }
     },
     mounted() {
         this.init();
