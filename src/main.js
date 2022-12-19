@@ -3,7 +3,8 @@ import Vue from 'vue';
 import 'normalize.css/normalize.css'; // A modern alternative to CSS resets
 
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import './theme/index.css';
+// import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/zh-CN'; // lang i18n
 
 import '@/styles/index.scss'; // global css
@@ -18,6 +19,11 @@ import '@/permission'; // permission control
 import VueClipboard from 'vue-clipboard2';
 
 Vue.use(VueClipboard);
+
+import JsonViewer from 'vue-json-viewer';
+
+// Import JsonViewer as a Vue.js plugin
+Vue.use(JsonViewer);
 
 /**
  * If you don't want to use mock-server

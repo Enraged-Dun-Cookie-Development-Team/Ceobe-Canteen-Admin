@@ -170,7 +170,12 @@ export default {
             this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
         },
         onFocus() { this.$emit('focus',''); },
-        onBlur() { this.$emit('blur',''); },
+        onBlur() {
+            // 删除富文本最后的换行
+            this.html=this.html.replace(/(<p><br><\/p>)*$/g,'');
+
+            this.$emit('blur','');
+        },
         isEmpty() {
             return this.editor.isEmpty();
         }

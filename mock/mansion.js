@@ -8,7 +8,7 @@ module.exports = [
 
             let data = ["16", "16.3", "16.6", "17"];
             return {
-                code: null,
+                code: "00000",
                 data: data
             };
         }
@@ -675,7 +675,7 @@ module.exports = [
             }
 
             return {
-                code: null,
+                code: "00000",
                 data: data
             };
         }
@@ -691,7 +691,7 @@ module.exports = [
             console.log(mansion_id);
 
             return {
-                code: null,
+                code: "00000",
                 message: "成功上传"
             };
         }
@@ -706,7 +706,7 @@ module.exports = [
             console.log(mansion_id);
 
             return {
-                code: null,
+                code: "00000",
                 message: "成功删除"
             };
         }

@@ -15,11 +15,7 @@
         />
       </el-form-item>
       <el-form-item label="强制更新" prop="force">
-        <el-switch
-          v-model="phoneForm.force"
-          active-color="#ffba4b"
-          inactive-color="#97a8be"
-        />
+        <el-switch v-model="phoneForm.force" />
       </el-form-item>
       <el-form-item label="上次强制版本" prop="last_force_version">
         <el-input

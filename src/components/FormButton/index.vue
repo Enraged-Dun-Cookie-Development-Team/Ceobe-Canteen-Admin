@@ -1,5 +1,6 @@
 <template>
   <el-button
+    type="primary"
     class="btn-submit"
     @click="submit"
   >
@@ -24,15 +25,5 @@ export default {
   position: fixed;
   right: 80px;
   bottom: 20px;
-  border-color: #ffba4b;
-  color: #f4f4f5;
-  background-color: #ffba4b;
-
-  &:focus,
-  &:hover {
-    border-color: #ffc76e;
-    color: #f4f4f5;
-    background-color: #ffc76e;
-  }
 }
 </style>

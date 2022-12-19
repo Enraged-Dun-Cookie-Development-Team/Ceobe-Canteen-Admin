@@ -7,6 +7,7 @@ const resource = require('./resource');
 const version = require('./version');
 const announcement = require("./announcement");
 const mansion = require('./mansion');
+const fetcherConifg = require('./fetcherConifg');
 
 
 const mocks = [
@@ -16,6 +17,7 @@ const mocks = [
     ...version,
     ...announcement,
     ...mansion,
+    ...fetcherConifg
 ];
 
 // for front mock

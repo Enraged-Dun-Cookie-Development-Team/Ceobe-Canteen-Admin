@@ -52,6 +52,9 @@
         进入厨房
       </el-button>
     </el-form>
+    <div class="logo-area">
+      <img src="@/assets/image/logo/icon.png" alt="" />
+    </div>
   </div>
 </template>
 
@@ -124,7 +127,7 @@ export default {
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
+$bg:#C3C0B6;
 $light_gray:#FFF;
 $cursor: #FFF;
 
@@ -171,9 +174,9 @@ $cursor: #FFF;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2D3A4B;
+$bg:#D9D6CB;
 $dark_gray:#889AA4;
-$light_gray:#EEE;
+$light_gray:#4F4C42;
 
 .login-container {
   overflow: hidden;
@@ -183,6 +186,7 @@ $light_gray:#EEE;
 
   .login-form {
     position: relative;
+    z-index: 1;
     overflow: hidden;
     margin: 0 auto;
     padding: 160px 35px 0;
@@ -232,6 +236,18 @@ $light_gray:#EEE;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
+  }
+
+  .logo-area {
+    position: fixed;
+    right: -50px;
+    bottom: -50px;
+    z-index: 0;
+
+    img {
+      width: 600px;
+      height: 600px;
+    }
   }
 }
 </style>

@@ -16,3 +16,6 @@
 /dist/
 /node_modules/
 /lib/
+
+# element主题样式文件
+/src/theme/

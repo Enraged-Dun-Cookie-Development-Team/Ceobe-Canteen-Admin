@@ -94,10 +94,7 @@
                   @blur="checkForm(index)"
                   @focus="activeIndex = index"
                 />
-                <el-radio-group
-                  v-model="detail.forecast_status" class="radio-group" fill="#ffba4b"
-                  text-color="#ffffff"
-                >
+                <el-radio-group v-model="detail.forecast_status" class="radio-group">
                   <el-radio-button label="unknown">
                     还没到
                   </el-radio-button>
@@ -777,27 +774,6 @@ export default {
 
     .forecast-info {
       margin-bottom: 10px;
-
-      :deep(.radio-group) {
-        margin-left: 15px;
-
-        .el-radio-button__orig-radio:checked+.el-radio-button__inner {
-          border-color: #FFBA4B;
-          background-color: #FFBA4B;
-          box-shadow: -1px 0 0 0 #FFBA4B;
-        }
-
-        .el-radio-button__inner:hover {
-          color: #FFBA4B !important;
-        }
-
-        .is-active {
-
-          .el-radio-button__inner:hover {
-            color: #FFF !important;
-          }
-        }
-      }
     }
   }
 

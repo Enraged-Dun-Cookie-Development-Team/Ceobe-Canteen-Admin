@@ -171,16 +171,5 @@ export default {
   :deep(label) {
     font-weight: 500;
   }
-
-  .btn-password {
-    border-color: #FFBA4B;
-    background-color: #FFBA4B;
-  }
-
-  .btn-password:focus,
-  .btn-password:hover {
-    border-color: #FFC76E;
-    background-color: #FFC76E;
-  }
 }
 </style>

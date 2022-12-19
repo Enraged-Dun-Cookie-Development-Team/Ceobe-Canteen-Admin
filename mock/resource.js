@@ -80,7 +80,7 @@ module.exports = [
             }
 
             return {
-                code: null,
+                code: "00000",
                 data: data
             };
         }
@@ -95,7 +95,7 @@ module.exports = [
             console.log(config.body);
 
             return {
-                code: null,
+                code: "00000",
                 message: "成功上传"
             };
         }
