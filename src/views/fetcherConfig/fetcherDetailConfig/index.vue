@@ -414,7 +414,21 @@ export default {
         async getFetcherConfigList() {
             try {
                 let response = await this.$store.dispatch("fetcherConfig/getFetcherConfigList", { "type_id":this.platform });
-                this.fetcherConfigList = response.data;
+                let index = 0;
+                for (let i = 0; i<response.data?.length; i++) {
+                    if (response.data[i].number == index + 1) {
+                        response.data[i].server?.forEach((server, _) => {
+                            server.groups?.forEach((group, _) => {
+                                group.type = this.datasourceMap[group.datasource[0]].datasource;
+                            });
+                        });
+                        this.fetcherConfigList.push(response.data[i]);
+                    } else {
+                        this.fetcherConfigList.push({ number: index+1, server: [] });
+                        i--;
+                    }
+                    index++;
+                }
             } catch{
                 this.$message({
                     showClose: true,
@@ -425,13 +439,12 @@ export default {
         },
         // 每种server下添加groups
         serverAddGroups() {
-            this.fetcherConfigList.forEach((item,index) => {
-                if (!this.completeServer[index]) {
-                    for (let i = 0; i < item.number; i++) {
-                        item.server.push({
-                            groups: [],
-                        });
-                    }
+            this.fetcherConfigList.forEach((item) => {
+                let length = item.number-item.server?.length;
+                for (let i = 0; i < length; i++) {
+                    item.server.push({
+                        groups: [],
+                    });
                 }
             });
         },
@@ -448,6 +461,7 @@ export default {
                 // 这里初始化卡片的对象
                 findData.groups.push({
                     name: value,
+                    platform: this.platform,
                     type: null,
                     datasource: [],
                 });
@@ -459,7 +473,6 @@ export default {
         // 删除一个来源组(datasource)
         removeDatasources(serversNumber, groupIndex, datasourceIndex) {
             if (this.fetcherConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]) {
-                this.fetcherConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex];
                 this.fetcherConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]?.datasource.find(sourceTypeId => {
                     this.datasourceList[serversNumber-1].push({
                         nickname: this.datasourceMap[sourceTypeId].nickname,
