@@ -381,6 +381,7 @@ export default {
                 datasources.forEach(x => {
                     this.datasourceMap[x.id+'']={
                         nickname: x.nickname,
+                        datasource: x.datasource,
                         config: x.config,
                     };
                 });
@@ -447,7 +448,7 @@ export default {
                 // 这里初始化卡片的对象
                 findData.groups.push({
                     name: value,
-                    type: this.platform,
+                    type: null,
                     datasource: [],
                 });
                 this.completeServer[serverLiveListNumber-1] = false;
@@ -502,12 +503,22 @@ export default {
                 let datasourceIndex = event.currentTarget.dataset.datasourceindex;
                 let serverLive = this.fetcherConfigList.find(x => x.number == serversIndex);
                 let datasource = serverLive.server[groupIndex].groups[datasourceIndex];
-                if (datasource.datasource.findIndex(x => x == this.dragItem.id) < 0) {
-                    datasource.datasource.push(this.dragItem.id);
-                    let index = this.datasourceList[serversIndex-1].findIndex(x => x.id == this.dragItem.id);
-                    this.datasourceList[serversIndex-1].splice(index, 1);
+                // 判断数据源类型一致不一致， 不一致则不让拖动
+                if (datasource.type == "" || datasource.type == null || datasource.type == this.datasourceMap[this.dragItem.id].datasource) {
+                    if (datasource.datasource.findIndex(x => x == this.dragItem.id) < 0) {
+                        datasource.datasource.push(this.dragItem.id);
+                        let index = this.datasourceList[serversIndex-1].findIndex(x => x.id == this.dragItem.id);
+                        datasource.type = this.datasourceMap[this.dragItem.id].datasource;
+                        this.datasourceList[serversIndex-1].splice(index, 1);
+                        this.completeServer[serversIndex-1] = false;
+                    }
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: `该数据源类型${this.datasourceMap[this.dragItem.id].datasource}与组的数据源类型${datasource.type}不一致，不可以放在一个组！`,
+                        type: "warning",
+                    });
                 }
-                this.completeServer[serversIndex-1] = false;
             }
             this.dragItem = null;
         },
@@ -670,6 +681,7 @@ export default {
                         message: "上传蹲饼器配置成功",
                         type: "success",
                     });
+                    this.initData();
                 }).catch(() =>{
                     this.$message({
                         showClose: true,
@@ -677,7 +689,6 @@ export default {
                         type: "error",
                     });
                 });
-            this.initData();
         }
     }
 };
