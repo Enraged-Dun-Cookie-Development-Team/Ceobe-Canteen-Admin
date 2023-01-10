@@ -93,7 +93,8 @@ import ArknightsWebsitePublic from "./editForm/arknightsWebsitePublic.vue";
 import BilibiliDynamic from "./editForm/bilibiliDynamic.vue";
 import NeteaseCloudAlbums from "./editForm/neteaseCloudAlbums.vue";
 import WeiboDynamic from "./editForm/weiboDynamic.vue";
-import { BILIBILI_OPTION, WEIBO_OPTION, NETEASE_OPTION, ARKNIGHTS_GAME_OPTION, ARKNIHTS_WEBSITE_OPTION } from "@/const/fetcherConfig.js";
+import { BILIBILI_OPTION, WEIBO_OPTION, NETEASE_OPTION, ARKNIGHTS_GAME_OPTION, ARKNIHTS_WEBSITE_OPTION, DATASOURCE_UNIQUE_KEY } from "@/const/fetcherConfig.js";
+
 export default {
     name: "EditDatasource",
     components: { UploadImg, ArknightsGamePublic, ArknightsWebsitePublic, BilibiliDynamic, NeteaseCloudAlbums, WeiboDynamic, Default },
@@ -248,7 +249,7 @@ export default {
         },
         createData() {
             this.$store
-                .dispatch("fetcherConfig/createDatasource",this.datasourceData)
+                .dispatch("fetcherConfig/createDatasource",{ unique_key: DATASOURCE_UNIQUE_KEY[this.datasourceData.datasource], ...this.datasourceData })
                 .then(() => {
                     this.$message({
                         showClose: true,
@@ -269,7 +270,7 @@ export default {
         },
         updateData() {
             this.$store
-                .dispatch("fetcherConfig/updateDatasource",this.datasourceData)
+                .dispatch("fetcherConfig/updateDatasource",{ unique_key: DATASOURCE_UNIQUE_KEY[this.datasourceData.datasource], ...this.datasourceData })
                 .then(() => {
                     this.$message({
                         showClose: true,
