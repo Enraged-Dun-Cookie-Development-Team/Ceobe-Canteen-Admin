@@ -414,20 +414,21 @@ export default {
         async getFetcherConfigList() {
             try {
                 let response = await this.$store.dispatch("fetcherConfig/getFetcherConfigList", { "type_id":this.platform });
-                let index = 0;
+                response.data = response.data?.sort((a, b) => { return a.number - b.number; });
+
+                let lastNumber = 0;
                 for (let i = 0; i<response.data?.length; i++) {
-                    if (response.data[i].number == index + 1) {
-                        response.data[i].server?.forEach((server, _) => {
-                            server.groups?.forEach((group, _) => {
-                                group.type = this.datasourceMap[group.datasource[0]].datasource;
-                            });
-                        });
-                        this.fetcherConfigList.push(response.data[i]);
-                    } else {
-                        this.fetcherConfigList.push({ number: index+1, server: [] });
-                        i--;
+                    while (response.data[i]?.number - 1 > lastNumber) {
+                        this.fetcherConfigList.push({ number: lastNumber+1, server: [] });
+                        lastNumber++;
                     }
-                    index++;
+                    response.data[i].server?.forEach((server, _) => {
+                        server.groups?.forEach((group, _) => {
+                            group.type = this.datasourceMap[group.datasource[0]].datasource;
+                        });
+                    });
+                    this.fetcherConfigList.push(response.data[i]);
+                    lastNumber = response.data[i].number;
                 }
             } catch{
                 this.$message({
