@@ -414,7 +414,6 @@ export default {
         async getFetcherConfigList() {
             try {
                 let response = await this.$store.dispatch("fetcherConfig/getFetcherConfigList", { "type_id":this.platform });
-                response.data = response.data?.sort((a, b) => { return a.number - b.number; });
 
                 let lastNumber = 0;
                 for (let i = 0; i<response.data?.length; i++) {
