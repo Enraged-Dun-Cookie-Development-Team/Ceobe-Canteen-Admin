@@ -44,3 +44,14 @@ export const ARKNIHTS_WEBSITE_OPTION = [
         value: 'arknights/terra-historicus',
     }
 ];
+
+export const DATASOURCE_UNIQUE_KEY = {
+    'bilibili': 'uid',
+    'weibo': 'uid',
+    'netease-cloud-music': 'artistId',
+    'arknights/game-announcement': 'platform',
+    'arknights/game-version': 'platform',
+    'arknights/monster-siren': null,
+    'arknights/official-website': null,
+    'arknights/terra-historicus': null,
+};

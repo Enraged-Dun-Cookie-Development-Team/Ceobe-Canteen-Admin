@@ -43,12 +43,12 @@ module.exports = {
         },
         setupMiddlewares: require('./mock/mock-server.js'),
         // proxy: {
-        //   // change xxx-api/login => mock/login
-        //   // detail: https://cli.vuejs.org/config/#devserver-proxy
-        //   '/api/v1/admin': {
-        //     target: process.env.TARGET_API,
-        //     changeOrigin: true
-        //   }
+        //     // change xxx-api/login => mock/login
+        //     // detail: https://cli.vuejs.org/config/#devserver-proxy
+        //     '/api/v1/admin': {
+        //         target: process.env.TARGET_API,
+        //         changeOrigin: true
+        //     }
         // }
     },
     configureWebpack: {

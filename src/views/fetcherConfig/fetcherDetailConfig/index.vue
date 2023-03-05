@@ -381,6 +381,7 @@ export default {
                 datasources.forEach(x => {
                     this.datasourceMap[x.id+'']={
                         nickname: x.nickname,
+                        datasource: x.datasource,
                         config: x.config,
                     };
                 });
@@ -413,7 +414,21 @@ export default {
         async getFetcherConfigList() {
             try {
                 let response = await this.$store.dispatch("fetcherConfig/getFetcherConfigList", { "type_id":this.platform });
-                this.fetcherConfigList = response.data;
+
+                let lastNumber = 0;
+                for (let i = 0; i<response.data.length; i++) {
+                    while (response.data[i].number - 1 > lastNumber) {
+                        this.fetcherConfigList.push({ number: lastNumber+1, server: [] });
+                        lastNumber++;
+                    }
+                    response.data[i].server.forEach((server, _) => {
+                        server.groups?.forEach((group, _) => {
+                            group.type = this.datasourceMap[group.datasource[0]].datasource;
+                        });
+                    });
+                    this.fetcherConfigList.push(response.data[i]);
+                    lastNumber = response.data[i].number;
+                }
             } catch{
                 this.$message({
                     showClose: true,
@@ -424,13 +439,12 @@ export default {
         },
         // 每种server下添加groups
         serverAddGroups() {
-            this.fetcherConfigList.forEach((item,index) => {
-                if (!this.completeServer[index]) {
-                    for (let i = 0; i < item.number; i++) {
-                        item.server.push({
-                            groups: [],
-                        });
-                    }
+            this.fetcherConfigList.forEach((item) => {
+                let length = item.number-item.server?.length;
+                for (let i = 0; i < length; i++) {
+                    item.server.push({
+                        groups: [],
+                    });
                 }
             });
         },
@@ -447,7 +461,8 @@ export default {
                 // 这里初始化卡片的对象
                 findData.groups.push({
                     name: value,
-                    type: this.platform,
+                    platform: this.platform,
+                    type: null,
                     datasource: [],
                 });
                 this.completeServer[serverLiveListNumber-1] = false;
@@ -458,14 +473,13 @@ export default {
         // 删除一个来源组(datasource)
         removeDatasources(serversNumber, groupIndex, datasourceIndex) {
             if (this.fetcherConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]) {
-                this.fetcherConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex];
-                this.fetcherConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]?.datasource.find(sourceTypeId => {
+                this.fetcherConfigList[serversNumber-1].server[groupIndex].groups[datasourceIndex].datasource.find(sourceTypeId => {
                     this.datasourceList[serversNumber-1].push({
                         nickname: this.datasourceMap[sourceTypeId].nickname,
                         id: sourceTypeId
                     });
                 });
-                this.fetcherConfigList[serversNumber-1]?.server[groupIndex]?.groups.splice(datasourceIndex,1);
+                this.fetcherConfigList[serversNumber-1].server[groupIndex].groups.splice(datasourceIndex,1);
                 this.completeServer[serversNumber-1] = false;
             }
         },
@@ -502,12 +516,22 @@ export default {
                 let datasourceIndex = event.currentTarget.dataset.datasourceindex;
                 let serverLive = this.fetcherConfigList.find(x => x.number == serversIndex);
                 let datasource = serverLive.server[groupIndex].groups[datasourceIndex];
-                if (datasource.datasource.findIndex(x => x == this.dragItem.id) < 0) {
-                    datasource.datasource.push(this.dragItem.id);
-                    let index = this.datasourceList[serversIndex-1].findIndex(x => x.id == this.dragItem.id);
-                    this.datasourceList[serversIndex-1].splice(index, 1);
+                // 判断数据源类型一致不一致， 不一致则不让拖动
+                if (datasource.type == "" || datasource.type == null || datasource.type == this.datasourceMap[this.dragItem.id].datasource) {
+                    if (datasource.datasource.findIndex(x => x == this.dragItem.id) < 0) {
+                        datasource.datasource.push(this.dragItem.id);
+                        let index = this.datasourceList[serversIndex-1].findIndex(x => x.id == this.dragItem.id);
+                        datasource.type = this.datasourceMap[this.dragItem.id].datasource;
+                        this.datasourceList[serversIndex-1].splice(index, 1);
+                        this.completeServer[serversIndex-1] = false;
+                    }
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: `该数据源类型${this.datasourceMap[this.dragItem.id].datasource}与组的数据源类型${datasource.type}不一致，不可以放在一个组！`,
+                        type: "warning",
+                    });
                 }
-                this.completeServer[serversIndex-1] = false;
             }
             this.dragItem = null;
         },
@@ -605,13 +629,13 @@ export default {
         validConfig(serverLiveNumber) {
             this.configLoading = true;
             let fetcherConfigValidationMessage = [];
-            this.fetcherConfigList[serverLiveNumber - 1]?.server?.forEach((server, index) => {
+            this.fetcherConfigList[serverLiveNumber - 1].server.forEach((server, index) => {
                 try {
                     // 替换config下面的datasources id为详细内容
                     let singleFetcher = JSON.parse(JSON.stringify(server));
-                    singleFetcher.groups?.forEach((groupItem, groupIndex) => {
-                        groupItem.datasource?.forEach((datasourceItem, datasourceIndex) => {
-                            groupItem.datasource?.splice(datasourceIndex, 1, this.datasourceMap[datasourceItem].config);
+                    singleFetcher.groups.forEach((groupItem, groupIndex) => {
+                        groupItem.datasource.forEach((datasourceItem, datasourceIndex) => {
+                            groupItem.datasource.splice(datasourceIndex, 1, this.datasourceMap[datasourceItem].config);
                         });
                         singleFetcher.groups[groupIndex] = groupItem;
                     });
@@ -670,6 +694,7 @@ export default {
                         message: "上传蹲饼器配置成功",
                         type: "success",
                     });
+                    this.initData();
                 }).catch(() =>{
                     this.$message({
                         showClose: true,
@@ -677,7 +702,6 @@ export default {
                         type: "error",
                     });
                 });
-            this.initData();
         }
     }
 };

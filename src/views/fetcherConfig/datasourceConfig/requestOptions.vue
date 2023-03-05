@@ -53,9 +53,15 @@ export default {
             if (!("timestampParamName" in this.requestOptions)) {
                 this.$set(this.requestOptions, "timestampParamName", "t");
             }
-            if (!("headers" in this.requestOptions)) {
-                this.$set(this.requestOptions, "headers", {});
+            if ("headers" in this.requestOptions) {
+                for(let key in this.requestOptions.headers) {
+                    this.headerList.push({
+                        key: key,
+                        value: this.requestOptions.headers[key]
+                    });
+                }
             }
+            this.$set(this.requestOptions, "headers", {});
         },
         complete() {
             this.headerList.forEach(header => {

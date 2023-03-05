@@ -17,7 +17,6 @@
           :key="item.value"
           :label="item.label"
           :value="item.value"
-          @blur="fillPlatform"
         />
       </el-select>
     </el-form-item>
