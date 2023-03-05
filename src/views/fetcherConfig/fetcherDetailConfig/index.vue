@@ -416,12 +416,12 @@ export default {
                 let response = await this.$store.dispatch("fetcherConfig/getFetcherConfigList", { "type_id":this.platform });
 
                 let lastNumber = 0;
-                for (let i = 0; i<response.data?.length; i++) {
-                    while (response.data[i]?.number - 1 > lastNumber) {
+                for (let i = 0; i<response.data.length; i++) {
+                    while (response.data[i].number - 1 > lastNumber) {
                         this.fetcherConfigList.push({ number: lastNumber+1, server: [] });
                         lastNumber++;
                     }
-                    response.data[i].server?.forEach((server, _) => {
+                    response.data[i].server.forEach((server, _) => {
                         server.groups?.forEach((group, _) => {
                             group.type = this.datasourceMap[group.datasource[0]].datasource;
                         });
@@ -473,13 +473,13 @@ export default {
         // 删除一个来源组(datasource)
         removeDatasources(serversNumber, groupIndex, datasourceIndex) {
             if (this.fetcherConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]) {
-                this.fetcherConfigList[serversNumber-1]?.server[groupIndex]?.groups[datasourceIndex]?.datasource.find(sourceTypeId => {
+                this.fetcherConfigList[serversNumber-1].server[groupIndex].groups[datasourceIndex].datasource.find(sourceTypeId => {
                     this.datasourceList[serversNumber-1].push({
                         nickname: this.datasourceMap[sourceTypeId].nickname,
                         id: sourceTypeId
                     });
                 });
-                this.fetcherConfigList[serversNumber-1]?.server[groupIndex]?.groups.splice(datasourceIndex,1);
+                this.fetcherConfigList[serversNumber-1].server[groupIndex].groups.splice(datasourceIndex,1);
                 this.completeServer[serversNumber-1] = false;
             }
         },
@@ -629,13 +629,13 @@ export default {
         validConfig(serverLiveNumber) {
             this.configLoading = true;
             let fetcherConfigValidationMessage = [];
-            this.fetcherConfigList[serverLiveNumber - 1]?.server?.forEach((server, index) => {
+            this.fetcherConfigList[serverLiveNumber - 1].server.forEach((server, index) => {
                 try {
                     // 替换config下面的datasources id为详细内容
                     let singleFetcher = JSON.parse(JSON.stringify(server));
-                    singleFetcher.groups?.forEach((groupItem, groupIndex) => {
-                        groupItem.datasource?.forEach((datasourceItem, datasourceIndex) => {
-                            groupItem.datasource?.splice(datasourceIndex, 1, this.datasourceMap[datasourceItem].config);
+                    singleFetcher.groups.forEach((groupItem, groupIndex) => {
+                        groupItem.datasource.forEach((datasourceItem, datasourceIndex) => {
+                            groupItem.datasource.splice(datasourceIndex, 1, this.datasourceMap[datasourceItem].config);
                         });
                         singleFetcher.groups[groupIndex] = groupItem;
                     });
