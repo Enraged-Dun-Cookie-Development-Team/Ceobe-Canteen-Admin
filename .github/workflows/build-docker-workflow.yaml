@@ -1,5 +1,7 @@
 name: Node.js CI
 on:
+  # for debug
+  # pull_request:
   push:
     branches: [ master ]
     tags:
@@ -20,6 +22,22 @@ jobs:
       -
         run: |
           echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      -
+        name: Login npm registry
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+      -
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      -
+        name: build frontend
+        run: npm install && npm run build:prod
+
       -
         name: Build and push release
         uses: docker/build-push-action@v2
@@ -34,6 +52,6 @@ jobs:
         if: "!startsWith(github.ref, 'refs/tags/v')"
         with:
           context: .
-          push: true
+          push: ${{ github.event_name == 'push' }}
           tags: ceobecanteen/ceobe-canteen-admin
 
