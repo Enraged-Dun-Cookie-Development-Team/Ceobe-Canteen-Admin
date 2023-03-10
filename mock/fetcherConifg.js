@@ -123,7 +123,7 @@ module.exports = [
 
             let data = {
                 platform_list: ["bilibili", "weibo", "netease-cloud-music", "arknights-game", "arknights-website"],
-                datasource_list: ["bilibili", "weibo", "netease-cloud-music", "arknights/game-announcement", "arknights/game-version", "arknights/monster-siren", "arknights/official-website", "arknights/terra-historicus"]
+                datasource_list: ["bilibili:dynamic-by-uid", "	weibo:dynamic-by-uid", "netease-cloud-music:albums-by-artist", "arknights-game:announcement", "arknights-game:version", "arknights-website:monster-siren", "arknights-website:official-website", "arknights-website:terra-historicus"]
             };
             return {
                 code: "00000",
@@ -144,11 +144,11 @@ module.exports = [
 
             const platformList = ["bilibili", "weibo", "netease-cloud-music", "arknights-game", "arknights-website"];
             const datasource = {
-                "bilibili": ["bilibili"],
-                "weibo":["weibo"],
-                "netease-cloud-music":["netease-cloud-music"],
-                "arknights-game":["arknights/game-announcement", "arknights/game-version"],
-                "arknights-website":["arknights/monster-siren", "arknights/official-website", "arknights/terra-historicus"]
+                "bilibili": ["bilibili:dynamic-by-uid"],
+                "weibo":["weibo:dynamic-by-uid"],
+                "netease-cloud-music":["netease-cloud-music:albums-by-artist"],
+                "arknights-game":["arknights-game:announcement", "arknights-game:version"],
+                "arknights-website":["arknights-website:monster-siren", "arknights-website:official-website", "arknights-website:terra-historicus"]
             };
             const device = ['Android','IOS','Bilibili'];
 
@@ -338,31 +338,31 @@ module.exports = [
                     {
                         id: 0,
                         nickname: "明日方舟-B站",
-                        datasource: "bilibili",
+                        datasource: "bilibili:dynamic-by-uid",
                         config: { uid: '161775300' }
                     },
                     {
                         id: 1,
                         nickname: "明日方舟终末地-B站",
-                        datasource: "bilibili",
+                        datasource: "bilibili:dynamic-by-uid",
                         config: { uid: '1265652806' },
                     },
                     {
                         id: 2,
                         nickname: "来自星尘-B站",
-                        datasource: "bilibili",
+                        datasource: "bilibili:dynamic-by-uid",
                         config: { uid: '1883857209' },
                     },
                     {
                         id: 3,
                         nickname: "重力井动画-B站",
-                        datasource: "bilibili",
+                        datasource: "bilibili:dynamic-by-uid",
                         config: { uid: '1554642444' },
                     },
                     {
                         id: 4,
                         nickname: "CubesCollective-B站",
-                        datasource: "bilibili",
+                        datasource: "bilibili:dynamic-by-uid",
                         config: { uid: '2123591088' },
                     }
                 ],
@@ -370,7 +370,7 @@ module.exports = [
                     {
                         id: 5,
                         nickname: "明日方舟Arknights-微博",
-                        datasource: "weibo",
+                        datasource: "weibo:dynamic-by-uid",
                         config: {
                             uid: '6279793937',
                             requestOptions: {
@@ -385,37 +385,37 @@ module.exports = [
                     {
                         id: 6,
                         nickname: "一拾山-微博",
-                        datasource: "weibo",
+                        datasource: "weibo:dynamic-by-uid",
                         config: { uid: '7506039414' },
                     },
                     {
                         id: 7,
                         nickname: "明日方舟朝陇山-微博",
-                        datasource: "weibo",
+                        datasource: "weibo:dynamic-by-uid",
                         config: { uid: '6441489862' },
                     },
                     {
                         id: 8,
                         nickname: "泰拉记事社-微博",
-                        datasource: "weibo",
+                        datasource: "weibo:dynamic-by-uid",
                         config: { uid: '7499841383' },
                     },
                     {
                         id: 9,
                         nickname: "鹰角网络-微博",
-                        datasource: "weibo",
+                        datasource: "weibo:dynamic-by-uid",
                         config: { uid: '7461423907' },
                     },
                     {
                         id: 10,
                         nickname: "乌柯塔界限OCTAVEDGE-微博",
-                        datasource: "weibo",
+                        datasource: "weibo:dynamic-by-uid",
                         config: { uid: '7499841383' },
                     },
                     {
                         id: 11,
                         nickname: "明日方舟终末地-微博",
-                        datasource: "weibo",
+                        datasource: "weibo:dynamic-by-uid",
                         config: { uid: '7745672941' },
                     }
                 ],
@@ -423,13 +423,13 @@ module.exports = [
                     {
                         id: 12,
                         nickname: "塞壬唱片-MSR-网易云",
-                        datasource: "netease-cloud-musis",
+                        datasource: "netease-cloud-music:albums-by-artist",
                         config: { artistId: '32540734' },
                     },
                     {
                         id: 13,
                         nickname: "塞壬唱片-MSR-Cubes Collective",
-                        datasource: "netease-cloud-musis",
+                        datasource: "netease-cloud-music:albums-by-artist",
                         config: { artistId: '50653540' },
                     }
                 ],
@@ -437,13 +437,13 @@ module.exports = [
                     {
                         id: 14,
                         nickname: "游戏内公告(安卓)-明日方舟",
-                        datasource: "arknights/monster-siren",
+                        datasource: "arknights-game:announcement",
                         config: { platform: 'Android' },
                     },
                     {
                         id: 15,
                         nickname: "游戏版本(安卓)-明日方舟",
-                        datasource: "arknights/game-version",
+                        datasource: "arknights-game:version",
                         config: { platform: 'Android' },
                     },
                 ],
@@ -451,19 +451,19 @@ module.exports = [
                     {
                         id: 16,
                         nickname: "塞壬唱片官网-明日方舟",
-                        datasource: "arknights/monster-siren",
+                        datasource: "",
                         config: { },
                     },
                     {
                         id: 17,
                         nickname: "官网-明日方舟",
-                        datasource: "arknights/official-website",
+                        datasource: "arknights-website:official-website",
                         config: { },
                     },
                     {
                         id: 18,
                         nickname: "泰拉记事社官网-明日方舟",
-                        datasource: "arknights/terra-historicus",
+                        datasource: "arknights-website:terra-historicus",
                         config: { },
                     },
                 ]

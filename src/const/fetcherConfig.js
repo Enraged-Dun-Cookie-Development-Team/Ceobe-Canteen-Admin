@@ -1,57 +1,57 @@
 export const BILIBILI_OPTION = [
     {
-        label: 'bilibili',
-        value: 'bilibili',
+        label: 'bilibili:dynamic-by-uid',
+        value: 'bilibili:dynamic-by-uid',
     }
 ];
 
 export const WEIBO_OPTION = [
     {
-        label: 'weibo',
-        value: 'weibo',
+        label: 'weibo:dynamic-by-uid',
+        value: 'weibo:dynamic-by-uid',
     }
 ];
 
 export const NETEASE_OPTION = [
     {
-        label: 'netease-cloud-music',
-        value: 'netease-cloud-music',
+        label: 'netease-cloud-music:albums-by-artist',
+        value: 'netease-cloud-music:albums-by-artist',
     }
 ];
 
 export const ARKNIGHTS_GAME_OPTION = [
     {
-        label: 'arknights/game-announcement',
-        value: 'arknights/game-announcement',
+        label: 'arknights-game:announcement',
+        value: 'arknights-game:announcement',
     },
     {
-        label: 'arknights/game-version',
-        value: 'arknights/game-version',
+        label: 'arknights-game:version',
+        value: 'arknights-game:version',
     }
 ];
 
 export const ARKNIHTS_WEBSITE_OPTION = [
     {
-        label: 'arknights/monster-siren',
-        value: 'arknights/monster-siren',
+        label: 'arknights-website:monster-siren',
+        value: 'arknights-website:monster-siren',
     },
     {
-        label: 'arknights/official-website',
-        value: 'arknights/official-website',
+        label: 'arknights-website:official-website',
+        value: 'arknights-website:official-website',
     },
     {
-        label: 'arknights/terra-historicus',
-        value: 'arknights/terra-historicus',
+        label: 'arknights-website:terra-historicus',
+        value: 'arknights-website:terra-historicus',
     }
 ];
 
 export const DATASOURCE_UNIQUE_KEY = {
-    'bilibili': 'uid',
-    'weibo': 'uid',
-    'netease-cloud-music': 'artistId',
-    'arknights/game-announcement': 'platform',
-    'arknights/game-version': 'platform',
-    'arknights/monster-siren': null,
-    'arknights/official-website': null,
-    'arknights/terra-historicus': null,
+    'bilibili:dynamic-by-uid': 'uid',
+    'weibo:dynamic-by-uid': 'uid',
+    'netease-cloud-music:albums-by-artist': 'artistId',
+    'arknights-game:announcement': 'platform',
+    'arknights-game:version': 'platform',
+    'arknights-website:monster-siren': null,
+    'arknights-website:official-website': null,
+    'arknights-website:terra-historicus': null,
 };
