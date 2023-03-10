@@ -104,7 +104,7 @@ export default {
         return {
             create: false,
             showDraw: false,
-            url: "api/v1/admin/fetcherConfig/uploadAvatar",
+            url: "api/v1/admin/fetcherConfig/uploadDatasourceAvatar",
             datasourceData: {},
             platformIdOptions:[],
             datasourceOptions: [],
