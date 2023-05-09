@@ -62,6 +62,19 @@
                 @blur="checkForm(index)"
               />
             </el-form-item>
+            <el-form-item label="类型" prop="countdown_type">
+              <el-select
+                v-model="item.countdown_type"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in typeOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
             <el-form-item
               label="显示时间" prop="start_time"
               required
@@ -125,6 +138,24 @@ export default {
             value: '',
         };
         return {
+            typeOptions: [
+                {
+                    value: null,
+                    label: "默认",
+                },
+                {
+                    value: "activity",
+                    label: "活动",
+                },
+                {
+                    value: "banner",
+                    label: "卡池",
+                },
+                {
+                    value: "live",
+                    label: "直播",
+                }
+            ],
             collapseProps: collapseProps,
             collapseComponentData: {
                 on: {
@@ -139,6 +170,7 @@ export default {
                     {
                         text: "",
                         remark: "",
+                        countdown_type: null,
                         time: "",
                         start_time: "",
                         over_time: "",
@@ -151,6 +183,7 @@ export default {
                     {
                         text: "",
                         remark: "",
+                        countdown_type: null,
                         time: "",
                         start_time: "",
                         over_time: "",
@@ -450,6 +483,7 @@ export default {
                 this.resourceForm.countdown = [{
                     text: "",
                     remark: "",
+                    countdown_type: null,
                     time: "",
                     start_time: "",
                     over_time: ""
@@ -464,6 +498,7 @@ export default {
             this.resourceForm.countdown.splice(index + 1, 0, {
                 text: "",
                 remark: "",
+                countdown_type: null,
                 time: "",
                 start_time: "",
                 over_time: "",
