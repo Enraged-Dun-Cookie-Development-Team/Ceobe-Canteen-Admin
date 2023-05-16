@@ -327,7 +327,7 @@ export default {
                                 "pick",
                                 TimeUtil.passHourTime(
                                     this.videoListForm.videos[this.activeIndex].start_time,
-                                    13 * 24 + 12
+                                    20 * 24 + 12
                                 )
                             );
                         },
