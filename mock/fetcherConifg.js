@@ -157,6 +157,7 @@ module.exports = [
                 const platform = platformList[Math.floor(Math.random()*platformList.length)];
 
                 let config = {};
+                let url = "www.baidu.com";
                 switch (platform) {
                 case "bilibili":
                     config.uid = getRandomString(15);
@@ -172,9 +173,11 @@ module.exports = [
                     break;
                 case "arknights-game":
                     config.platform = device[Math.floor(Math.random()*device.length)];
+                    url = null;
                     break;
                 case "arknights-website":
                     config={};
+                    url = null;
                     break;
                 default:
                     config={};
@@ -186,7 +189,8 @@ module.exports = [
                     datasource: datasource[platform][Math.floor(Math.random()*datasource[platform].length)],
                     nickname: "昵称"+i,
                     avatar: "https://www.ceobecanteen.top/assets/img/lwt.81a55840.png",
-                    config: config
+                    config: config,
+                    jump_url: url
                 });
             }
             let data = {
