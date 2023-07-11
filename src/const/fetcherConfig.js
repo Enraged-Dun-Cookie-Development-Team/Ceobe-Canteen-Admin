@@ -23,6 +23,9 @@ export const ARKNIGHTS_GAME_OPTION = [
     {
         label: 'arknights-game:announcement',
         value: 'arknights-game:announcement',
+    },{
+        label: 'arknights-game:bulletin-list',
+        value: 'arknights-game:bulletin-list',
     },
     {
         label: 'arknights-game:version',
@@ -51,6 +54,7 @@ export const DATASOURCE_UNIQUE_KEY = {
     'netease-cloud-music:albums-by-artist': 'artistId',
     'arknights-game:announcement': 'platform',
     'arknights-game:version': 'platform',
+    'arknights-game:bulletin-list': 'platform',
     'arknights-website:monster-siren': null,
     'arknights-website:official-website': null,
     'arknights-website:terra-historicus': null,
