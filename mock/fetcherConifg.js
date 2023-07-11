@@ -157,7 +157,7 @@ module.exports = [
                 const platform = platformList[Math.floor(Math.random()*platformList.length)];
 
                 let config = {};
-                let url = "www.baidu.com";
+                let url = "";
                 switch (platform) {
                 case "bilibili":
                     config.uid = getRandomString(15);
