@@ -56,6 +56,12 @@
             @success="(data)=>onSuccess(data)" @remove="onRemove()"
           />
         </el-form-item>
+        <el-form-item label="链接:" prop="jump_url">
+          <el-input
+            v-model="datasourceData.jump_url" placeholder="请输入跳转链接"
+            @blur="changeEmptyToNull"
+          />
+        </el-form-item>
       </el-form>
       <arknights-game-public
         v-if="datasourceData.platform == 'arknights-game'" ref="extendForm"
@@ -120,7 +126,10 @@ export default {
                 },
                 avatar: {
                     required: true, message: "请上传图片", trigger: "change"
-                }
+                },
+                jump_url: {
+                    required: false, message: "请选择昵称", trigger: "blur"
+                },
             }
         };
     },
@@ -148,6 +157,7 @@ export default {
                 datasource: "",
                 nickname: "",
                 avatar: "",
+                jump_url: null,
                 config: {}
             };
         },
@@ -249,7 +259,7 @@ export default {
         },
         createData() {
             this.$store
-                .dispatch("fetcherConfig/createDatasource",{ unique_key: DATASOURCE_UNIQUE_KEY[this.datasourceData.datasource], ...this.datasourceData })
+                .dispatch("fetcherConfig/createDatasource",{ unique_key: DATASOURCE_UNIQUE_KEY[this.datasourceData.datasource], ...this.datasourceData  })
                 .then(() => {
                     this.$message({
                         showClose: true,
@@ -288,6 +298,12 @@ export default {
                 }).finally(()=>{
                     this.$emit("uploadDone");
                 });
+        },
+        // 更改跳转链接空为null
+        changeEmptyToNull() {
+            if (this.datasourceData.jump_url.trim() == '') {
+                this.datasourceData.jump_url = null;
+            }
         }
     }
 };
