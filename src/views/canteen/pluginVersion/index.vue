@@ -6,7 +6,7 @@
       :model="pluginForm"
       :rules="pluginRules"
       label-position="left"
-      label-width="100px"
+      label-width="150px"
     >
       <!-- <el-form-item label="LOGO" prop="logo">
         <el-select
@@ -52,7 +52,7 @@
       :model="pluginForm.down"
       :rules="downRules"
       label-position="left"
-      label-width="100px"
+      label-width="150px"
     >
       <el-form-item label="crx下载链接" prop="crx">
         <el-input
@@ -60,10 +60,22 @@
           placeholder="请输入crx下载链接"
         />
       </el-form-item>
+      <el-form-item label="crx备用下载链接" prop="spare_crx">
+        <el-input
+          v-model="pluginForm.down.spare_crx"
+          placeholder="请输入crx备用下载链接"
+        />
+      </el-form-item>
       <el-form-item label="zip下载链接" prop="zip">
         <el-input
           v-model="pluginForm.down.zip"
           placeholder="请输入zip下载链接"
+        />
+      </el-form-item>
+      <el-form-item label="zip备用下载链接" prop="spare_zip">
+        <el-input
+          v-model="pluginForm.down.spare_zip"
+          placeholder="请输入zip备用下载链接"
         />
       </el-form-item>
       <el-form-item label="百度云" prop="spare">
@@ -150,7 +162,9 @@ export default {
                 description: "",
                 down: {
                     crx: "",
+                    spare_crx: "",
                     zip: "",
+                    spare_zip: "",
                     spare: ["https://pan.baidu.com/s/1kzY6kpfYqLcGpuaiwQOGoA", "备用下载（提取码 jzq9）"],
                     chrome:
             "https://chrome.google.com/webstore/detail/%E8%B9%B2%E9%A5%BC-%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E8%B9%B2%E9%A5%BC%E5%99%A8-arknights-cook/gblmdllhbodefkmimbcjpflhjneagkkd?hl=zh-CN",
@@ -202,7 +216,21 @@ export default {
                         trigger: ["change", "blur"],
                     },
                 ],
+                spare_crx: [
+                    {
+                        required: true,
+                        message: "都说了不要为空了",
+                        trigger: ["change", "blur"],
+                    },
+                ],
                 zip: [
+                    {
+                        required: true,
+                        message: "都说了不要为空了啦",
+                        trigger: ["change", "blur"],
+                    },
+                ],
+                spare_zip: [
                     {
                         required: true,
                         message: "都说了不要为空了啦",
@@ -256,6 +284,8 @@ export default {
             this.pluginForm.title = `小刻食堂翻新啦 - ${this.pluginForm.version}`;
             this.pluginForm.down.crx = `https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/${this.pluginForm.version}/Ceobe-Canteen-${this.pluginForm.version}.crx`;
             this.pluginForm.down.zip = `https://github.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/${this.pluginForm.version}/Ceobe-Canteen-${this.pluginForm.version}.zip`;
+            this.pluginForm.down.spare_crx = `https://kgithub.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/${this.pluginForm.version}/Ceobe-Canteen-${this.pluginForm.version}.crx`;
+            this.pluginForm.down.spare_zip = `https://kgithub.com/Enraged-Dun-Cookie-Development-Team/Dun-Cookie-Vue/releases/download/${this.pluginForm.version}/Ceobe-Canteen-${this.pluginForm.version}.zip`;
         },
         // changeLogo() {
         //   this.logoImg = require(`../../../assets/image/logo/${this.pluginForm.logo}`);
