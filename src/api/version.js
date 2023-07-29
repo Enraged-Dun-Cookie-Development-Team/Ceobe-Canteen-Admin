@@ -17,3 +17,12 @@ export async function submitPhoneVersion(token, data) {
         data: data
     });
 }
+
+export async function submitWindowVersion(token, data) {
+    return request({
+        url: `/admin/version/window`,
+        method: 'post',
+        headers: token,
+        data: data
+    });
+}

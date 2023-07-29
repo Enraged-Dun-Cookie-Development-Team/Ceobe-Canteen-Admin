@@ -126,6 +126,12 @@ export const asyncRoutes = [
                 name: '手机更新',
                 component: () => import('@/views/canteen/phoneVersion/index'),
                 meta: { title: '手机更新', icon: 'el-icon-mobile-phone' }
+            },
+            {
+                path: 'windowVersion',
+                name: '桌面更新',
+                component: () => import('@/views/canteen/windowVersion/index'),
+                meta: { title: '桌面更新', icon: 'el-icon-s-platform' }
             }
         ]
     },
