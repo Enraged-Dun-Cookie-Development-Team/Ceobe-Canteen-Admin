@@ -1,4 +1,4 @@
-import { submitPluginVersion, submitPhoneVersion, submitWindowVersion } from '@/api/version';
+import { submitPluginVersion, submitPhoneVersion, submitDesktopVersion } from '@/api/version';
 import store from '..';
 
 const actions = {
@@ -23,9 +23,9 @@ const actions = {
         });
     },
     // 上传手机版本信息
-    submitWindowVersion(_, windowForm) {
+    submitDesktopVersion(_, windowForm) {
         return new Promise((resolve, reject) => {
-            submitWindowVersion({ token: store.getters.token }, windowForm).then(response => {
+            submitDesktopVersion({ token: store.getters.token }, windowForm).then(response => {
                 resolve(response);
             }).catch(error => {
                 reject(error);

@@ -18,9 +18,9 @@ export async function submitPhoneVersion(token, data) {
     });
 }
 
-export async function submitWindowVersion(token, data) {
+export async function submitDesktopVersion(token, data) {
     return request({
-        url: `/admin/version/window`,
+        url: `/admin/version/desktop`,
         method: 'post',
         headers: token,
         data: data

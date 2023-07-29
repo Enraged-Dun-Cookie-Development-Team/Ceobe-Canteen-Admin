@@ -2,31 +2,31 @@
   <div id="mainWindow">
     <h3>桌面端版本信息</h3>
     <el-form
-      ref="windowForm"
-      :model="windowForm"
+      ref="desktopForm"
+      :model="desktopForm"
       :rules="phoneRules"
       label-position="left"
       label-width="150px"
     >
       <el-form-item label="版本号" prop="version">
         <el-input
-          v-model="windowForm.version"
+          v-model="desktopForm.version"
           placeholder="请输入版本号"
           @blur="changeVersion"
         />
       </el-form-item>
       <el-form-item label="强制更新" prop="force">
-        <el-switch v-model="windowForm.force" />
+        <el-switch v-model="desktopForm.force" />
       </el-form-item>
       <el-form-item label="上次强制版本" prop="last_force_version">
         <el-input
-          v-model="windowForm.last_force_version"
+          v-model="desktopForm.last_force_version"
           placeholder="请输入标题"
         />
       </el-form-item>
       <el-form-item label="描述" prop="description">
         <el-input
-          v-model="windowForm.description"
+          v-model="desktopForm.description"
           type="textarea"
           :rows="8"
           placeholder="请输入描述"
@@ -34,42 +34,42 @@
       </el-form-item>
       <el-form-item label="exe下载链接" prop="exe">
         <el-input
-          v-model="windowForm.exe"
+          v-model="desktopForm.exe"
           placeholder="请输入exe下载链接"
         />
       </el-form-item>
       <el-form-item label="exe备用下载链接" prop="spare_exe">
         <el-input
-          v-model="windowForm.spare_exe"
+          v-model="desktopForm.spare_exe"
           placeholder="请输入exe备用下载链接"
         />
       </el-form-item>
       <el-form-item label="dmg下载链接" prop="dmg">
         <el-input
-          v-model="windowForm.dmg"
+          v-model="desktopForm.dmg"
           placeholder="请输入dmg下载链接"
         />
       </el-form-item>
       <el-form-item label="dmg备用下载链接" prop="spare_dmg">
         <el-input
-          v-model="windowForm.spare_dmg"
+          v-model="desktopForm.spare_dmg"
           placeholder="请输入dmg备用下载链接"
         />
       </el-form-item>
       <el-form-item label="百度云" prop="baidu">
         <el-input
-          v-model="windowForm.baidu"
+          v-model="desktopForm.baidu"
           placeholder="请输入百度云链接"
         />
       </el-form-item>
       <el-form-item label="百度云描述" prop="baidu_text">
         <el-input
-          v-model="windowForm.baidu_text"
+          v-model="desktopForm.baidu_text"
           placeholder="请输入百度云描述"
         />
       </el-form-item>
     </el-form>
-    <form-button @submit="submitWindowVersion" />
+    <form-button @submit="submitDesktopVersion" />
   </div>
 </template>
 <script>
@@ -88,7 +88,7 @@ export default {
             }
         };
         return {
-            windowForm: {
+            desktopForm: {
                 version: "",
                 force: true,
                 last_force_version: "",
@@ -190,11 +190,11 @@ export default {
     methods: {
         init() {},
         // 提交表单到服务器
-        submitWindowVersion() {
-            this.$refs["windowForm"].validate((valid) => {
+        submitDesktopVersion() {
+            this.$refs["desktopForm"].validate((valid) => {
                 if (valid) {
                     this.$store
-                        .dispatch("version/submitWindowVersion", this.windowForm)
+                        .dispatch("version/submitDesktopVersion", this.desktopForm)
                         .then(() => {
                             this.$message({
                                 showClose: true,
@@ -206,10 +206,10 @@ export default {
             });
         },
         changeVersion() {
-            this.windowForm.exe = `https://github.com/Enraged-Dun-Cookie-Development-Team/Ceobe-Canteen-Electron/releases/download/${this.windowForm.version}/Ceobe-Canteen-${this.windowForm.version}.exe`;
-            this.windowForm.spare_exe = `https://kgithub.com/Enraged-Dun-Cookie-Development-Team/Ceobe-Canteen-Electron/releases/download/${this.windowForm.version}/Ceobe-Canteen-${this.windowForm.version}.exe`;
-            this.windowForm.dmg = `https://github.com/Enraged-Dun-Cookie-Development-Team/Ceobe-Canteen-Electron/releases/download/${this.windowForm.version}/Ceobe-Canteen-${this.windowForm.version}.dmg`;
-            this.windowForm.spare_dmg = `https://kgithub.com/Enraged-Dun-Cookie-Development-Team/Ceobe-Canteen-Electron/releases/download/${this.windowForm.version}/Ceobe-Canteen-${this.windowForm.version}.dmg`;
+            this.desktopForm.exe = `https://github.com/Enraged-Dun-Cookie-Development-Team/Ceobe-Canteen-Electron/releases/download/${this.desktopForm.version}/Ceobe-Canteen-${this.desktopForm.version}.exe`;
+            this.desktopForm.spare_exe = `https://kgithub.com/Enraged-Dun-Cookie-Development-Team/Ceobe-Canteen-Electron/releases/download/${this.desktopForm.version}/Ceobe-Canteen-${this.desktopForm.version}.exe`;
+            this.desktopForm.dmg = `https://github.com/Enraged-Dun-Cookie-Development-Team/Ceobe-Canteen-Electron/releases/download/${this.desktopForm.version}/Ceobe-Canteen-${this.desktopForm.version}.dmg`;
+            this.desktopForm.spare_dmg = `https://kgithub.com/Enraged-Dun-Cookie-Development-Team/Ceobe-Canteen-Electron/releases/download/${this.desktopForm.version}/Ceobe-Canteen-${this.desktopForm.version}.dmg`;
         },
     },
 };

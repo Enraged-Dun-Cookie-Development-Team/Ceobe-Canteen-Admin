@@ -128,9 +128,9 @@ export const asyncRoutes = [
                 meta: { title: '手机更新', icon: 'el-icon-mobile-phone' }
             },
             {
-                path: 'windowVersion',
+                path: 'desktopVersion',
                 name: '桌面更新',
-                component: () => import('@/views/canteen/windowVersion/index'),
+                component: () => import('@/views/canteen/desktopVersion/index'),
                 meta: { title: '桌面更新', icon: 'el-icon-s-platform' }
             }
         ]

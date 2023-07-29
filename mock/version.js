@@ -29,7 +29,7 @@ module.exports = [
         }
     },
     {
-        url: '/admin/version/window',
+        url: '/admin/version/desktop',
         type: 'post',
         response: config => {
             const { token } = config.headers;
