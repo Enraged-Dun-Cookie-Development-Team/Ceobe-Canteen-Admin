@@ -132,6 +132,12 @@ export const asyncRoutes = [
                 name: '桌面更新',
                 component: () => import('@/views/canteen/desktopVersion/index'),
                 meta: { title: '桌面更新', icon: 'el-icon-s-platform' }
+            },
+            {
+                path: 'toolLink',
+                name: '工具链接',
+                component: () => import('@/views/canteen/toolLink/index'),
+                meta: { title: '工具链接', icon: 'el-icon-s-platform' }
             }
         ]
     },
