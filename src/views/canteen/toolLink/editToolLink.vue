@@ -64,7 +64,6 @@ export default {
         return {
             create: false,
             showDraw: false,
-            // 还没写好
             url: "api/v1/admin/toolLink/uploadAvatar",
             toolLinkData: {},
             toolLinkRules: {

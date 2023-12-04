@@ -6,6 +6,18 @@
         :inline="true" :model="search"
         class="demo-form-inline" @submit.native.prevent
       >
+        <el-form-item label="链接名">
+          <el-input v-model="search.nickname" placeholder="请输入连接名"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary" icon="el-icon-search"
+            size="small" class="btn-search"
+            @click="searchList"
+          >
+            查询
+          </el-button>
+        </el-form-item>
       </el-form> -->
     </div>
     <div class="mt-30">
@@ -92,8 +104,7 @@ export default {
             pageSize: {},
             value: "",
             search: {
-                platform: "",
-                datasource: "",
+                nickname: ''
             },
         };
     },
@@ -123,7 +134,7 @@ export default {
                 }).catch(() =>{
                     this.$message({
                         showClose: true,
-                        message: "获取平台列表失败",
+                        message: "获取工具链接列表失败",
                         type: "error",
                     });
                 }).finally(()=> {
