@@ -8,7 +8,7 @@ const version = require('./version');
 const announcement = require("./announcement");
 const mansion = require('./mansion');
 const fetcherConifg = require('./fetcherConifg');
-
+const toolLink = require('./toolLink');
 
 const mocks = [
     ...user,
@@ -17,7 +17,8 @@ const mocks = [
     ...version,
     ...announcement,
     ...mansion,
-    ...fetcherConifg
+    ...fetcherConifg,
+    ...toolLink
 ];
 
 // for front mock
