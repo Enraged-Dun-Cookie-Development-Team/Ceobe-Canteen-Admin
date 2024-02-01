@@ -102,7 +102,7 @@ export default {
     components: { FormButton, draggable },
     data() {
         let validBV = (rule, value, callback) => {
-            let pattern = /^(BV)?1..4(1|y)1.7..$/i;
+            let pattern = /^(BV)?1..4.1.7..$/i;
             if (!pattern.test(value)) {
                 callback(new Error("你这BV号好像不太对诶"));
             } else {
