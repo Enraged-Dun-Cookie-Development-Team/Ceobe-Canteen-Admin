@@ -229,7 +229,8 @@
 <script>
 import ShowAndConfirm from "./showAndConfirm.vue";
 import FormButton from "@/components/FormButton";
-import { FetchController, registerDefaultDataSourceTypes } from '@enraged-dun-cookie-development-team/cookie-fetcher';
+import { registerDefaultDataSourceTypes } from '@enraged-dun-cookie-development-team/cookie-fetcher';
+import { FetchController } from '@enraged-dun-cookie-development-team/cookie-fetcher-core';
 export default {
     name: "FetcherDetailConfig",
     components: { ShowAndConfirm, FormButton },
@@ -662,7 +663,6 @@ export default {
                         FetchController.validateConfig(fetcherConfig);
                     }
                 } catch (e) {
-                    console.log(e)
                     fetcherConfigValidationMessage.push({ number: index+1, message: e.message });
                 }
 
