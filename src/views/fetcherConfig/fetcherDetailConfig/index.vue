@@ -662,6 +662,7 @@ export default {
                         FetchController.validateConfig(fetcherConfig);
                     }
                 } catch (e) {
+                    console.log(e)
                     fetcherConfigValidationMessage.push({ number: index+1, message: e.message });
                 }
 
