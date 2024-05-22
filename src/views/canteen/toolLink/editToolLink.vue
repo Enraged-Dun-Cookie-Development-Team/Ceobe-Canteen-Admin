@@ -29,6 +29,29 @@
             @blur="changeEmptyToNull"
           />
         </el-form-item>
+        <el-form-item label="描述:" prop="description">
+          <el-input v-model="toolLinkData.description" placeholder="请输入工具描述" />
+        </el-form-item>
+        <el-form-item label="Slogan:" prop="slogan">
+          <el-input v-model="toolLinkData.slogan" placeholder="请输入工具Slogan" />
+        </el-form-item>
+        <el-form-item label="标签:" prop="tags">
+          <el-select
+            v-model="toolLinkData.tags"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            placeholder="请选择工具标签"
+          >
+            <el-option
+              v-for="item in []"
+              :key="item"
+              :label="item"
+              :value="item"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button
             v-if="create"
@@ -76,6 +99,15 @@ export default {
                 jump_url: {
                     required: false, message: "请输入链接", trigger: "blur"
                 },
+                description: {
+                    required: false, message: "请输入描述", trigger: "blur"
+                },
+                slogan: {
+                    required: false, message: "请输入Slogan", trigger: "blur"
+                },
+                tags: {
+                    required: false, message: "标签不能为空", trigger: "blur"
+                },
             }
         };
     },
@@ -102,6 +134,9 @@ export default {
                 nickname: "",
                 avatar: "",
                 jump_url: null,
+                description: "",
+                slogan: "",
+                tags: [],
                 config: {}
             };
         },
