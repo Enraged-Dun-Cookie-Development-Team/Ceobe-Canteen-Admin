@@ -14,30 +14,33 @@
         label-position="right" label-width="120px"
         :rules="toolLinkRules"
       >
-        <el-form-item label="名字:" prop="nickname">
-          <el-input v-model="toolLinkData.nickname" placeholder="请输入名字" />
+        <el-form-item label="名字:" prop="localized_name.zh_CN">
+          <el-input v-model="toolLinkData.localized_name.zh_CN" placeholder="请输入名字" />
         </el-form-item>
-        <el-form-item label="头像:" prop="avatar">
+        <el-form-item label="Name:" prop="localized_name.en_US">
+          <el-input v-model="toolLinkData.localized_name.en_US" placeholder="Please enter your name" />
+        </el-form-item>
+        <el-form-item label="图标:" prop="icon_url">
           <upload-img
             :file-list="fileList" :url="url"
             @success="(data)=>onSuccess(data)" @remove="onRemove()"
           />
         </el-form-item>
-        <el-form-item label="链接:" prop="jump_url">
-          <el-input
-            v-model="toolLinkData.jump_url" placeholder="请输入跳转链接"
-            @blur="changeEmptyToNull"
-          />
+        <el-form-item label="描述:" prop="localized_description.zh_CN">
+          <el-input v-model="toolLinkData.localized_description.zh_CN" placeholder="请输入工具描述" />
         </el-form-item>
-        <el-form-item label="描述:" prop="description">
-          <el-input v-model="toolLinkData.description" placeholder="请输入工具描述" />
+        <el-form-item label="Description:" prop="localized_description.en_US">
+          <el-input v-model="toolLinkData.localized_description.en_US" placeholder="Please enter a tool description" />
         </el-form-item>
-        <el-form-item label="Slogan:" prop="slogan">
-          <el-input v-model="toolLinkData.slogan" placeholder="请输入工具Slogan" />
+        <el-form-item label="口号:" prop="localized_slogan.zh_CN">
+          <el-input v-model="toolLinkData.localized_slogan.zh_CN" placeholder="请输入工具Slogan" />
         </el-form-item>
-        <el-form-item label="标签:" prop="tags">
+        <el-form-item label="Slogan:" prop="localized_slogan.en_US">
+          <el-input v-model="toolLinkData.localized_slogan.en_US" placeholder="Please enter the tool Slogan" />
+        </el-form-item>
+        <el-form-item label="标签:" prop="localized_tags.en_US">
           <el-select
-            v-model="toolLinkData.tags"
+            v-model="toolLinkData.localized_tags.zh_CN"
             multiple
             filterable
             allow-create
@@ -45,13 +48,88 @@
             placeholder="请选择工具标签"
           >
             <el-option
-              v-for="item in []"
+              v-for="item in defaultTags"
               :key="item"
-              :label="item"
               :value="item"
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="Tags:" prop="localized_tags.en_US">
+          <el-select
+            v-model="toolLinkData.localized_tags.en_US"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            placeholder="Please select the tool tags"
+          >
+            <el-option
+              v-for="item in defaultTags"
+              :key="item"
+              :value="item"
+            />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="链接">
+          <i class="el-icon-circle-plus-outline add-icon" @click="addLink()"></i>
+        </el-form-item>
+
+        <el-collapse style="margin-bottom: 24px;">
+          <el-collapse-item v-for="(link, index) in toolLinkData.links" :key="index">
+            <template slot="title">
+              <div class="collapse-header">
+                <div>{{ link.localized_name.zh_CN }}</div>
+                <div>
+                  <el-button
+                    icon="el-icon-delete" class="btn-editor btn-delete" round
+                    @click.stop="removeLink(index)"
+                  />
+                </div>
+              </div>
+            </template>
+            <el-form-item label="primary:" prop="link.primary">
+              <el-switch v-model="link.primary" />
+            </el-form-item>
+            <el-form-item label="status:" prop="link.status">
+              <el-select v-model="link.status" placeholder="请选择">
+                <el-option
+                  v-for="item in linkStatus"
+                  :key="item"
+                  :value="item"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="regionality:" prop="link.regionality">
+              <el-select v-model="link.regionality" placeholder="请选择">
+                <el-option
+                  v-for="item in linkRegionality"
+                  :key="item"
+                  :value="item"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="service:" prop="link.service">
+              <el-select v-model="link.service" placeholder="请选择">
+                <el-option
+                  v-for="item in linkService"
+                  :key="item"
+                  :value="item"
+                />
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="链接名:" prop="link.localized_name.zh_CN">
+              <el-input v-model="link.localized_name.zh_CN" placeholder="请输入链接名" />
+            </el-form-item>
+            <el-form-item label="Name:" prop="link.localized_name.en_US">
+              <el-input v-model="link.localized_name.en_US" placeholder="Please enter the url name" />
+            </el-form-item>
+            <el-form-item label="url:" prop="link.url">
+              <el-input v-model="link.url" placeholder="请输入链接" />
+            </el-form-item>
+          </el-collapse-item>
+        </el-collapse>
         <el-form-item>
           <el-button
             v-if="create"
@@ -88,27 +166,59 @@ export default {
             create: false,
             showDraw: false,
             url: "api/v1/admin/toolLink/uploadAvatar",
-            toolLinkData: {},
+            toolLinkData: {
+            },
             toolLinkRules: {
-                nickname: {
+                'localized_name.zh_CN': {
                     required: true, message: "请输入名字", trigger: "blur"
                 },
-                avatar: {
+                'localized_name.en_US': {
+                    required: true, message: "请输入名字", trigger: "blur"
+                },
+                icon_url: {
                     required: true, message: "请上传图片", trigger: "change"
                 },
-                jump_url: {
-                    required: false, message: "请输入链接", trigger: "blur"
+                'localized_description.zh_CN': {
+                    required: true, message: "请输入描述", trigger: "blur"
                 },
-                description: {
-                    required: false, message: "请输入描述", trigger: "blur"
+                'localized_description.en_US': {
+                    required: true, message: "请输入描述", trigger: "blur"
                 },
-                slogan: {
-                    required: false, message: "请输入Slogan", trigger: "blur"
+                'localized_slogan.zh_CN': {
+                    required: true, message: "请输入Slogan", trigger: "blur"
                 },
-                tags: {
-                    required: false, message: "标签不能为空", trigger: "blur"
+                'localized_slogan.en_US': {
+                    required: true, message: "请输入Slogan", trigger: "blur"
                 },
-            }
+                'localized_tags.zh_CN': {
+                    required: true, message: "标签不能为空", trigger: ["blur", "change"]
+                },
+                'localized_tags.en_US': {
+                    required: true, message: "标签不能为空", trigger: ["blur", "change"]
+                },
+                'link.localized_name.zh_CN': {
+                    required: true, message: "请输入名字", trigger: "blur"
+                },
+                'link.localized_name.en_US': {
+                    required: true, message: "请输入名字", trigger: "blur"
+                },
+                'link.status': {
+                    required: true, message: "此项不能为空", trigger: ["blur", "change"]
+                },
+                'link.regionality': {
+                    required: true, message: "此项不能为空", trigger: ["blur", "change"]
+                },
+                'link.service': {
+                    required: true, message: "此项不能为空", trigger: ["blur", "change"]
+                },
+                'link.url': {
+                    required: true, message: "请输入链接", trigger: "blur"
+                },
+            },
+            defaultTags: [],
+            linkStatus: [ 'TEST' ],
+            linkRegionality: ['TEST'],
+            linkService: [ 'TEST' ]
         };
     },
     computed:{
@@ -131,13 +241,37 @@ export default {
         },
         initToolLinkData() {
             this.toolLinkData = {
-                nickname: "",
-                avatar: "",
-                jump_url: null,
-                description: "",
-                slogan: "",
-                tags: [],
-                config: {}
+                localized_name: {
+                    zh_CN: "",
+                    en_US: ""
+                },
+                icon_url: null,
+                localized_description: {
+                    zh_CN: "",
+                    en_US: ""
+                },
+                localized_slogan: {
+                    zh_CN: "",
+                    en_US: ""
+                },
+                localized_tags: {
+                    zh_CN: [],
+                    en_US: []
+                },
+                links: []
+            };
+        },
+        initLinks() {
+            return {
+                primary: false,
+                status: 'TEST',
+                regionality: 'TEST',
+                service: 'TEST',
+                localized_name: {
+                    zh_CN: "小刻食堂",
+                    en_US: "ceobe canteen"
+                },
+                url: 'https://www.ceobecanteen.top/'
             };
         },
         // 打开抽屉
@@ -162,52 +296,74 @@ export default {
             this.toolLinkData.avatar = '';
         },
         createData() {
-            this.$store
-                .dispatch("toolLink/createToolLink",this.toolLinkData)
-                .then(() => {
-                    this.$message({
-                        showClose: true,
-                        message: "创建成功",
-                        type: "success",
+            let allPass = true;
+            this.$refs["toolLinkForm"].validate((valid) => {
+                if (!valid) {
+                    allPass = false;
+                    return;
+                }
+            });
+            if (allPass)
+                this.$store
+                    .dispatch("toolLink/createToolLink",this.toolLinkData)
+                    .then(() => {
+                        this.$message({
+                            showClose: true,
+                            message: "创建成功",
+                            type: "success",
+                        });
+                        this.showDraw = false;
+                        this.init();
+                    }).catch(() =>{
+                        this.$message({
+                            showClose: true,
+                            message: "创建失败",
+                            type: "error",
+                        });
+                    }).finally(()=>{
+                        this.$emit("uploadDone");
                     });
-                    this.showDraw = false;
-                    this.init();
-                }).catch(() =>{
-                    this.$message({
-                        showClose: true,
-                        message: "创建失败",
-                        type: "error",
-                    });
-                }).finally(()=>{
-                    this.$emit("uploadDone");
-                });
         },
         updateData() {
-            this.$store
-                .dispatch("toolLink/updateToolLink",this.toolLinkData)
-                .then(() => {
-                    this.$message({
-                        showClose: true,
-                        message: "修改成功",
-                        type: "success",
+            let allPass = true;
+            this.$refs["toolLinkForm"].validate((valid) => {
+                if (!valid) {
+                    allPass = false;
+                    return;
+                }
+            });
+            if (allPass)
+                this.$store
+                    .dispatch("toolLink/updateToolLink",this.toolLinkData)
+                    .then(() => {
+                        this.$message({
+                            showClose: true,
+                            message: "修改成功",
+                            type: "success",
+                        });
+                        this.showDraw = false;
+                        this.init();
+                    }).catch(() =>{
+                        this.$message({
+                            showClose: true,
+                            message: "修改失败",
+                            type: "error",
+                        });
+                    }).finally(()=>{
+                        this.$emit("uploadDone");
                     });
-                    this.showDraw = false;
-                    this.init();
-                }).catch(() =>{
-                    this.$message({
-                        showClose: true,
-                        message: "修改失败",
-                        type: "error",
-                    });
-                }).finally(()=>{
-                    this.$emit("uploadDone");
-                });
         },
         // 更改跳转链接空为null
         changeEmptyToNull() {
             if (this.toolLinkData.jump_url.trim() == '') {
                 this.toolLinkData.jump_url = null;
             }
+        },
+        addLink() {
+            this.toolLinkData.links.push(this.initLinks());
+        },
+        removeLink(index) {
+            this.toolLinkData.links.splice(index, 1);
         }
     }
 };
@@ -221,5 +377,31 @@ export default {
 
 .pl-24 {
   padding-left: 24px;
+}
+
+.add-icon {
+  cursor: pointer;
+  font-size: 18px;
+
+  &:hover {
+    color: #FFBA4B;
+  }
+}
+
+.collapse-header {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 10px;
+  width: 100%;
+}
+
+.btn-add {
+  color: white;
+  background-color: #67C23A;
+}
+
+.btn-delete {
+  color: white;
+  background-color: #F56C6C;
 }
 </style>

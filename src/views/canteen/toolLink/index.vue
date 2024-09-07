@@ -36,11 +36,15 @@
       style="width: 100%"
     >
       <el-table-column
-        prop="nickname" label="链接名"
+        prop="localized_name.zh_CN" label="链接名"
         align="center"
       />
       <el-table-column
-        prop="jump_url" label="跳转链接"
+        prop="localized_description.zh_CN" label="详情描述"
+        align="center"
+      />
+      <el-table-column
+        prop="localized_slogan.zh_CN" label="Slogan"
         align="center"
       />
       <el-table-column
