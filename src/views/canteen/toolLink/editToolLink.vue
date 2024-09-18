@@ -38,7 +38,7 @@
         <el-form-item label="Slogan:" prop="localized_slogan.en_US">
           <el-input v-model="toolLinkData.localized_slogan.en_US" placeholder="Please enter the tool Slogan" />
         </el-form-item>
-        <el-form-item label="标签:" prop="localized_tags.en_US">
+        <el-form-item label="标签:" prop="localized_tags.zh_CN">
           <el-select
             v-model="toolLinkData.localized_tags.zh_CN"
             multiple
@@ -91,15 +91,6 @@
             <el-form-item label="primary:" prop="link.primary">
               <el-switch v-model="link.primary" />
             </el-form-item>
-            <el-form-item label="status:" prop="link.status">
-              <el-select v-model="link.status" placeholder="请选择">
-                <el-option
-                  v-for="item in linkStatus"
-                  :key="item"
-                  :value="item"
-                />
-              </el-select>
-            </el-form-item>
             <el-form-item label="regionality:" prop="link.regionality">
               <el-select v-model="link.regionality" placeholder="请选择">
                 <el-option
@@ -109,16 +100,6 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item label="service:" prop="link.service">
-              <el-select v-model="link.service" placeholder="请选择">
-                <el-option
-                  v-for="item in linkService"
-                  :key="item"
-                  :value="item"
-                />
-              </el-select>
-            </el-form-item>
-
             <el-form-item label="链接名:" prop="link.localized_name.zh_CN">
               <el-input v-model="link.localized_name.zh_CN" placeholder="请输入链接名" />
             </el-form-item>
@@ -155,6 +136,7 @@
 
 <script>
 import UploadImg from "@/components/UploadImg/index.vue";
+import { REGION } from "@/const/toolLinkConfig";
 
 export default {
     name: "EditToolLink",
@@ -202,13 +184,7 @@ export default {
                 'link.localized_name.en_US': {
                     required: true, message: "请输入名字", trigger: "blur"
                 },
-                'link.status': {
-                    required: true, message: "此项不能为空", trigger: ["blur", "change"]
-                },
                 'link.regionality': {
-                    required: true, message: "此项不能为空", trigger: ["blur", "change"]
-                },
-                'link.service': {
                     required: true, message: "此项不能为空", trigger: ["blur", "change"]
                 },
                 'link.url': {
@@ -216,9 +192,7 @@ export default {
                 },
             },
             defaultTags: [],
-            linkStatus: [ 'TEST' ],
-            linkRegionality: ['TEST'],
-            linkService: [ 'TEST' ]
+            linkRegionality: REGION,
         };
     },
     computed:{
@@ -264,9 +238,7 @@ export default {
         initLinks() {
             return {
                 primary: false,
-                status: 'TEST',
-                regionality: 'TEST',
-                service: 'TEST',
+                regionality: REGION[0],
                 localized_name: {
                     zh_CN: "小刻食堂",
                     en_US: "ceobe canteen"
