@@ -41,7 +41,7 @@ module.exports = {
                 errors: true
             },
         },
-        setupMiddlewares: require('./mock/mock-server.js'),
+        // setupMiddlewares: require('./mock/mock-server.js'),
         proxy: {
             // change xxx-api/login => mock/login
             // detail: https://cli.vuejs.org/config/#devserver-proxy

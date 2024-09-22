@@ -72,7 +72,7 @@
         </el-form-item>
 
         <el-form-item label="链接">
-          <i class="el-icon-circle-plus-outline add-icon" @click="addLink()"></i>
+          <i class="el-icon-circle-plus-outline add-icon" @click="addLink"></i>
         </el-form-item>
 
         <el-collapse style="margin-bottom: 24px;">
@@ -148,8 +148,7 @@ export default {
             create: false,
             showDraw: false,
             url: "api/v1/admin/toolLink/uploadAvatar",
-            toolLinkData: {
-            },
+            toolLinkData: this.initToolLinkData(),
             toolLinkRules: {
                 'localized_name.zh_CN': {
                     required: true, message: "请输入名字", trigger: "blur"
@@ -178,18 +177,18 @@ export default {
                 'localized_tags.en_US': {
                     required: true, message: "标签不能为空", trigger: ["blur", "change"]
                 },
-                'link.localized_name.zh_CN': {
-                    required: true, message: "请输入名字", trigger: "blur"
-                },
-                'link.localized_name.en_US': {
-                    required: true, message: "请输入名字", trigger: "blur"
-                },
-                'link.regionality': {
-                    required: true, message: "此项不能为空", trigger: ["blur", "change"]
-                },
-                'link.url': {
-                    required: true, message: "请输入链接", trigger: "blur"
-                },
+                // 'link.localized_name.zh_CN': {
+                //     required: true, message: "请输入名字", trigger: "blur"
+                // },
+                // 'link.localized_name.en_US': {
+                //     required: true, message: "请输入名字", trigger: "blur"
+                // },
+                // 'link.regionality': {
+                //     required: true, message: "此项不能为空", trigger: ["blur", "change"]
+                // },
+                // 'link.url': {
+                //     required: true, message: "请输入链接", trigger: "blur"
+                // },
             },
             defaultTags: [],
             linkRegionality: REGION,
@@ -205,7 +204,7 @@ export default {
     },
     methods: {
         init() {
-            this.initToolLinkData();
+            // this.initToolLinkData();
         },
         // 清除表单验证
         clearValidate() {
@@ -214,7 +213,7 @@ export default {
             });
         },
         initToolLinkData() {
-            this.toolLinkData = {
+            return {
                 localized_name: {
                     zh_CN: "",
                     en_US: ""
@@ -261,7 +260,7 @@ export default {
         },
         // 图片成功
         onSuccess(data) {
-            this.toolLinkData.avatar = data?.data?.url;
+            this.toolLinkData.icon_url = data?.data?.url;
         },
         // 删除图片
         onRemove() {
@@ -269,13 +268,15 @@ export default {
         },
         createData() {
             let allPass = true;
+            console.log(this.$refs["toolLinkForm"]);
             this.$refs["toolLinkForm"].validate((valid) => {
                 if (!valid) {
                     allPass = false;
                     return;
                 }
             });
-            if (allPass)
+            if (allPass) {
+
                 this.$store
                     .dispatch("toolLink/createToolLink",this.toolLinkData)
                     .then(() => {
@@ -295,6 +296,9 @@ export default {
                     }).finally(()=>{
                         this.$emit("uploadDone");
                     });
+
+            }
+
         },
         updateData() {
             let allPass = true;
@@ -332,6 +336,7 @@ export default {
             }
         },
         addLink() {
+            console.log(this.toolLinkData);
             this.toolLinkData.links.push(this.initLinks());
         },
         removeLink(index) {
