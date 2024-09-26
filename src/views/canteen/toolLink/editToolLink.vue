@@ -247,10 +247,10 @@ export default {
                 primary: false,
                 regionality: REGION[0],
                 localized_name: {
-                    zh_CN: "小刻食堂",
-                    en_US: "ceobe canteen"
+                    zh_CN: "",
+                    en_US: ""
                 },
-                url: 'https://www.ceobecanteen.top/'
+                url: ''
             };
         },
         // 打开抽屉
@@ -258,6 +258,8 @@ export default {
             this.create = create;
             if(data) {
                 this.toolLinkData = JSON.parse(JSON.stringify(data));
+            } else {
+                this.toolLinkData = this.initToolLinkData();
             }
             this.showDraw = true;
         },
