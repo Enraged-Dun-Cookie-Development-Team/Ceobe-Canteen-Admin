@@ -97,7 +97,10 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="链接">
+        <el-form-item
+          label="链接" prop="links"
+          :rules="toolLinkRules.links"
+        >
           <i class="el-icon-circle-plus-outline add-icon" @click="addLink"></i>
         </el-form-item>
 
@@ -203,6 +206,9 @@ export default {
                 tags: {
                     required: true, message: "标签不能为空", trigger: ["blur", "change"]
                 },
+                links: {
+                    required: true, message: "链接列表不能为空", trigger: "blur"
+                },
                 url: {
                     required: true, message: "请输入链接", trigger: "blur"
                 },
@@ -289,7 +295,6 @@ export default {
         },
         createData() {
             let allPass = true;
-            console.log(this.$refs["toolLinkForm"]);
             this.$refs["toolLinkForm"].validate((valid) => {
                 if (!valid) {
                     allPass = false;
