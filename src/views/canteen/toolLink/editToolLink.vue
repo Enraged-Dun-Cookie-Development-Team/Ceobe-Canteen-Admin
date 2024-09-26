@@ -196,7 +196,7 @@ export default {
     },
     computed:{
         fileList(){
-            return this.toolLinkData.avatar?[{ name: '', url: this.toolLinkData.avatar }] : [];
+            return this.toolLinkData.icon_url?[{ name: '', url: this.toolLinkData.icon_url }] : [];
         }
     },
     mounted() {
@@ -247,6 +247,7 @@ export default {
         },
         // 打开抽屉
         open(create, data) {
+            console.log(data);
             this.create = create;
             if(data) {
                 this.toolLinkData = JSON.parse(JSON.stringify(data));

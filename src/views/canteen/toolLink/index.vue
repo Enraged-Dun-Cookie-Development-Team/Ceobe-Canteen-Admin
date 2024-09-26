@@ -1,25 +1,6 @@
 <template>
   <div id="fetcherDetailConfig">
     <h3>工具链接</h3>
-    <div class="search-area">
-      <!-- <el-form
-        :inline="true" :model="search"
-        class="demo-form-inline" @submit.native.prevent
-      >
-        <el-form-item label="链接名">
-          <el-input v-model="search.nickname" placeholder="请输入连接名"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            type="primary" icon="el-icon-search"
-            size="small" class="btn-search"
-            @click="searchList"
-          >
-            查询
-          </el-button>
-        </el-form-item>
-      </el-form> -->
-    </div>
     <div class="mt-30">
       <el-button
         type="primary" icon="el-icon-plus"
@@ -52,7 +33,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <img style="width:60px;height:60px" :src="scope.row.avatar" />
+          <img style="width:60px;height:60px" :src="scope.row.icon_url" />
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
@@ -107,9 +88,6 @@ export default {
             dataSourceTable:[],
             pageSize: {},
             value: "",
-            search: {
-                nickname: ''
-            },
         };
     },
     mounted() {
@@ -131,7 +109,7 @@ export default {
         getDatasourceList() {
             this.loading = true;
             this.$store
-                .dispatch("toolLink/toolLinkList", { ...this.search, ...this.pageSize })
+                .dispatch("toolLink/toolLinkList", this.pageSize)
                 .then((response) => {
                     this.dataSourceTable = response.data?.list;
                     this.pageSize = response.data?.page_size;
