@@ -1,7 +1,6 @@
 import request from '@/utils/request';
 
 export function toolLinkList(token, data) {
-    console.log(data);
     return request({
         url: '/admin/toolLink/pageShow',
         method: 'get',

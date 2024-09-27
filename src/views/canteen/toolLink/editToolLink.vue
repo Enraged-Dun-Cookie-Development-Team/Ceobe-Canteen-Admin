@@ -97,7 +97,10 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="链接">
+        <el-form-item
+          label="链接" prop="links"
+          :rules="toolLinkRules.links"
+        >
           <i class="el-icon-circle-plus-outline add-icon" @click="addLink"></i>
         </el-form-item>
 
@@ -114,10 +117,13 @@
                 </div>
               </div>
             </template>
-            <el-form-item label="primary:">
+            <el-form-item label="primary:" :prop="`links[${index}].primary`">
               <el-switch v-model="link.primary" />
             </el-form-item>
-            <el-form-item label="regionality:">
+            <el-form-item
+              label="regionality:" :prop="`links[${index}].regionality`"
+              :rules="toolLinkRules.select"
+            >
               <el-select v-model="link.regionality" placeholder="请选择">
                 <el-option
                   v-for="item in linkRegionality"
@@ -126,13 +132,22 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item label="链接名:">
+            <el-form-item
+              label="链接名:" :prop="`links[${index}].localized_name.zh_CN`"
+              :rules="toolLinkRules.name"
+            >
               <el-input v-model="link.localized_name.zh_CN" placeholder="请输入链接名" />
             </el-form-item>
-            <el-form-item label="Name:">
+            <el-form-item
+              label="Name:" :prop="`links[${index}].localized_name.en_US`"
+              :rules="toolLinkRules.name"
+            >
               <el-input v-model="link.localized_name.en_US" placeholder="Please enter the url name" />
             </el-form-item>
-            <el-form-item label="url:">
+            <el-form-item
+              label="url:" :prop="`links[${index}].url`"
+              :rules="toolLinkRules.url"
+            >
               <el-input v-model="link.url" placeholder="请输入链接" />
             </el-form-item>
           </el-collapse-item>
@@ -191,6 +206,9 @@ export default {
                 tags: {
                     required: true, message: "标签不能为空", trigger: ["blur", "change"]
                 },
+                links: {
+                    required: true, message: "链接列表不能为空", trigger: "blur"
+                },
                 url: {
                     required: true, message: "请输入链接", trigger: "blur"
                 },
@@ -212,7 +230,6 @@ export default {
     },
     methods: {
         init() {
-            // this.initToolLinkData();
         },
         // 清除表单验证
         clearValidate() {
@@ -278,7 +295,6 @@ export default {
         },
         createData() {
             let allPass = true;
-            console.log(this.$refs["toolLinkForm"]);
             this.$refs["toolLinkForm"].validate((valid) => {
                 if (!valid) {
                     allPass = false;
@@ -346,7 +362,6 @@ export default {
             }
         },
         addLink() {
-            console.log(this.toolLinkData);
             this.toolLinkData.links.push(this.initLinks());
         },
         removeLink(index) {
