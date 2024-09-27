@@ -33,6 +33,6 @@ export function deleteToolLink(token, id) {
         url: '/admin/toolLink/deleteOne',
         method: 'delete',
         headers: token,
-        data: id
+        params: id
     });
 }
