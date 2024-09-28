@@ -89,6 +89,10 @@ export default {
                 {
                     value: "architect",
                     label: "饼学家",
+                },
+                {
+                    value: "porter",
+                    label: "配餐员",
                 }
             ]
         };

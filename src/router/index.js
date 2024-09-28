@@ -74,13 +74,13 @@ export const asyncRoutes = [
                 path: 'changeUsername',
                 name: '修改用户名',
                 component: () => import('@/views/user/changeUsername/index'),
-                meta: { title: '修改用户名', icon: 'el-icon-s-custom', roles: ['chef', 'cooker', 'architect'] }
+                meta: { title: '修改用户名', icon: 'el-icon-s-custom', roles: ['chef', 'cooker', 'architect', 'porter'] }
             },
             {
                 path: 'changePassword',
                 name: '修改密码',
                 component: () => import('@/views/user/changePassword/index'),
-                meta: { title: '修改密码', icon: 'lock', roles: ['chef', 'cooker', 'architect'] }
+                meta: { title: '修改密码', icon: 'lock', roles: ['chef', 'cooker', 'architect', 'porter'] }
             },
             {
                 path: 'userList',
@@ -95,49 +95,49 @@ export const asyncRoutes = [
         name: 'canteen',
         component: Layout,
         redirect: '/canteen/announcement',
-        meta: { title: '小刻食堂运营信息', icon: 'form', roles: ['chef', 'cooker'] },
+        meta: { title: '小刻食堂运营信息', icon: 'form' },
         children: [
             {
                 path: 'announcement',
                 name: '公告内容',
                 component: () => import('@/views/canteen/announcement/index'),
-                meta: { title: '公告内容', icon: 'el-icon-message-solid' }
+                meta: { title: '公告内容', icon: 'el-icon-message-solid', roles: ['chef', 'cooker'] }
             },
             {
                 path: 'videolist',
                 name: '视频链接',
                 component: () => import('@/views/canteen/videoList/index'),
-                meta: { title: '视频链接', icon: 'el-icon-video-camera-solid' }
+                meta: { title: '视频链接', icon: 'el-icon-video-camera-solid', roles: ['chef', 'cooker'] }
             },
             {
                 path: 'resource',
                 name: '资源时间管理',
                 component: () => import('@/views/canteen/resource/index'),
-                meta: { title: '资源时间管理', icon: 'el-icon-files' }
+                meta: { title: '资源时间管理', icon: 'el-icon-files', roles: ['chef', 'cooker'] }
             },
             {
                 path: 'pluginVersion',
                 name: '插件更新',
                 component: () => import('@/views/canteen/pluginVersion/index'),
-                meta: { title: '插件更新', icon: 'el-icon-top' }
+                meta: { title: '插件更新', icon: 'el-icon-top', roles: ['chef', 'cooker'] }
             },
             {
                 path: 'phoneVersion',
                 name: '手机更新',
                 component: () => import('@/views/canteen/phoneVersion/index'),
-                meta: { title: '手机更新', icon: 'el-icon-mobile-phone' }
+                meta: { title: '手机更新', icon: 'el-icon-mobile-phone', roles: ['chef', 'cooker'] }
             },
             {
                 path: 'desktopVersion',
                 name: '桌面更新',
                 component: () => import('@/views/canteen/desktopVersion/index'),
-                meta: { title: '桌面更新', icon: 'el-icon-s-platform' }
+                meta: { title: '桌面更新', icon: 'el-icon-s-platform', roles: ['chef', 'cooker'] }
             },
             {
                 path: 'toolLink',
                 name: '工具链接',
                 component: () => import('@/views/canteen/toolLink/index'),
-                meta: { title: '工具链接', icon: 'el-icon-s-platform' }
+                meta: { title: '工具链接', icon: 'el-icon-s-platform', roles: ['chef', 'cooker', 'porter'] }
             }
         ]
     },

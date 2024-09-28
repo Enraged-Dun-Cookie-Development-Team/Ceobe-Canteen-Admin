@@ -15,11 +15,26 @@ module.exports = [
 
                 platformTable[i] = Mock.mock({
                     id: i,
-                    nickname: "name"+i,
-                    avatar: "platform"+i,
-                    jump_url: "url"+i,
+                    icon_url: "platform"+i,
+                    links: [],
                     min_request_interval:minTime,
-                    "has_datasource|1": true
+                    "has_datasource|1": true,
+                    localized_name: {
+                        zh_CN: "name"+i,
+                        en_US: "name"+i
+                    },
+                    localized_description: {
+                        zh_CN: "description"+i,
+                        en_US: "description"+i
+                    },
+                    localized_slogan: {
+                        zh_CN: "slogan"+i,
+                        en_US: "slogan"+i
+                    },
+                    localized_tags: {
+                        zh_CN: ["tags"+i],
+                        en_US: ["tags"+i]   
+                    }
                 });
             }
             let data = {

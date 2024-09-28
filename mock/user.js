@@ -9,6 +9,9 @@ const userpassword = {
     },
     architect: {
         password: 'architect-password'
+    },
+    porter: {
+        password: 'porter-password'
     }
 };
 
@@ -21,6 +24,9 @@ const tokens = {
     },
     architect: {
         token: 'architect-token'
+    },
+    porter: {
+        token: 'porter-token'
     }
 };
 
@@ -36,6 +42,10 @@ const newUser = {
     architect: {
         username: 'architect1',
         password: 'architect1-password'
+    },
+    porter: {
+        username: 'porter1',
+        password: 'porter1-password'
     }
 };
 
@@ -51,6 +61,10 @@ const users = {
     'architect-token': {
         roles: ['architect'],
         name: 'architect'
+    },
+    'porter-token': {
+        roles: ['porter'],
+        name: 'porter'
     }
 };
 
@@ -205,7 +219,7 @@ module.exports = [
         response: req => {
             console.log(req);
             const { page, size } = req.query;
-            let auth = ['chef','cooker','architect'];
+            let auth = ['chef','cooker','architect', 'porter'];
             let userTable = [];
             for(let i = 0; i < 28; i++) {
                 let index = Math.floor(Math.random()*auth.length);

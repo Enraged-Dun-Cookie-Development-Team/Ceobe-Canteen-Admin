@@ -26,6 +26,12 @@
         >
           饼学家
         </el-radio>
+        <el-radio
+          v-model="permission" class="radio"
+          label="porter"
+        >
+          配餐员
+        </el-radio>
         <el-button
           class="btn-confirm" type="primary"
           @click="entryCanteen"
