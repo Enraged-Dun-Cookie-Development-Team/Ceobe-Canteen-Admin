@@ -291,7 +291,7 @@ export default {
         },
         // 删除图片
         onRemove() {
-            this.toolLinkData.avatar = '';
+            this.toolLinkData.icon_url = '';
         },
         createData() {
             let allPass = true;
