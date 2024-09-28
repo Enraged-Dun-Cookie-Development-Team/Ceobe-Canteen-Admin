@@ -5,6 +5,7 @@
     direction="rtl"
     size="40%"
     custom-class="drawer-max-height"
+    :before-close="beforeClose"
     @close="onClose"
   >
     <div class="edit-area pr-24 pl-24">
@@ -279,6 +280,10 @@ export default {
                 this.toolLinkData = this.initToolLinkData();
             }
             this.showDraw = true;
+        },
+        // 关闭抽屉前
+        beforeClose(done) {
+            this.$confirm("确定关闭吗？").then(_ => { this.visible = false; done(); }).catch(_ => { });
         },
         // 关闭抽屉
         onClose() {
