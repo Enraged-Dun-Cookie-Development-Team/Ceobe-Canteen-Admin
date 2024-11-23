@@ -1,4 +1,4 @@
-import { submitPluginVersion, submitPhoneVersion, submitDesktopVersion } from '@/api/version';
+import { submitPluginVersion, submitPhoneVersion, submitDesktopVersion, getVersionList, createVersion, modifyVersion, markDeleteVersion } from '@/api/version';
 import store from '..';
 
 const actions = {
@@ -26,6 +26,47 @@ const actions = {
     submitDesktopVersion(_, windowForm) {
         return new Promise((resolve, reject) => {
             submitDesktopVersion({ token: store.getters.token }, windowForm).then(response => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+
+    // 获取版本列表
+    getVersionList(_, versionForm) {
+        return new Promise((resolve, reject) => {
+            getVersionList({ token: store.getters.token }, versionForm).then(response => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+    // 新建版本信息
+    createVersion(_, versionForm) {
+        return new Promise((resolve, reject) => {
+            createVersion({ token: store.getters.token }, versionForm).then(response => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+    // 更改版本信息
+    modifyVersion(_, versionForm) {
+        return new Promise((resolve, reject) => {
+            modifyVersion({ token: store.getters.token }, versionForm).then(response => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+    // 删除版本信息
+    markDeleteVersion(_, versionForm) {
+        return new Promise((resolve, reject) => {
+            markDeleteVersion({ token: store.getters.token }, versionForm).then(response => {
                 resolve(response);
             }).catch(error => {
                 reject(error);

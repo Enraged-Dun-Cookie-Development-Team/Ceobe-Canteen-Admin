@@ -26,3 +26,39 @@ export async function submitDesktopVersion(token, data) {
         data: data
     });
 }
+
+export async function getVersionList(token, data) {
+    return request({
+        url: `/admin/releaseVersion/all`,
+        method: 'get',
+        headers: token,
+        params: data
+    });
+}
+
+export async function createVersion(token, data) {
+    return request({
+        url: `/admin/releaseVersion/create`,
+        method: 'post',
+        headers: token,
+        data: data
+    });
+}
+
+export async function modifyVersion(token, data) {
+    return request({
+        url: `/admin/releaseVersion/modify`,
+        method: 'post',
+        headers: token,
+        data: data
+    });
+}
+
+export async function markDeleteVersion(token, data) {
+    return request({
+        url: `/admin/releaseVersion/markDelete`,
+        method: 'post',
+        headers: token,
+        data: data
+    });
+}
