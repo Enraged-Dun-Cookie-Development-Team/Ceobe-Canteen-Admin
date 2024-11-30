@@ -59,6 +59,6 @@ export async function markDeleteVersion(token, data) {
         url: `/admin/releaseVersion/markDelete`,
         method: 'post',
         headers: token,
-        data: data
+        params: data
     });
 }

@@ -31,7 +31,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="mt-30">
+    <div>
       <el-button
         type="primary" icon="el-icon-plus"
         size="small" class="btn-add"
@@ -47,9 +47,13 @@
       style="width: 100%"
     >
       <el-table-column
-        prop="platform" label="平台"
+        label="平台"
         align="center"
-      />
+      >
+        <template #default="scope">
+          {{ platformMap[scope.row.platform] ?? scope.row.platform }}
+        </template>
+      </el-table-column>
       <el-table-column
         prop="version" label="版本号"
         align="center"
@@ -99,11 +103,15 @@
         @current-change="getVersionList"
       />
     </div>
-    <edit-version ref="editVersion" @uploadDone="uploadDone" />
+    <edit-version
+      ref="editVersion" :platform-option="platformOptions"
+      @uploadDone="uploadDone"
+    />
   </div>
 </template>
 
 <script>
+import { filterSearchParams } from "@/utils/field-filter";
 import EditVersion from "./editVersion.vue";
 export default {
     name: "ReleaseVersion",
@@ -116,17 +124,22 @@ export default {
             platformOptions: [
                 {
                     label: "插件端",
-                    value: "Plugin"
+                    value: "plugin"
                 },
                 {
                     label: "桌面端",
-                    value: "Desktop"
+                    value: "desktop"
                 },
                 {
                     label: "移动端",
-                    value: "Pocket"
+                    value: "pocket"
                 }
             ],
+            platformMap: {
+                "plugin": "插件端",
+                "desktop": "桌面端",
+                "pocket": "移动端",
+            },
             search: {
                 platform: "",
             },
@@ -151,14 +164,14 @@ export default {
         getVersionList() {
             this.loading = true;
             this.$store
-                .dispatch("version/getVersionList", { ...this.search, ...this.pageSize })
+                .dispatch("version/getVersionList", { ...filterSearchParams(this.search), ...this.pageSize, deleted: true })
                 .then((response) => {
-                    this.dataSourceTable = response.data?.list;
+                    this.versionTable = response.data?.list;
                     this.pageSize = response.data?.page_size;
                 }).catch(() =>{
                     this.$message({
                         showClose: true,
-                        message: "获取平台列表失败",
+                        message: "获取版本列表失败",
                         type: "error",
                     });
                 }).finally(()=> {
@@ -182,7 +195,7 @@ export default {
                 type: 'warning'
             }).then(()=> {
                 this.$store
-                    .dispatch("version/markDeleteVersion", data.id)
+                    .dispatch("version/markDeleteVersion", { version: data.version, platform: data.platform })
                     .then(() => {
                         this.$message({
                             showClose: true,

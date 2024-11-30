@@ -19,16 +19,22 @@
           label="版本号:" prop="version"
           :rules="versionRules.version"
         >
-          <el-input v-model="versionData.version" placeholder="请输入版本号" />
+          <el-input
+            v-model="versionData.version" :disabled="!create"
+            placeholder="请输入版本号"
+          />
         </el-form-item>
         <el-form-item label="强制更新:" prop="force.force_update">
-          <el-switch v-model="versionData.force.force_update" />
+          <el-switch v-model="versionData.force.force_update" :disabled="!create" />
         </el-form-item>
         <el-form-item
           label="上个强更版本号:" prop="force.previous_force_version"
           :rules="versionRules.version"
         >
-          <el-input v-model="versionData.force.previous_force_version" placeholder="请输入上一个强制更新版本号" />
+          <el-input
+            v-model="versionData.force.previous_force_version" :disabled="!create"
+            placeholder="请输入上一个强制更新版本号"
+          />
         </el-form-item>
         <el-form-item
           label="描述:" prop="description"
@@ -47,6 +53,7 @@
         >
           <el-select
             v-model="versionData.platform"
+            :disabled="!create"
             placeholder="请选择平台"
           >
             <el-option
@@ -58,81 +65,46 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item
-          label="下载源名称:" prop="download_source.name"
-          :rules="versionRules.download_source_name"
-        >
-          <el-input v-model="versionData.download_source.name" placeholder="请输入下载源名称" />
-        </el-form-item>
-        <el-form-item
-          label="下载源描述:" prop="download_source.description"
-          :rules="versionRules.download_source_description"
-        >
-          <el-input v-model="versionData.download_source.description" placeholder="请输入下载源描述" />
-        </el-form-item>
-
-        <el-form-item label="主下载链接名:" prop="download_source.primary_url.name">
-          <el-input v-model="versionData.download_source.primary_url.name" placeholder="请输入主下载链接名" />
-        </el-form-item>
-        <el-form-item
-          label="主下载链接:" prop="download_source.primary_url.url"
-          :rules="versionRules.download_url"
-        >
-          <el-input v-model="versionData.download_source.primary_url.url" placeholder="请输入主下载链接" />
-        </el-form-item>
-        <el-form-item label="手动安装:" prop="download_source.primary_url.mamual">
-          <el-switch v-model="versionData.download_source.primary_url.mamual" />
-        </el-form-item>
-        <el-form-item label="支持平台:" prop="download_source.primary_url.support_platforms">
-          <el-select
-            v-model="versionData.download_source.primary_url.support_platforms"
-            multiple placeholder="请选择支持平台"
-          >
-            <el-option
-              v-for="item in supportPlatform"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-form-item>
-
-
-        <el-form-item label="备用下载:" prop="download_source.spare_urls">
-          <i class="el-icon-circle-plus-outline add-icon" @click="addUrl"></i>
+        <el-form-item label="添加下载:" prop="download_source">
+          <i class="el-icon-circle-plus-outline add-icon" @click="addDownload"></i>
         </el-form-item>
 
         <el-collapse style="margin-bottom: 24px;">
-          <el-collapse-item v-for="(url_info, index) in versionData.download_source.spare_urls" :key="index">
+          <el-collapse-item v-for="(download_info, i) in versionData.download_source" :key="i">
             <template slot="title">
               <div class="collapse-header">
-                <div>{{ (index+1) + ". " + url_info.name }}</div>
+                <div style="color: #FFC86F;">
+                  {{ "下载链接：" + (i+1) + ". " + (download_info.name || "") }}
+                </div>
                 <div>
                   <el-button
                     icon="el-icon-delete" class="btn-editor btn-delete" round
-                    @click.stop="removeUrl(index)"
+                    @click.stop="removeDownload(index)"
                   />
                 </div>
               </div>
             </template>
             <el-form-item
-              label="备用下载链接名:" :prop="`url_info[${index}].name`"
-              :rules="versionRules.download_name"
+              label="下载源名称:" :prop="`download_source[${i}].name`"
+              :rules="versionRules.download_source_name"
             >
-              <el-input v-model="url_info.name" placeholder="请输入备用下载链接名" />
+              <el-input v-model="download_info.name" placeholder="请输入下载源名称" />
+            </el-form-item>
+            <el-form-item label="下载源描述:" :prop="`download_source[${i}].description`">
+              <el-input v-model="download_info.description" placeholder="请输入下载源描述" />
             </el-form-item>
             <el-form-item
-              label="备用下载链接:" :prop="`url_info[${index}].url`"
+              label="主下载链接:" :prop="`download_source[${i}].primary_url.url`"
               :rules="versionRules.download_url"
             >
-              <el-input v-model="url_info.url" placeholder="请输入备用下载链接" />
+              <el-input v-model="download_info.primary_url.url" placeholder="请输入主下载链接" />
             </el-form-item>
-            <el-form-item label="手动安装:" :prop="`url_info[${index}].mamual`">
-              <el-switch v-model="url_info.mamual" />
+            <el-form-item label="手动安装:" :prop="`download_source[${i}].manual`">
+              <el-switch v-model="download_info.primary_url.manual" />
             </el-form-item>
-            <el-form-item label="支持平台:" :prop="`url_info[${index}].support_platforms`">
+            <el-form-item label="支持平台:" :prop="`download_source[${i}].support_platforms`">
               <el-select
-                v-model="url_info.support_platforms"
+                v-model="download_info.primary_url.support_platforms"
                 multiple placeholder="请选择支持平台"
               >
                 <el-option
@@ -143,6 +115,55 @@
                 />
               </el-select>
             </el-form-item>
+
+
+            <el-form-item label="备用下载:" :prop="`download_source[${i}].spare_urls`">
+              <i class="el-icon-circle-plus-outline add-icon" @click="addUrl(i)"></i>
+            </el-form-item>
+
+            <el-collapse style="margin-bottom: 24px;">
+              <el-collapse-item v-for="(url_info, index) in download_info.spare_urls" :key="index">
+                <template slot="title">
+                  <div class="collapse-header">
+                    <div>{{ "备用链接：" + (index+1) + ". " + (url_info.name || "") }}</div>
+                    <div>
+                      <el-button
+                        icon="el-icon-delete" class="btn-editor btn-delete" round
+                        @click.stop="removeUrl(i, index)"
+                      />
+                    </div>
+                  </div>
+                </template>
+                <el-form-item
+                  label="备用下载链接名:" :prop="`download_source[${i}].spare_urls[${index}].name`"
+                  :rules="versionRules.download_name"
+                >
+                  <el-input v-model="url_info.name" placeholder="请输入备用下载链接名" />
+                </el-form-item>
+                <el-form-item
+                  label="备用下载链接:" :prop="`download_source[${i}].spare_urls[${index}].url`"
+                  :rules="versionRules.download_url"
+                >
+                  <el-input v-model="url_info.url" placeholder="请输入备用下载链接" />
+                </el-form-item>
+                <el-form-item label="手动安装:" :prop="`download_source[${i}].spare_urls[${index}].manual`">
+                  <el-switch v-model="url_info.manual" />
+                </el-form-item>
+                <el-form-item label="支持平台:" :prop="`download_source[${i}].spare_urls[${index}].support_platforms`">
+                  <el-select
+                    v-model="url_info.support_platforms"
+                    multiple placeholder="请选择支持平台"
+                  >
+                    <el-option
+                      v-for="item in supportPlatform"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-form-item>
+              </el-collapse-item>
+            </el-collapse>
           </el-collapse-item>
         </el-collapse>
         <el-form-item>
@@ -300,28 +321,40 @@ export default {
                 },
                 description: null,
                 platform: null,
-                download_source: {
-                    primary_url: {
-                        name: "",
-                        url: "",
-                        mamual: false,
-                        support_platforms: [],
-                    },
-                    spare_urls: []
-                }
+                download_source: [
+                    {
+                        primary_url: {
+                            url: "",
+                            manual: false,
+                            support_platforms: [],
+                        },
+                        spare_urls: []
+                    }
+                ]
+            };
+        },
+        initDownloadInfo() {
+            return {
+                primary_url: {
+                    url: "",
+                    manual: false,
+                    support_platforms: [],
+                },
+                spare_urls: []
             };
         },
         initSpareUrl() {
             return {
                 name: "",
                 url: "",
-                mamual: false,
+                manual: false,
                 support_platforms: [],
             };
         },
         // 打开抽屉
         open(create, data) {
             this.create = create;
+            console.log(data);
             if(data) {
                 this.versionData = JSON.parse(JSON.stringify(data));
             } else {
@@ -399,11 +432,17 @@ export default {
                         this.$emit("uploadDone");
                     });
         },
-        addUrl() {
-            this.versionData.download_source.spare_urls.push(this.initSpareUrl());
+        addUrl(i) {
+            this.versionData.download_source[i].spare_urls.push(this.initSpareUrl());
         },
-        removeUrl(index) {
-            this.versionData.download_source.spare_urls.splice(index, 1);
+        removeUrl(i, index) {
+            this.versionData.download_source[i].spare_urls.splice(index, 1);
+        },
+        addDownload() {
+            this.versionData.download_source.push(this.initDownloadInfo());
+        },
+        removeDownload(index) {
+            this.versionData.download_source.splice(index, 1);
         }
     }
 };
