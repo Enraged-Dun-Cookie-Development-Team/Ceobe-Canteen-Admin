@@ -24,16 +24,13 @@
             placeholder="请输入版本号"
           />
         </el-form-item>
-        <el-form-item label="强制更新:" prop="force.force_update">
-          <el-switch v-model="versionData.force.force_update" :disabled="!create" />
-        </el-form-item>
         <el-form-item
-          label="上个强更版本号:" prop="force.previous_force_version"
+          label="最低支持版本号:" prop="previous_mandatory_version"
           :rules="versionRules.version"
         >
           <el-input
-            v-model="versionData.force.previous_force_version" :disabled="!create"
-            placeholder="请输入上一个强制更新版本号"
+            v-model="versionData.previous_mandatory_version" :disabled="!create"
+            placeholder="请输入最低支持版本号"
           />
         </el-form-item>
         <el-form-item
@@ -315,10 +312,7 @@ export default {
         initVersionData() {
             return {
                 version: "",
-                force: {
-                    force_update: false,
-                    previous_force_version: ""
-                },
+                previous_mandatory_version: "",
                 description: null,
                 platform: null,
                 download_source: [
