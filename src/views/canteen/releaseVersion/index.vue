@@ -83,6 +83,7 @@
             编辑
           </el-button>
           <el-button
+            v-if="!scope.row.deleted"
             type="text"
             size="small"
             @click.native.prevent="deleteData(scope.row)"
