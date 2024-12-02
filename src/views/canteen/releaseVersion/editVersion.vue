@@ -62,7 +62,10 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="添加下载:" prop="download_source">
+        <el-form-item
+          label="添加下载:" prop="download_source"
+          :rules="versionRules.list"
+        >
           <i class="el-icon-circle-plus-outline add-icon" @click="addDownload"></i>
         </el-form-item>
 
@@ -76,7 +79,7 @@
                 <div>
                   <el-button
                     icon="el-icon-delete" class="btn-editor btn-delete" round
-                    @click.stop="removeDownload(index)"
+                    @click.stop="removeItem(versionData.download_source, i)"
                   />
                 </div>
               </div>
@@ -118,7 +121,7 @@
               <i class="el-icon-circle-plus-outline add-icon" @click="addUrl(i)"></i>
             </el-form-item>
 
-            <el-collapse style="margin-bottom: 24px;">
+            <el-collapse style="margin: 0 0 24px 24px;">
               <el-collapse-item v-for="(url_info, index) in download_info.spare_urls" :key="index">
                 <template slot="title">
                   <div class="collapse-header">
@@ -126,7 +129,7 @@
                     <div>
                       <el-button
                         icon="el-icon-delete" class="btn-editor btn-delete" round
-                        @click.stop="removeUrl(i, index)"
+                        @click.stop="removeItem(download_info.spare_urls, index)"
                       />
                     </div>
                   </div>
@@ -239,7 +242,11 @@ export default {
                 },
                 download_name: {
                     required: true, message: "请输入备用下载链接名", trigger: "blur"
-                }
+                },
+                list: {
+                    required: true, message: "列表不能为空", trigger: "blur"
+                },
+
             },
             supportPlatform: [
                 {
@@ -427,16 +434,14 @@ export default {
                     });
         },
         addUrl(i) {
+            this.versionData.download_source[i].spare_urls || this.$set(this.versionData.download_source[i], 'spare_urls', []);
             this.versionData.download_source[i].spare_urls.push(this.initSpareUrl());
-        },
-        removeUrl(i, index) {
-            this.versionData.download_source[i].spare_urls.splice(index, 1);
         },
         addDownload() {
             this.versionData.download_source.push(this.initDownloadInfo());
         },
-        removeDownload(index) {
-            this.versionData.download_source.splice(index, 1);
+        removeItem(list, index) {
+            list.splice(index, 1);
         }
     }
 };
