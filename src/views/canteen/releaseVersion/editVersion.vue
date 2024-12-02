@@ -70,7 +70,7 @@
         </el-form-item>
 
         <el-collapse style="margin-bottom: 24px;">
-          <el-collapse-item v-for="(download_info, i) in versionData.download_source" :key="i">
+          <el-collapse-item v-for="(download_info, i) in versionData.download_source" :key="`${versionData.version}-${i}`">
             <template slot="title">
               <div class="collapse-header">
                 <div style="color: #FFC86F;">
@@ -355,7 +355,6 @@ export default {
         // 打开抽屉
         open(create, data) {
             this.create = create;
-            console.log(data);
             if(data) {
                 this.versionData = JSON.parse(JSON.stringify(data));
             } else {

@@ -106,7 +106,7 @@
         </el-form-item>
 
         <el-collapse style="margin-bottom: 24px;">
-          <el-collapse-item v-for="(link, index) in toolLinkData.links" :key="index">
+          <el-collapse-item v-for="(link, index) in toolLinkData.links" :key="`${toolLinkData.id}-${index}`">
             <template slot="title">
               <div class="collapse-header">
                 <div>{{ link.localized_name.zh_CN }}</div>
