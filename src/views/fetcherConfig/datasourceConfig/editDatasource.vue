@@ -71,6 +71,10 @@
         v-else-if="datasourceData.platform == 'arknights-website'" ref="extendForm"
         @complete="completeForm"
       />
+      <endfield-game-public
+        v-if="datasourceData.platform == 'endfield-game'" ref="extendForm"
+        @complete="completeForm"
+      />
       <bilibili-dynamic
         v-else-if="datasourceData.platform == 'bilibili'" ref="extendForm"
         @complete="completeForm"
@@ -96,14 +100,15 @@ import UploadImg from "@/components/UploadImg/index.vue";
 import Default from "./editForm/default.vue";
 import ArknightsGamePublic from "./editForm/arknightsGamePublic.vue";
 import ArknightsWebsitePublic from "./editForm/arknightsWebsitePublic.vue";
+import EndfieldGamePublic from "./editForm/endfieldGamePublic.vue";
 import BilibiliDynamic from "./editForm/bilibiliDynamic.vue";
 import NeteaseCloudAlbums from "./editForm/neteaseCloudAlbums.vue";
 import WeiboDynamic from "./editForm/weiboDynamic.vue";
-import { BILIBILI_OPTION, WEIBO_OPTION, NETEASE_OPTION, ARKNIGHTS_GAME_OPTION, ARKNIHTS_WEBSITE_OPTION, DATASOURCE_UNIQUE_KEY } from "@/const/fetcherConfig.js";
+import { BILIBILI_OPTION, WEIBO_OPTION, NETEASE_OPTION, ARKNIGHTS_GAME_OPTION, ARKNIHTS_WEBSITE_OPTION, DATASOURCE_UNIQUE_KEY, ENDFIELD_GAME_OPTION } from "@/const/fetcherConfig.js";
 
 export default {
     name: "EditDatasource",
-    components: { UploadImg, ArknightsGamePublic, ArknightsWebsitePublic, BilibiliDynamic, NeteaseCloudAlbums, WeiboDynamic, Default },
+    components: { UploadImg, ArknightsGamePublic, ArknightsWebsitePublic, EndfieldGamePublic, BilibiliDynamic, NeteaseCloudAlbums, WeiboDynamic, Default },
     props: {
     },
     data() {
@@ -225,6 +230,14 @@ export default {
             case "arknights-website":
                 this.datasourceData.datasource = "";
                 this.datasourceOptions = ARKNIHTS_WEBSITE_OPTION;
+                // 使用nextTick避免无法获取到ref
+                this.$nextTick(()=>{
+                    this.$refs.extendForm.openWithoutConfig(this.create);
+                });
+                break;
+            case "endfield-game":
+                this.datasourceData.datasource = "";
+                this.datasourceOptions = ENDFIELD_GAME_OPTION;
                 // 使用nextTick避免无法获取到ref
                 this.$nextTick(()=>{
                     this.$refs.extendForm.openWithoutConfig(this.create);

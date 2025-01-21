@@ -33,6 +33,13 @@ export const ARKNIGHTS_GAME_OPTION = [
     }
 ];
 
+export const ENDFIELD_GAME_OPTION = [
+    {
+        label: 'endfield-game:bulletin-list',
+        value: 'endfield-game:bulletin-list',
+    }
+];
+
 export const ARKNIHTS_WEBSITE_OPTION = [
     {
         label: 'arknights-website:monster-siren',
@@ -55,6 +62,7 @@ export const DATASOURCE_UNIQUE_KEY = {
     'arknights-game:announcement': 'platform',
     'arknights-game:version': 'platform',
     'arknights-game:bulletin-list': 'platform',
+    'endfield-game:bulletin-list': 'platform',
     'arknights-website:monster-siren': null,
     'arknights-website:official-website': null,
     'arknights-website:terra-historicus': null,
