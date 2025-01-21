@@ -72,7 +72,7 @@
         @complete="completeForm"
       />
       <endfield-game-public
-        v-if="datasourceData.platform == 'endfield-game'" ref="extendForm"
+        v-else-if="datasourceData.platform == 'endfield-game'" ref="extendForm"
         @complete="completeForm"
       />
       <bilibili-dynamic
