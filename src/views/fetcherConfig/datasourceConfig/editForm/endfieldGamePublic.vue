@@ -57,6 +57,10 @@ export default {
                     label: "",
                     value: "PlayStation"
                 },
+                {
+                    label: "",
+                    value: "Test"
+                },
             ],
             config: {
                 platform: "Windows"
