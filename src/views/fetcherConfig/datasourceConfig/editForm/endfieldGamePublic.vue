@@ -45,6 +45,22 @@ export default {
                     label: "",
                     value: "Windows"
                 },
+                {
+                    label: "",
+                    value: "Android"
+                },
+                {
+                    label: "",
+                    value: "iOS"
+                },
+                {
+                    label: "",
+                    value: "PlayStation"
+                },
+                {
+                    label: "",
+                    value: "Test"
+                },
             ],
             config: {
                 platform: "Windows"
