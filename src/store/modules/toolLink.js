@@ -5,7 +5,11 @@ const actions = {
     // 获取平台配置信息
     toolLinkList(_, pageSize) {
         return new Promise((resolve, reject) => {
-            toolLinkList({ token: store.getters.token }, { page: pageSize.page, size: pageSize.size }).then(response => {
+            const params = { page: pageSize.page, size: pageSize.size };
+            if (pageSize.kind && pageSize.kind.length > 0) {
+                params.kind = pageSize.kind;
+            }
+            toolLinkList({ token: store.getters.token }, params).then(response => {
                 resolve(response);
             }).catch(error => {
                 reject(error);

@@ -1,10 +1,24 @@
 <template>
   <div id="fetcherDetailConfig">
     <h3>工具链接</h3>
-    <div class="mt-30">
+    <div class="mt-30 filter-bar">
+      <el-select
+        v-model="kindFilter"
+        multiple
+        placeholder="所属游戏"
+        size="small"
+        @change="searchList"
+      >
+        <el-option
+          v-for="item in kindOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
       <el-button
         type="primary" icon="el-icon-plus"
-        size="small" class="btn-add"
+        size="small" class="btn-add ml-10"
         @click="addData"
       >
         新增
@@ -28,6 +42,21 @@
         prop="localized_slogan.zh_CN" label="Slogan"
         align="center"
       />
+      <el-table-column
+        label="所属游戏"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <el-tag
+            v-for="k in scope.row.kind"
+            :key="k"
+            size="small"
+            style="margin-right: 4px"
+          >
+            {{ kindLabel(k) }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         label="头像"
         align="center"
@@ -79,6 +108,7 @@
 
 <script>
 import EditToolLink from "./editToolLink.vue";
+import { KINDS } from "@/const/toolLinkConfig";
 export default {
     name: "ToolLink",
     components: { EditToolLink },
@@ -88,6 +118,8 @@ export default {
             dataSourceTable:[],
             pageSize: {},
             value: "",
+            kindFilter: [],
+            kindOptions: KINDS,
         };
     },
     mounted() {
@@ -108,8 +140,12 @@ export default {
         },
         getDatasourceList() {
             this.loading = true;
+            const params = {
+                ...this.pageSize,
+                kind: this.kindFilter
+            };
             this.$store
-                .dispatch("toolLink/toolLinkList", this.pageSize)
+                .dispatch("toolLink/toolLinkList", params)
                 .then((response) => {
                     this.dataSourceTable = response.data?.list;
                     this.pageSize = response.data?.page_size;
@@ -159,6 +195,10 @@ export default {
         },
         uploadDone() {
             this.getDatasourceList();
+        },
+        kindLabel(value) {
+            const item = this.kindOptions.find(k => k.value === value);
+            return item ? item.label : value;
         }
     }
 };
@@ -179,6 +219,11 @@ export default {
 
   .mt-30 {
     margin-top: 30px;
+  }
+
+  .filter-bar {
+    display: flex;
+    align-items: center;
   }
 }
 </style>
