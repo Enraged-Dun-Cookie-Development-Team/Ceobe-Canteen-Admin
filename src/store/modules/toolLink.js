@@ -7,7 +7,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             const params = { page: pageSize.page, size: pageSize.size };
             if (pageSize.kind && pageSize.kind.length > 0) {
-                params.kind = pageSize.kind;
+                params.kind = pageSize.kind.join(',');
             }
             toolLinkList({ token: store.getters.token }, params).then(response => {
                 resolve(response);
