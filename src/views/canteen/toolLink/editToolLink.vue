@@ -99,6 +99,24 @@
         </el-form-item>
 
         <el-form-item
+          label="所属游戏:" prop="kind"
+          :rules="toolLinkRules.kind"
+        >
+          <el-select
+            v-model="toolLinkData.kind"
+            multiple
+            placeholder="请选择所属游戏"
+          >
+            <el-option
+              v-for="item in gameKinds"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item
           label="链接" prop="links"
           :rules="toolLinkRules.links"
         >
@@ -178,7 +196,7 @@
 
 <script>
 import UploadImg from "@/components/UploadImg/index.vue";
-import { REGION } from "@/const/toolLinkConfig";
+import { REGION, KINDS } from "@/const/toolLinkConfig";
 
 export default {
     name: "EditToolLink",
@@ -216,9 +234,13 @@ export default {
                 select: {
                     required: true, message: "此选项不能为空", trigger: "blur"
                 },
+                kind: {
+                    required: true, message: "请选择所属游戏", trigger: ["blur", "change"]
+                },
             },
             defaultTags: [],
             linkRegionality: REGION,
+            gameKinds: KINDS,
         };
     },
     computed:{
@@ -257,7 +279,8 @@ export default {
                     zh_CN: [],
                     en_US: []
                 },
-                links: []
+                links: [],
+                kind: ["arknights"]
             };
         },
         initLinks() {
