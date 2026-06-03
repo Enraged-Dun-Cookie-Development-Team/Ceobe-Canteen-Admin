@@ -7,7 +7,6 @@
         multiple
         placeholder="所属游戏"
         size="small"
-        @change="searchList"
       >
         <el-option
           v-for="item in kindOptions"
@@ -17,8 +16,15 @@
         />
       </el-select>
       <el-button
-        type="primary" icon="el-icon-plus"
+        type="primary"
         size="small" class="btn-add ml-10"
+        @click="searchList"
+      >
+        查询
+      </el-button>
+      <el-button
+        type="primary" icon="el-icon-plus"
+        size="small" class="ml-10"
         @click="addData"
       >
         新增
@@ -142,7 +148,7 @@ export default {
             this.loading = true;
             const params = {
                 ...this.pageSize,
-                kind: this.kindFilter
+                kind: this.kindFilter.join(',')
             };
             this.$store
                 .dispatch("toolLink/toolLinkList", params)
