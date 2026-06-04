@@ -3,13 +3,9 @@ import store from '..';
 
 const actions = {
     // 获取平台配置信息
-    toolLinkList(_, pageSize) {
+    toolLinkList(_, data) {
         return new Promise((resolve, reject) => {
-            const params = { page: pageSize.page, size: pageSize.size };
-            if (pageSize.kind && pageSize.kind.length > 0) {
-                params.kind = pageSize.kind.join(',');
-            }
-            toolLinkList({ token: store.getters.token }, params).then(response => {
+            toolLinkList({ token: store.getters.token }, data).then(response => {
                 resolve(response);
             }).catch(error => {
                 reject(error);
